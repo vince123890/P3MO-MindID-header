@@ -65,7 +65,7 @@ export const Component = () => {
         projectRisks.data.items.push(newRisk);
         
         message.success("Risk created successfully");
-        navigate(`/projects/${id}`);
+        navigate(`/projects/${id}?tab=risks`);
       } catch (error) {
         message.error("Failed to create risk");
       } finally {
@@ -82,7 +82,7 @@ export const Component = () => {
       <Modal
         title="Create New Risk"
         open={true}
-        onCancel={() => navigate(-1)}
+        onCancel={() => navigate(`/projects/${id}?tab=risks`)}
         footer={null}
         width={1200}
         centered

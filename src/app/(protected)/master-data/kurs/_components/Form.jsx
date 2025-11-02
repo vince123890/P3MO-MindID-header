@@ -1,4 +1,4 @@
-import { Button, Col, Form, Input, Row, DatePicker, Select } from "antd";
+import { Button, Col, Form, Input, Row, DatePicker, Select, Switch } from "antd";
 import { Section } from "admiral";
 import { Flex } from "antd";
 import { useNavigate } from "react-router";
@@ -38,37 +38,44 @@ export const FormKurs = ({ formProps, error, loading, isEdit }) => {
             </Col>
             <Col span={12}>
               <Form.Item
-                label="Tanggal"
+                label="Bulan Tahun"
                 name="tanggal"
                 rules={[
                   {
                     required: true,
-                    message: "Tanggal is required",
+                    message: "Bulan Tahun is required",
                   },
                 ]}
               >
-                <DatePicker style={{ width: "100%" }} placeholder="Select date" />
+                <DatePicker 
+                  picker="month"
+                  style={{ width: "100%" }} 
+                  placeholder="Select month and year" 
+                  format="MMMM YYYY"
+                />
               </Form.Item>
             </Col>
-            {isEdit && (
-              <Col span={12}>
-                <Form.Item
-                  label="Status"
-                  name="status"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Status is required",
-                    },
-                  ]}
-                >
-                  <Select placeholder="Select status">
-                    <Select.Option value="Active">Active</Select.Option>
-                    <Select.Option value="Inactive">Inactive</Select.Option>
-                  </Select>
-                </Form.Item>
-              </Col>
-            )}
+            <Col span={12}>
+              <Form.Item
+                label="Status"
+                name="status"
+                valuePropName="checked"
+                getValueFromEvent={(checked) => checked ? "Active" : "Inactive"}
+                getValueProps={(value) => ({ checked: value === "Active" })}
+                rules={[
+                  {
+                    required: true,
+                    message: "Status is required",
+                  },
+                ]}
+              >
+                <Switch 
+                  checkedChildren="Active" 
+                  unCheckedChildren="Inactive"
+                  defaultChecked={isEdit ? false : true}
+                />
+              </Form.Item>
+            </Col>
           </Row>
         </Section>
       </Section>

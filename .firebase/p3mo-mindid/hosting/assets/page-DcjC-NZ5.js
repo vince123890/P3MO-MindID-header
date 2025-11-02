@@ -1,0 +1,2 @@
+import{j as t}from"./@react-router-BOJM2k20.js";try{let e=typeof window<"u"?window:typeof global<"u"?global:typeof globalThis<"u"?globalThis:typeof self<"u"?self:{},n=new e.Error().stack;n&&(e._sentryDebugIds=e._sentryDebugIds||{},e._sentryDebugIds[n]="96544d05-8fba-448e-9c9e-f7a32b0f01fe",e._sentryDebugIdIdentifier="sentry-dbid-96544d05-8fba-448e-9c9e-f7a32b0f01fe")}catch{}const f=()=>t.jsx("div",{children:"Test component"});export{f as default};
+//# sourceMappingURL=page-DcjC-NZ5.js.map

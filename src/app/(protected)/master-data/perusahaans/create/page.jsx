@@ -16,7 +16,7 @@ export const Component = () => {
       path: "/master-data/perusahaans",
     },
     {
-      label: "Add Perusahaan",
+      label: "Tambah Perusahaan",
       path: "#",
     },
   ];
@@ -28,7 +28,7 @@ export const Component = () => {
 
   return (
     <Page
-      title="Add Perusahaan"
+      title="Tambah Perusahaan"
       breadcrumbs={breadcrumb}
       noStyle
       goBack={() => navigate("/master-data/perusahaans")}

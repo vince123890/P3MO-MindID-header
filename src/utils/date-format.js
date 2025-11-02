@@ -10,6 +10,22 @@ export const formatStringToDate = (str) => {
   return str ? dayjs(str) : null;
 };
 
+// use this function to format a date to Indonesian month-year format (e.g., Januari 2025)
+export const formatToMonthYear = (date) => {
+  if (!date) return null;
+  
+  const monthNames = [
+    "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+    "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+  ];
+  
+  const dateObj = dayjs(date);
+  const month = monthNames[dateObj.month()];
+  const year = dateObj.year();
+  
+  return `${month} ${year}`;
+};
+
 // use this function to format a number to Indonesian Rupiah currency format
 export const formatToRupiah = (amount) => {
   if (amount === null || amount === undefined || isNaN(amount)) {

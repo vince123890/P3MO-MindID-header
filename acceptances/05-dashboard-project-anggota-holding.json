@@ -83,66 +83,7 @@
           ]
         }
       ]
-    },
-    {
-      "code": "<b>DPH02</b>",
-      "feature": "<b>Info Total Sebaran Project per Kota</b>",
-      "acceptances": [
-        {
-          "info": "<b>Ringkasan Total Sebaran Project</b>",
-          "detail": [
-            {
-              "text": "<b>Total Project</b>:\n- Menampilkan jumlah total semua project\n- Icon: ProjectOutlined\n- Warna: Biru (#1890ff)",
-              "note": "Menghitung dari semua project di data"
-            },
-            {
-              "text": "<b>Total Kota</b>:\n- Menampilkan jumlah kota yang memiliki project\n- Icon: EnvironmentOutlined\n- Warna: Hijau (#52c41a)",
-              "note": "Menghitung unique cities"
-            },
-            {
-              "text": "<b>Total Budget</b>:\n- Menampilkan total budget semua project dalam format Triliun\n- Icon: DollarOutlined\n- Warna: Orange (#fa8c16)\n- Format: X.X T (Triliun)",
-              "note": "Penjumlahan dari budget semua project"
-            },
-            {
-              "text": "<b>Progress Rata-rata</b>:\n- Menampilkan rata-rata progress semua project\n- Format: XX%\n- Warna: Ungu (#722ed1)",
-              "note": "Rata-rata dari progress semua project"
-            }
-          ]
-        },
-        {
-          "info": "<b>Sebaran Project per Kota</b>",
-          "detail": [
-            {
-              "text": "<b>Card Layout</b>:\n- 6 kartu sesuai dengan 6 kota (Jakarta, Surabaya, Medan, Denpasar, Balikpapan, Jayapura)\n- Responsive: xs=24, sm=12, lg=6\n- Urutan berdasarkan total budget tertinggi",
-              "note": "Jakarta > Surabaya > Medan > Denpasar > Balikpapan > Jayapura"
-            },
-            {
-              "text": "<b>Informasi per Kota</b>:\n- Nama Kota (Title berwarna biru)\n- Jumlah Project (Statistic besar)\n- Total Budget (format Rupiah lengkap)\n- Progress Rata-rata (Progress bar dengan gradient)\n- Status Project (Tag: In Progress=blue, Planning=orange)\n- Daftar Project (bullet list dengan nama project)",
-              "note": "Perhitungan dinamis: Jakarta (2 project), Surabaya (2 project), Medan (1 project), Denpasar (1 project), Balikpapan (1 project), Jayapura (1 project)"
-            }
-          ]
-        },
-        {
-          "info": "<b>Behavior</b>",
-          "detail": [
-            {
-              "text": "<b>Role</b>: All",
-              "note": "Semua user bisa mengakses"
-            },
-            {
-              "text": "<b>Position</b>:\n- Berada di bawah section peta\n- Section title: 'Info Total Sebaran Project per Kota'"
-            },
-            {
-              "text": "<b>Data Source</b>:\n- Menggunakan data yang sama dengan peta\n- Real-time calculation dari projectsData",
-              "note": "Tidak ada data terpisah, semua dihitung dari data existing"
-            },
-            {
-              "text": "<b>Responsive Design</b>:\n- Card kota responsive\n- Statistics responsive\n- Text size menyesuaikan"
-            }
-          ]
-        }
-      ]
     }
   ],
-  "updated_at": "2025-10-21T10:45:00.000Z"
+  "updated_at": "2025-10-28T02:17:00.000Z"
 }

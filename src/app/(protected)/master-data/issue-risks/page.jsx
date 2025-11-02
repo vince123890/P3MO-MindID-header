@@ -1,5 +1,5 @@
-import { Button, Flex, message, Tag } from "antd";
-import { DeleteOutlined, EditOutlined, EyeOutlined, PlusCircleOutlined } from "@ant-design/icons";
+import { Button, Flex, message, Tag, Modal } from "antd";
+import { DeleteOutlined, EditOutlined, EyeOutlined, PlusOutlined } from "@ant-design/icons";
 import { Link } from "react-router";
 import { Page, DataTable } from "admiral";
 import dayjs from "dayjs";
@@ -20,7 +20,7 @@ export const Component = () => {
     {
       dataIndex: "kode_issue_risk",
       key: "kode_issue_risk",
-      title: "Kode Issue/Resiko",
+      title: "Kode Issue",
       sorter: true,
       render: (_, record) => (
         <Link to={record.id}>
@@ -30,7 +30,7 @@ export const Component = () => {
     },
     {
       dataIndex: "tipe_issue_risk",
-      title: "Tipe Resiko/Issue",
+      title: "Tipe Issue",
       key: "tipe_issue_risk",
       sorter: true,
     },
@@ -42,15 +42,6 @@ export const Component = () => {
       render: (_, record) => {
         const color = record.status === "Active" ? "green" : "red";
         return <Tag color={color} style={{ border: 'none' }}>{record.status}</Tag>;
-      },
-    },
-    {
-      dataIndex: "created_at",
-      title: "Created At",
-      key: "created_at",
-      sorter: true,
-      render: (_, record) => {
-        return formatDate(record.created_at);
       },
     },
     {
@@ -71,7 +62,16 @@ export const Component = () => {
               type="link"
               icon={<DeleteOutlined style={{ color: "red" }} />}
               onClick={() => {
-                message.success("Issue/Risk successfully deleted");
+                Modal.confirm({
+                  title: "Konfirmasi Hapus",
+                  content: "Apakah Anda yakin ingin menghapus Issue/Risk ini?",
+                  okText: "Delete",
+                  cancelText: "Cancel",
+                  okType: "danger",
+                  onOk: () => {
+                    message.success("Issue/Risk successfully deleted");
+                  },
+                });
               }}
             />
           </Flex>
@@ -86,18 +86,18 @@ export const Component = () => {
       path: "/master-data",
     },
     {
-      label: "Issue/Resiko",
+      label: "Issue",
       path: "/master-data/issue-risks",
     },
   ];
 
   return (
     <Page
-      title="Issue/Resiko"
+      title="Issue"
       breadcrumbs={breadcrumbs}
       topActions={
         <Link to={"/master-data/issue-risks/create"}>
-          <Button type="primary" icon={<PlusCircleOutlined />}>Tambah Issue/Risk</Button>
+          <Button type="primary" icon={<PlusOutlined />}>Tambah Issue</Button>
         </Link>
       }
       noStyle
@@ -124,15 +124,15 @@ export const Component = () => {
             width: 180,
             defaultValue: filters.tipe_issue_risk,
             options: [
-              { label: "Technical Risk", value: "Technical Risk" },
-              { label: "Budget Risk", value: "Budget Risk" },
-              { label: "Schedule Risk", value: "Schedule Risk" },
-              { label: "Resource Risk", value: "Resource Risk" },
+              { label: "Technical Issue", value: "Technical Risk" },
+              { label: "Budget Issue", value: "Budget Risk" },
+              { label: "Schedule Issue", value: "Schedule Risk" },
+              { label: "Resource Issue", value: "Resource Risk" },
               { label: "Quality Issue", value: "Quality Issue" },
               { label: "Scope Issue", value: "Scope Issue" },
-              { label: "Communication Risk", value: "Communication Risk" },
-              { label: "Stakeholder Risk", value: "Stakeholder Risk" },
-              { label: "External Risk", value: "External Risk" },
+              { label: "Communication Issue", value: "Communication Risk" },
+              { label: "Stakeholder Issue", value: "Stakeholder Risk" },
+              { label: "External Issue", value: "External Risk" },
               { label: "Compliance Issue", value: "Compliance Issue" },
             ],
           },
@@ -149,8 +149,17 @@ export const Component = () => {
             key: "delete",
             label: "Delete",
             onClick: (_values, cb) => {
-              message.success("Selected issue/risks successfully deleted");
-              cb.reset();
+              Modal.confirm({
+                title: "Konfirmasi Hapus",
+                content: "Apakah Anda yakin ingin menghapus Issue/Risk yang dipilih?",
+                okText: "Delete",
+                cancelText: "Cancel",
+                okType: "danger",
+                onOk: () => {
+                  message.success("Selected issue/risks successfully deleted");
+                  cb.reset();
+                },
+              });
             },
             danger: true,
             icon: <DeleteOutlined />,

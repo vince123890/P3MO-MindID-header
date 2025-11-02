@@ -16,24 +16,19 @@ export const Component = () => {
       path: "/master-data/template-messaging",
     },
     {
-      label: "Add Template",
+      label: "Tambah Template",
       path: "#",
     },
   ];
 
   const handleOnFinish = (values) => {
-    // Automatically set status to Active when creating
-    const dataWithStatus = {
-      ...values,
-      status: "Active",
-    };
     message.success("Template Messaging successfully created");
     navigate("/master-data/template-messaging");
   };
 
   return (
     <Page
-      title="Add Template Messaging"
+      title="Tambah Template"
       breadcrumbs={breadcrumb}
       noStyle
       goBack={() => navigate("/master-data/template-messaging")}

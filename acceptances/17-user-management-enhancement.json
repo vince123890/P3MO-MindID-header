@@ -1,0 +1,562 @@
+{
+  "module_name": "User Management Enhancement",
+  "updated_at": "2025-10-27T03:28:00Z",
+  "data": [
+    {
+      "code": "<b>UME04</b>",
+      "feature": "<b>Daftar Role List</b>",
+      "acceptances": [
+        {
+          "info": "<b>Fields</b>",
+          "detail": [
+            {
+              "text": "<b>Search</b>:\n- Nama Role",
+              "note": ""
+            },
+            {
+              "text": "<b>Filter</b>:\n- Status (Active, Inactive)",
+              "note": ""
+            },
+            {
+              "text": "<b>Edit Action</b>:\n- Click edit button on user with Active/Inactive status",
+              "note": "Navigate to edit user page"
+            }
+          ]
+        },
+        {
+          "info": "<b>Fields Column</b>",
+          "detail": [
+            {
+              "text": "<b>Nama Role</b>\n- Hyperlink to detail"
+            },
+            {
+              "text": "<b>Status</b>\n- Tag chip (Active: green, Inactive: red)"
+            },
+            {
+              "text": "<b>Created At</b>\n- Read Only"
+            },
+            {
+              "text": "<b>Action</b>\n- Edit and Delete buttons"
+            }
+          ]
+        },
+        {
+          "info": "<b>Behavior</b>",
+          "detail": [
+            {
+              "text": "<b>Role</b>: Admin"
+            },
+            {
+              "text": "Default sorting based on most recent data"
+            },
+            {
+              "text": "<b>Default Data</b>: Display 20 rows of role data",
+              "note": "Including roles: Administrator, PMO Admin, PMO Mind ID, Direktur Mind ID, Tim Proyek, Viewer, Project Manager, Finance Admin, Technical Lead, Data Analyst, Quality Assurance, Business Analyst, HR Manager, Risk Manager, Procurement Officer, Legal Officer, IT Support, Auditor, Stakeholder, Consultant"
+            },
+            {
+              "text": "<b>Action</b>: Edit, Delete buttons for each role"
+            },
+            {
+              "text": "<b>Tambah Role</b> button next to title with primary color"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "<b>UME05</b>",
+      "feature": "<b>Tambah Role Functionality</b>",
+      "acceptances": [
+        {
+          "info": "<b>Navigation</b>",
+          "detail": [
+            {
+              "text": "<b>Button</b>: Primary color \"Tambah Role\" button next to \"Daftar Role\" title",
+              "note": ""
+            },
+            {
+              "text": "<b>Destination</b>: Redirects to /user-management/roles/create",
+              "note": ""
+            }
+          ]
+        },
+        {
+          "info": "<b>Form Fields</b>",
+          "detail": [
+            {
+              "text": "<b>Nama Role*</b>:\n- Text Field\n- Required\n- String validation",
+              "note": ""
+            },
+            {
+              "text": "<b>Status*</b>:\n- Switch Button\n- Default ON (Active)",
+              "note": ""
+            }
+          ]
+        },
+        {
+          "info": "<b>Form Actions</b>",
+          "detail": [
+            {
+              "text": "<b>Cancel</b>: Reset and back to role list",
+              "note": ""
+            },
+            {
+              "text": "<b>Simpan</b>: Save role and display success message, redirect to role list",
+              "note": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "<b>UME06</b>",
+      "feature": "<b>Role Detail Page</b>",
+      "acceptances": [
+        {
+          "info": "<b>Navigation</b>",
+          "detail": [
+            {
+              "text": "<b>Nama Role Link</b>: Clickable role name in list page navigates to detail page",
+              "note": "Direct navigation to role details"
+            }
+          ]
+        },
+        {
+          "info": "<b>Display Information</b>",
+          "detail": [
+            {
+              "text": "<b>Nama Role</b>\n- Read Only display field"
+            },
+            {
+              "text": "<b>Status</b>\n- Tag chip (Active: green, Inactive: red)"
+            }
+          ]
+        },
+        {
+          "info": "<b>Permission Display</b>",
+          "detail": [
+            {
+              "text": "<b>Disabled Checkboxes</b>: All permission checkboxes are disabled but show current permissions",
+              "note": "Users can see but cannot modify permissions on detail page"
+            },
+            {
+              "text": "<b>Permission Modules</b>: Dashboard, User Management, Master Data, Projects, Messaging, Laporan",
+              "note": "Each module shows Create, List, Detail, Edit, Delete permissions"
+            },
+            {
+              "text": "<b>Visual Feedback</b>: Checked boxes indicate granted permissions, unchecked indicate denied",
+              "note": "Consistent with form layout from Tambah Role page"
+            }
+          ]
+        },
+        {
+          "info": "<b>Actions</b>",
+          "detail": [
+            {
+              "text": "<b>Edit Role</b> button with primary color",
+              "note": "Navigates to edit page for role modification"
+            }
+          ]
+        },
+        {
+          "info": "<b>Breadcrumb Navigation</b>",
+          "detail": [
+            {
+              "text": "<b>User Management</b> → <b>Daftar Role</b> → <b>Role Details: [Role Name]</b>",
+              "note": "Clear navigation path showing current location"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "<b>UME07</b>",
+      "feature": "<b>Edit Role Functionality</b>",
+      "acceptances": [
+        {
+          "info": "<b>Breadcrumb Navigation</b>",
+          "detail": [
+            {
+              "text": "<b>User Management</b> → <b>Daftar Role</b> → <b>Edit Role</b>",
+              "note": "Clear navigation path showing user journey"
+            }
+          ]
+        },
+        {
+          "info": "<b>Dynamic Page Title</b>",
+          "detail": [
+            {
+              "text": "<b>Title</b>: \"Update Role: [Role Name]\"",
+              "note": "Displays the specific role name being edited"
+            }
+          ]
+        },
+        {
+          "info": "<b>Pre-filled Form</b>",
+          "detail": [
+            {
+              "text": "<b>Nama Role</b>:\n- Pre-filled with current role name",
+              "note": ""
+            },
+            {
+              "text": "<b>Status</b>:\n- Pre-filled with current status (switch position)",
+              "note": ""
+            },
+            {
+              "text": "<b>Permission Checklist</b>:\n- All permission checkboxes pre-filled with current role permissions",
+              "note": "Includes Dashboard, User Management, Master Data, Projects, Messaging, Laporan modules"
+            }
+          ]
+        },
+        {
+          "info": "<b>Form Actions</b>",
+          "detail": [
+            {
+              "text": "<b>Cancel</b>: Reset and back to role list",
+              "note": ""
+            },
+            {
+              "text": "<b>Save Changes</b>: Update role and display success message, redirect to role list",
+              "note": ""
+            }
+          ]
+        },
+        {
+          "info": "<b>Loading State</b>",
+          "detail": [
+            {
+              "text": "<b>Loading Indicator</b>: Shows \"Loading...\" while fetching role data",
+              "note": "Prevents form rendering before data is available"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "<b>UME01</b>",
+      "feature": "<b>Enhanced User List Display</b>",
+      "acceptances": [
+        {
+          "info": "<b>Fields</b>",
+          "detail": [
+            {
+              "text": "<b>Search</b>:\n- Nama User, Email, Perusahaan",
+              "note": ""
+            },
+            {
+              "text": "<b>Filter</b>:\n- Status (Active, Inactive)",
+              "note": ""
+            },
+            {
+              "text": "<b>Sorting ASC,DESC</b>:\n- Nama User, Role, Email, Perusahaan, Status, Created At",
+              "note": "Default sorting by created_at"
+            }
+          ]
+        },
+        {
+          "info": "<b>Fields Column</b>",
+          "detail": [
+            {
+              "text": "<b>Nama User</b>\n- Hyperlink to detail"
+            },
+            {
+              "text": "<b>Role</b>\n- Tag chip with consistent styling for all roles including PMO MIND ID and Direktur MIND ID"
+            },
+            {
+              "text": "<b>Email</b>\n- Read Only"
+            },
+            {
+              "text": "<b>Perusahaan</b>\n- Read Only"
+            },
+            {
+              "text": "<b>Status</b>\n- Tag chip (Active: green, Inactive: red, -: plain text)"
+            },
+            {
+              "text": "<b>Action</b>\n- Conditional buttons based on status"
+            },
+            {
+              "text": "<b>Created At</b>\n- Read Only"
+            }
+          ]
+        },
+        {
+          "info": "<b>Behavior</b>",
+          "detail": [
+            {
+              "text": "<b>Role</b>: Admin"
+            },
+            {
+              "text": "Default sorting based on most recent data"
+            },
+            {
+              "text": "<b>Action</b>: Edit button for Active/Inactive status, Check & Close buttons for empty status"
+            },
+            {
+              "text": "<b>Tambah User</b> button next to title with primary color"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "<b>UME02</b>",
+      "feature": "<b>User Approval Workflow</b>",
+      "acceptances": [
+        {
+          "info": "<b>Approve Action</b>",
+          "detail": [
+            {
+              "text": "<b>Trigger</b>: Click check button on user with empty status",
+              "note": ""
+            },
+            {
+              "text": "<b>Confirmation Modal</b>: Shows user details and Approve/Cancel buttons",
+              "note": ""
+            },
+            {
+              "text": "<b>Result</b>: Status changes to Active, user removed from pending list",
+              "note": ""
+            }
+          ]
+        },
+        {
+          "info": "<b>Reject Action</b>",
+          "detail": [
+            {
+              "text": "<b>Trigger</b>: Click close button on user with empty status",
+              "note": ""
+            },
+            {
+              "text": "<b>Confirmation Modal</b>: Shows user details and Reject/Cancel buttons",
+              "note": ""
+            },
+            {
+              "text": "<b>Result</b>: User row deleted from table",
+              "note": "Action cannot be undone"
+            }
+          ]
+        },
+        {
+          "info": "<b>Edit Action</b>",
+          "detail": [
+            {
+              "text": "<b>Trigger</b>: Click edit button on user with Active/Inactive status",
+              "note": ""
+            },
+            {
+              "text": "<b>Result</b>: Navigate to edit user page",
+              "note": "To be implemented"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "<b>UME03</b>",
+      "feature": "<b>Tambah User Functionality</b>",
+      "acceptances": [
+        {
+          "info": "<b>Navigation</b>",
+          "detail": [
+            {
+              "text": "<b>Button</b>: Primary color \"Tambah User\" button next to \"Daftar User\" title",
+              "note": ""
+            },
+            {
+              "text": "<b>Destination</b>: Redirects to /user-management/users/create",
+              "note": ""
+            }
+          ]
+        },
+        {
+          "info": "<b>Form Fields</b>",
+          "detail": [
+            {
+              "text": "<b>Nama*</b>:\n- Text Field\n- Required",
+              "note": ""
+            },
+            {
+              "text": "<b>Role*</b>:\n- Dropdown Select\n- Required\n- Options: Administrator, PMO Admin, PMO MIND ID, Direktur MIND ID, Tim Proyek",
+              "note": ""
+            },
+            {
+              "text": "<b>Email*</b>:\n- Email Field\n- Required\n- Email validation",
+              "note": ""
+            },
+            {
+              "text": "<b>Perusahaan*</b>:\n- Dropdown Select\n- Required\n- Options: PT Aneka Tambang Tbk, PT Bukit Asam Tbk, PT Freeport Indonesia, PT Indonesia Asahan Aluminium, PT Timah Tbk, PT MIND ID",
+              "note": ""
+            }
+          ]
+        },
+        {
+          "info": "<b>Form Actions</b>",
+          "detail": [
+            {
+              "text": "<b>Cancel</b>: Reset and back to user list",
+              "note": ""
+            },
+            {
+              "text": "<b>Submit</b>: Save user and display success message, redirect to user list",
+              "note": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "<b>UME08</b>",
+      "feature": "<b>Edit User Functionality</b>",
+      "acceptances": [
+        {
+          "info": "<b>Navigation</b>",
+          "detail": [
+            {
+              "text": "<b>Button</b>: Edit button in Action column for users with Active/Inactive status",
+              "note": ""
+            },
+            {
+              "text": "<b>Destination</b>: Redirects to /user-management/users/[id]/update",
+              "note": ""
+            }
+          ]
+        },
+        {
+          "info": "<b>Pre-filled Form</b>",
+          "detail": [
+            {
+              "text": "<b>Nama*</b>:\n- Pre-filled with current user name",
+              "note": ""
+            },
+            {
+              "text": "<b>Role*</b>:\n- Pre-filled with current user role",
+              "note": ""
+            },
+            {
+              "text": "<b>Email*</b>:\n- Pre-filled with current user email",
+              "note": ""
+            },
+            {
+              "text": "<b>Perusahaan*</b>:\n- Pre-filled with current user perusahaan",
+              "note": ""
+            }
+          ]
+        },
+        {
+          "info": "<b>Form Actions</b>",
+          "detail": [
+            {
+              "text": "<b>Cancel</b>: Reset and back to user list",
+              "note": ""
+            },
+            {
+              "text": "<b>Save Changes</b>: Update user and display success message, redirect to user list",
+              "note": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "<b>UME09</b>",
+      "feature": "<b>User Detail Page</b>",
+      "acceptances": [
+        {
+          "info": "<b>Navigation</b>",
+          "detail": [
+            {
+              "text": "<b>Link</b>: Click on Nama User in the list",
+              "note": ""
+            },
+            {
+              "text": "<b>Destination</b>: Redirects to /user-management/users/[id]",
+              "note": ""
+            }
+          ]
+        },
+        {
+          "info": "<b>Display Information</b>",
+          "detail": [
+            {
+              "text": "<b>NIP</b>\n- Read Only"
+            },
+            {
+              "text": "<b>NIK</b>\n- Read Only"
+            },
+            {
+              "text": "<b>Nama User</b>\n- Read Only"
+            },
+            {
+              "text": "<b>Email</b>\n- Read Only"
+            },
+            {
+              "text": "<b>Role</b>\n- Tag chip with role-based styling"
+            },
+            {
+              "text": "<b>Username</b>\n- Read Only"
+            },
+            {
+              "text": "<b>Perusahaan</b>\n- Read Only"
+            },
+            {
+              "text": "<b>Status</b>\n- Tag chip (Active: green, Inactive: red)"
+            },
+            {
+              "text": "<b>Created At</b>\n- Read Only"
+            },
+            {
+              "text": "<b>Updated At</b>\n- Read Only"
+            }
+          ]
+        },
+        {
+          "info": "<b>Actions</b>",
+          "detail": [
+            {
+              "text": "<b>Delete</b> button with danger styling and confirmation modal",
+              "note": ""
+            },
+            {
+              "text": "<b>Edit</b> button with primary styling",
+              "note": ""
+            },
+            {
+              "text": "<b>Kembali</b> button to return to user list",
+              "note": ""
+            }
+          ]
+        },
+        {
+          "info": "<b>Delete Functionality</b>",
+          "detail": [
+            {
+              "text": "<b>Confirmation Modal</b>: Shows \"Apakah Anda yakin ingin menghapus data user ini?\"",
+              "note": ""
+            },
+            {
+              "text": "<b>Options</b>: Delete (danger) and Cancel buttons",
+              "note": ""
+            },
+            {
+              "text": "<b>Result</b>: Success message and redirect to user list",
+              "note": ""
+            }
+          ]
+        },
+        {
+          "info": "<b>Edit Functionality</b>",
+          "detail": [
+            {
+              "text": "<b>Navigation</b>: Redirects to /user-management/users/[id]/update",
+              "note": ""
+            },
+            {
+              "text": "<b>Form</b>: Pre-filled with current user data",
+              "note": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

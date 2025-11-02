@@ -1,6 +1,7 @@
 import { Space, Table, Row, Col, Card, Statistic, Progress, Tag } from "antd";
 import { Section, Tabs } from "admiral";
 import { Column, Bar, Line } from "@ant-design/plots";
+import "@/styles/project-detail-tabs.css";
 
 const DataVisualizationContent = () => {
   // Data untuk Realisasi Cost Bulanan (Million USD)
@@ -299,9 +300,9 @@ const DataVisualizationContent = () => {
 
   const changeStatusConfig = {
     data: changeStatusData,
-    xField: "count",
-    yField: "category",
-    height: 200,
+    xField: "category",
+    yField: "count",
+    height: 300,
     color: (data) => {
       switch(data.category) {
         case "Quality": return "#19315a";
@@ -311,14 +312,24 @@ const DataVisualizationContent = () => {
         default: return "#19315a";
       }
     },
+    columnStyle: {
+      radius: [4, 4, 0, 0],
+    },
     label: {
-      position: "right",
+      position: "top",
       style: {
         fill: "#000",
         fontSize: 12,
       },
     },
     xAxis: {
+      label: {
+        style: {
+          fontSize: 11,
+        },
+      },
+    },
+    yAxis: {
       max: 5,
       grid: {
         line: {
@@ -326,13 +337,6 @@ const DataVisualizationContent = () => {
             stroke: "#e8e8e8",
             strokeOpacity: 0.7,
           },
-        },
-      },
-    },
-    yAxis: {
-      label: {
-        style: {
-          fontSize: 11,
         },
       },
     },
@@ -572,35 +576,45 @@ const DataVisualizationContent = () => {
     },
   ];
 
-  // Data dummy untuk S-Curve Progress - Hanya Baseline dan Forecast
+  // Data dummy untuk S-Curve Progress - Baseline, Forecast, dan Aktual
   const sCurveData = [
-    // Baseline Progress (biru)
-    { month: 'Jan 2024', progress: 2.8, type: 'Baseline' },
-    { month: 'Feb 2024', progress: 5.8, type: 'Baseline' },
-    { month: 'Mar 2024', progress: 9.7, type: 'Baseline' },
-    { month: 'Apr 2024', progress: 15.1, type: 'Baseline' },
-    { month: 'May 2024', progress: 22.8, type: 'Baseline' },
-    { month: 'Jun 2024', progress: 32.7, type: 'Baseline' },
-    { month: 'Jul 2024', progress: 44.3, type: 'Baseline' },
-    { month: 'Aug 2024', progress: 56.8, type: 'Baseline' },
-    { month: 'Sep 2024', progress: 68.6, type: 'Baseline' },
-    { month: 'Oct 2024', progress: 78.4, type: 'Baseline' },
-    { month: 'Nov 2024', progress: 86.2, type: 'Baseline' },
-    { month: 'Dec 2024', progress: 92.5, type: 'Baseline' },
+    // Baseline Progress (biru) - S-Curve lengkap kumulatif
+    { month: 'Jan 2024', progress: 2, type: 'Baseline' },
+    { month: 'Feb 2024', progress: 5, type: 'Baseline' },
+    { month: 'Mar 2024', progress: 12, type: 'Baseline' },
+    { month: 'Apr 2024', progress: 25, type: 'Baseline' },
+    { month: 'May 2024', progress: 45, type: 'Baseline' },
+    { month: 'Jun 2024', progress: 65, type: 'Baseline' },
+    { month: 'Jul 2024', progress: 80, type: 'Baseline' },
+    { month: 'Aug 2024', progress: 90, type: 'Baseline' },
+    { month: 'Sep 2024', progress: 95, type: 'Baseline' },
+    { month: 'Oct 2024', progress: 98, type: 'Baseline' },
+    { month: 'Nov 2024', progress: 99, type: 'Baseline' },
+    { month: 'Dec 2024', progress: 100, type: 'Baseline' },
     
-    // Forecast Progress (merah)
+    // Forecast Progress (hijau) - S-Curve lengkap kumulatif
     { month: 'Jan 2024', progress: 1.5, type: 'Forecast' },
-    { month: 'Feb 2024', progress: 3.2, type: 'Forecast' },
-    { month: 'Mar 2024', progress: 6.8, type: 'Forecast' },
-    { month: 'Apr 2024', progress: 12.4, type: 'Forecast' },
-    { month: 'May 2024', progress: 19.7, type: 'Forecast' },
-    { month: 'Jun 2024', progress: 28.3, type: 'Forecast' },
-    { month: 'Jul 2024', progress: 38.1, type: 'Forecast' },
-    { month: 'Aug 2024', progress: 48.9, type: 'Forecast' },
-    { month: 'Sep 2024', progress: 59.2, type: 'Forecast' },
-    { month: 'Oct 2024', progress: 68.7, type: 'Forecast' },
-    { month: 'Nov 2024', progress: 77.1, type: 'Forecast' },
-    { month: 'Dec 2024', progress: 84.3, type: 'Forecast' },
+    { month: 'Feb 2024', progress: 4, type: 'Forecast' },
+    { month: 'Mar 2024', progress: 10, type: 'Forecast' },
+    { month: 'Apr 2024', progress: 21, type: 'Forecast' },
+    { month: 'May 2024', progress: 39, type: 'Forecast' },
+    { month: 'Jun 2024', progress: 61, type: 'Forecast' },
+    { month: 'Jul 2024', progress: 77, type: 'Forecast' },
+    { month: 'Aug 2024', progress: 89, type: 'Forecast' },
+    { month: 'Sep 2024', progress: 95, type: 'Forecast' },
+    { month: 'Oct 2024', progress: 98, type: 'Forecast' },
+    { month: 'Nov 2024', progress: 99.5, type: 'Forecast' },
+    { month: 'Dec 2024', progress: 100, type: 'Forecast' },
+    
+    // Aktual Progress (merah) - S-Curve belum selesai, berhenti di Agustus
+    { month: 'Jan 2024', progress: 1, type: 'Aktual' },
+    { month: 'Feb 2024', progress: 3, type: 'Aktual' },
+    { month: 'Mar 2024', progress: 8, type: 'Aktual' },
+    { month: 'Apr 2024', progress: 18, type: 'Aktual' },
+    { month: 'May 2024', progress: 35, type: 'Aktual' },
+    { month: 'Jun 2024', progress: 50, type: 'Aktual' },
+    { month: 'Jul 2024', progress: 60, type: 'Aktual' },
+    { month: 'Aug 2024', progress: 65, type: 'Aktual' },
   ];
 
   const sCurveConfig = {
@@ -610,7 +624,12 @@ const DataVisualizationContent = () => {
     seriesField: 'type',
     height: 400,
     color: (datum) => {
-      return datum.type === 'Baseline' ? '#19315a' : '#c41e3a';
+      switch(datum.type) {
+        case 'Baseline': return '#1890ff';
+        case 'Forecast': return '#52c41a';
+        case 'Aktual': return '#c41e3a';
+        default: return '#1890ff';
+      }
     },
     point: {
       size: 5,
@@ -887,7 +906,7 @@ const DataVisualizationContent = () => {
                 border: "1px solid #e8e8e8"
               }}
             >
-              <Bar {...changeStatusConfig} />
+              <Column {...changeStatusConfig} />
             </Section>
 
             {/* Total Open and Close Change */}
@@ -943,25 +962,41 @@ const DataVisualizationContent = () => {
       label: "Basic S-Curve",
       children: (
         <Space direction="vertical" size="large" style={{ width: "100%" }}>
-          {/* Top Row - Target vs Aktual dan Info */}
+          {/* Top Row - Baseline, Forecast, Aktual dan Info */}
           <Row gutter={[24, 24]}>
-            <Col span={6}>
+            <Col span={4}>
               <Card 
                 style={{ 
-                  backgroundColor: "#19315a", 
+                  backgroundColor: "#1890ff", 
                   color: "white",
                   textAlign: "center"
                 }}
               >
                 <Statistic
-                  title={<span style={{ color: "white", fontWeight: "bold" }}>TARGET</span>}
-                  value={26.8}
+                  title={<span style={{ color: "white", fontWeight: "bold" }}>BASELINE</span>}
+                  value={90}
                   suffix="%"
                   valueStyle={{ color: "white", fontSize: "24px", fontWeight: "bold" }}
                 />
               </Card>
             </Col>
-            <Col span={6}>
+            <Col span={4}>
+              <Card 
+                style={{ 
+                  backgroundColor: "#52c41a", 
+                  color: "white",
+                  textAlign: "center"
+                }}
+              >
+                <Statistic
+                  title={<span style={{ color: "white", fontWeight: "bold" }}>FORECAST</span>}
+                  value={89}
+                  suffix="%"
+                  valueStyle={{ color: "white", fontSize: "24px", fontWeight: "bold" }}
+                />
+              </Card>
+            </Col>
+            <Col span={4}>
               <Card 
                 style={{ 
                   backgroundColor: "#19315a", 
@@ -971,7 +1006,7 @@ const DataVisualizationContent = () => {
               >
                 <Statistic
                   title={<span style={{ color: "white", fontWeight: "bold" }}>AKTUAL</span>}
-                  value={12.4}
+                  value={65}
                   suffix="%"
                   valueStyle={{ color: "#c41e3a", fontSize: "24px", fontWeight: "bold" }}
                 />
@@ -986,7 +1021,7 @@ const DataVisualizationContent = () => {
                   borderRadius: "4px",
                   border: "1px solid #d9d9d9"
                 }}>
-                  Pelaksanaan
+                  Construction
                 </div>
               </Card>
             </Col>
@@ -999,7 +1034,7 @@ const DataVisualizationContent = () => {
                   borderRadius: "4px",
                   border: "1px solid #d9d9d9"
                 }}>
-                  1 Des 2020 - 31 Des 2020
+                  1 Jan 2024 - 31 Agt 2024
                 </div>
               </Card>
             </Col>
@@ -1030,18 +1065,18 @@ const DataVisualizationContent = () => {
                   alignItems: "center"
                 }}>
                   {[
-                    { month: 'Jan', value: 0.8 },
-                    { month: 'Feb', value: 1.3 },
-                    { month: 'Mar', value: 2.2 },
-                    { month: 'Apr', value: 3.0 },
-                    { month: 'May', value: 5.0 },
-                    { month: 'Jun', value: 8.1 },
-                    { month: 'Jul', value: 12.0 },
-                    { month: 'Aug', value: 17.0 },
-                    { month: 'Sep', value: 23.3 },
-                    { month: 'Oct', value: 31.0 },
-                    { month: 'Nov', value: 37.0 },
-                    { month: 'Dec', value: 44.0 }
+                    { month: 'Jan', actual: 1, baseline: 2 },
+                    { month: 'Feb', actual: 2, baseline: 3 },
+                    { month: 'Mar', actual: 5, baseline: 7 },
+                    { month: 'Apr', actual: 10, baseline: 13 },
+                    { month: 'May', actual: 17, baseline: 20 },
+                    { month: 'Jun', actual: 15, baseline: 20 },
+                    { month: 'Jul', actual: 10, baseline: 15 },
+                    { month: 'Aug', actual: 5, baseline: 10 },
+                    { month: 'Sep', actual: null, baseline: 5 },
+                    { month: 'Oct', actual: null, baseline: 3 },
+                    { month: 'Nov', actual: null, baseline: 1 },
+                    { month: 'Dec', actual: null, baseline: 1 }
                   ].map((item, idx) => (
                     <div key={item.month} style={{ 
                       display: "flex",
@@ -1059,21 +1094,66 @@ const DataVisualizationContent = () => {
                         {item.month}
                       </div>
                       
-                      {/* Progress Bar */}
+                      {/* Aktual Progress Bar */}
+                      {item.actual !== null ? (
+                        <div style={{
+                          width: "100%",
+                          height: "28px",
+                          backgroundColor: "#c41e3a",
+                          borderRadius: "4px",
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          color: "white",
+                          fontSize: "9px",
+                          fontWeight: "bold",
+                          textAlign: "center",
+                          padding: "2px"
+                        }}>
+                          <div style={{ fontSize: "7px", opacity: 0.9 }}>Aktual</div>
+                          <div>{item.actual}%</div>
+                        </div>
+                      ) : (
+                        <div style={{
+                          width: "100%",
+                          height: "28px",
+                          backgroundColor: "#f0f0f0",
+                          borderRadius: "4px",
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          color: "#999",
+                          fontSize: "9px",
+                          fontWeight: "bold",
+                          textAlign: "center",
+                          padding: "2px",
+                          border: "1px dashed #ccc"
+                        }}>
+                          <div style={{ fontSize: "7px", opacity: 0.9 }}>Aktual</div>
+                          <div>-</div>
+                        </div>
+                      )}
+                      
+                      {/* Baseline Progress Bar */}
                       <div style={{
                         width: "100%",
-                        height: "32px",
-                        backgroundColor: idx < 6 ? "#19315a" : "#c41e3a",
+                        height: "28px",
+                        backgroundColor: "#1890ff",
                         borderRadius: "4px",
                         display: "flex",
+                        flexDirection: "column",
                         alignItems: "center",
                         justifyContent: "center",
                         color: "white",
-                        fontSize: "10px",
+                        fontSize: "9px",
                         fontWeight: "bold",
-                        textAlign: "center"
+                        textAlign: "center",
+                        padding: "2px"
                       }}>
-                        {item.value}%
+                        <div style={{ fontSize: "7px", opacity: 0.9 }}>Baseline</div>
+                        <div>{item.baseline}%</div>
                       </div>
                     </div>
                   ))}
@@ -1330,6 +1410,7 @@ const DataVisualizationContent = () => {
       type="bordered-card"
       defaultActiveKey="realisasi-cost"
       items={visualizationTabs}
+      className="project-detail-visualization-tabs"
     />
   );
 };

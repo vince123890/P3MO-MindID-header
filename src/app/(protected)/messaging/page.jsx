@@ -1,5 +1,5 @@
-import { Button, Flex, message, Tag } from "antd";
-import { DeleteOutlined, EditOutlined, EyeOutlined, PlusCircleOutlined } from "@ant-design/icons";
+import { Button, Flex, message, Tag, Modal } from "antd";
+import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
 import { Link } from "react-router";
 import { Page, DataTable } from "admiral";
 
@@ -106,13 +106,6 @@ export const Component = () => {
         return (
           <Flex>
             <Link
-              to={urlParser("/messaging/:id", {
-                id: record.id,
-              })}
-            >
-              <Button type="link" icon={<EyeOutlined style={{ color: "green" }} />} />
-            </Link>
-            <Link
               to={urlParser("/messaging/:id/update", {
                 id: record.id,
               })}
@@ -123,7 +116,16 @@ export const Component = () => {
               type="link"
               icon={<DeleteOutlined style={{ color: "red" }} />}
               onClick={() => {
-                message.success("Message successfully deleted");
+                Modal.confirm({
+                  title: 'Delete Message',
+                  content: 'Are you sure you want to delete this message?',
+                  okText: 'Delete',
+                  cancelText: 'Cancel',
+                  okType: 'danger',
+                  onOk() {
+                    message.success("Message successfully deleted");
+                  },
+                });
               }}
             />
           </Flex>
@@ -145,7 +147,7 @@ export const Component = () => {
       breadcrumbs={breadcrumbs}
       topActions={
         <Link to={"/messaging/create"}>
-          <Button type="primary" icon={<PlusCircleOutlined />}>Compose Message</Button>
+          <Button type="primary" icon={<PlusOutlined />}>Compose Message</Button>
         </Link>
       }
       noStyle
@@ -190,8 +192,17 @@ export const Component = () => {
             key: "delete",
             label: "Delete",
             onClick: (_values, cb) => {
-              message.success("Selected messages successfully deleted");
-              cb.reset();
+              Modal.confirm({
+                title: 'Delete Selected Messages',
+                content: 'Are you sure you want to delete the selected messages?',
+                okText: 'Delete',
+                cancelText: 'Cancel',
+                okType: 'danger',
+                onOk() {
+                  message.success("Selected messages successfully deleted");
+                  cb.reset();
+                },
+              });
             },
             danger: true,
             icon: <DeleteOutlined />,

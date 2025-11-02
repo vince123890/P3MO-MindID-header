@@ -29,11 +29,11 @@ export const Component = () => {
       path: "/master-data/kurs",
     },
     {
-      label: data?.data?.nilai_kurs ?? "-",
+      label: `Kurs Details: USD 1 = IDR ${data?.data?.nilai_kurs ?? "-"}`,
       path: generatePath("/master-data/kurs/:id", { id: params.id }),
     },
     {
-      label: "Update",
+      label: `Update Kurs: USD 1 = IDR ${data?.data?.nilai_kurs}`,
       path: "#",
     },
   ];
@@ -41,7 +41,7 @@ export const Component = () => {
   const initialValues = {
     nilai_kurs: data?.data?.nilai_kurs,
     tanggal: formatStringToDate(data?.data?.tanggal),
-    status: data?.data?.status,
+    status: data?.data?.status === "Active",
   };
 
   return (

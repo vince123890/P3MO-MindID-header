@@ -99,3 +99,46 @@
 .ant-menu-item-selected[style*="background-color"] {
   background-color: var(--primary-red, #c41e3a) !important;
 }
+
+/* Collapsed Sidebar Styles */
+.ant-layout-sider-collapsed .ant-menu-item,
+.ant-layout-sider-collapsed .ant-menu-submenu-title {
+  padding-inline: 0 !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.ant-layout-sider-collapsed .ant-menu-item .anticon,
+.ant-layout-sider-collapsed .ant-menu-submenu-title .anticon {
+  margin: 0 !important;
+  font-size: 20px !important;
+}
+
+/* Hide submenu arrow when collapsed */
+.ant-layout-sider-collapsed .ant-menu-submenu-arrow {
+  display: none !important;
+}
+
+/* Hide menu text when collapsed */
+.ant-layout-sider-collapsed .ant-menu-item span:not(.anticon),
+.ant-layout-sider-collapsed .ant-menu-submenu-title span:not(.anticon) {
+  display: none !important;
+}
+
+/* Hide all text content in collapsed menu including links */
+.ant-layout-sider-collapsed .ant-menu-item a,
+.ant-layout-sider-collapsed .ant-menu-submenu-title {
+  width: 100% !important;
+  text-align: center !important;
+}
+
+.ant-layout-sider-collapsed .ant-menu-item a span:not(.anticon),
+.ant-layout-sider-collapsed .ant-menu-submenu-title > span:not(.anticon):not(.ant-menu-submenu-arrow) {
+  display: none !important;
+}
+
+/* Collapsed sidebar transition */
+.ant-layout-sider {
+  transition: all 0.2s ease-in-out !important;
+}

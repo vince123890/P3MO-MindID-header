@@ -1,19 +1,19 @@
 {
-  "module_name": "Master Data - Issue/Resiko",
+  "module_name": "Master Data - Issue",
   "data": [
     {
       "code": "<b>IRSK01</b>",
-      "feature": "<b>List Master Data Issue/Resiko</b>",
+      "feature": "<b>List Master Data Issue</b>",
       "acceptances": [
         {
           "info": "<b>Fields</b>",
           "detail": [
             {
-              "text": "<b>Search</b>:\n- Kode Issue/Resiko\n- Tipe Resiko/Issue",
+              "text": "<b>Search</b>:\n- Kode Issue\n- Tipe Issue",
               "note": ""
             },
             {
-              "text": "<b>Sorting ASC,DESC</b>:\n- Kode Issue/Resiko\n- Tipe Resiko/Issue\n- Created At",
+              "text": "<b>Sorting ASC,DESC</b>:\n- Kode Issue\n- Tipe Issue\n- Status",
               "note": "Default sorting by created_at"
             }
           ]
@@ -22,13 +22,13 @@
           "info": "<b>Fields Column</b>",
           "detail": [
             {
-              "text": "<b>Kode Issue/Resiko</b>\n- Hyperlink to detail"
+              "text": "<b>Kode Issue</b>\n- Hyperlink to detail"
             },
             {
-              "text": "<b>Tipe Resiko/Issue</b>\n- Read Only"
+              "text": "<b>Tipe Issue</b>\n- Read Only"
             },
             {
-              "text": "<b>Created At</b>\n- Read Only"
+              "text": "<b>Status</b>\n- Read Only"
             }
           ]
         },
@@ -47,6 +47,9 @@
             {
               "text": "<b>Bulk Action</b>: Delete",
               "note": "Multiple Data Check"
+            },
+            {
+              "text": "<b>Delete Confirmation</b>\n Show confirmation popup (Delete/Cancel) when deleting data"
             }
           ]
         }
@@ -54,18 +57,22 @@
     },
     {
       "code": "<b>IRSK02</b>",
-      "feature": "<b>Create Master Data Issue/Resiko</b>",
+      "feature": "<b>Create Master Data Issue</b>",
       "acceptances": [
         {
           "info": "<b>Fields</b>",
           "detail": [
             {
-              "text": "<b>Kode Issue/Resiko*</b>:\n- Text Field\n- String",
+              "text": "<b>Kode Issue*</b>:\n- Text Field\n- String",
               "note": "Required field"
             },
             {
-              "text": "<b>Tipe Resiko/Issue*</b>:\n- Text Field\n- String",
+              "text": "<b>Tipe Issue*</b>:\n- Text Field\n- String",
               "note": "Required field"
+            },
+            {
+              "text": "<b>Status*</b>:\n- Switch Button\n- Default ON (Active)\n- Active / Inactive",
+              "note": "Required field with default Active status"
             }
           ]
         },
@@ -73,10 +80,16 @@
           "info": "<b>Behavior</b>",
           "detail": [
             {
-              "text": "<b>Create</b>\n Save and Display data in the issue/risk list"
+              "text": "<b>Create</b>\n Save and Display data in the issue list"
             },
             {
               "text": "<b>Reset</b>\n Reset form to empty state"
+            },
+            {
+              "text": "<b>Breadcrumb</b>\n Master Data > Issue > <b>Tambah Issue</b>"
+            },
+            {
+              "text": "<b>Page Title</b>\n <b>Tambah Issue</b>"
             }
           ]
         }
@@ -84,22 +97,27 @@
     },
     {
       "code": "<b>IRSK03</b>",
-      "feature": "<b>Edit Master Data Issue/Resiko</b>",
+      "feature": "<b>Detail Master Data Issue</b>",
       "acceptances": [
         {
           "info": "<b>Fields</b>",
           "detail": [
             {
-              "text": "<b>Kode Issue/Resiko*</b>:\n- Text Field\n- String",
-              "note": "Required field"
+              "text": "<b>Kode Issue</b>\n- Read Only"
             },
             {
-              "text": "<b>Tipe Resiko/Issue*</b>:\n- Text Field\n- String",
-              "note": "Required field"
+              "text": "<b>Tipe Issue</b>\n- Read Only"
             },
             {
-              "text": "<b>Status*</b>:\n- Select Dropdown\n- Active / Inactive",
-              "note": "Only available on edit page - Update Status functionality"
+              "text": "<b>Status</b>\n- Read Only\n- Tag with color (Active: green, Inactive: red)"
+            },
+            {
+              "text": "<b>Created At</b>\n- Read Only\n- Date format",
+              "note": "Display creation timestamp"
+            },
+            {
+              "text": "<b>Updated At</b>\n- Read Only\n- Date format",
+              "note": "Display last update timestamp"
             }
           ]
         },
@@ -107,10 +125,16 @@
           "info": "<b>Behavior</b>",
           "detail": [
             {
-              "text": "<b>Update</b>\n Save and Display updated data in the issue/risk detail"
+              "text": "<b>Edit Button</b>\n Navigate to edit page"
             },
             {
-              "text": "<b>Reset</b>\n Reset form to initial values"
+              "text": "<b>Delete Button</b>\n Show delete confirmation and remove data"
+            },
+            {
+              "text": "<b>Breadcrumb</b>\n Master Data > Issue > <b>Issue Details: [Kode] - [Tipe]</b>"
+            },
+            {
+              "text": "<b>Page Title</b>\n <b>Issue Details: [Kode] - [Tipe]</b>"
             }
           ]
         }
@@ -118,7 +142,47 @@
     },
     {
       "code": "<b>IRSK04</b>",
-      "feature": "<b>Delete Master Data Issue/Resiko</b>",
+      "feature": "<b>Edit Master Data Issue</b>",
+      "acceptances": [
+        {
+          "info": "<b>Fields</b>",
+          "detail": [
+            {
+              "text": "<b>Kode Issue*</b>:\n- Text Field\n- String",
+              "note": "Required field"
+            },
+            {
+              "text": "<b>Tipe Issue*</b>:\n- Text Field\n- String",
+              "note": "Required field"
+            },
+            {
+              "text": "<b>Status*</b>:\n- Switch Button\n- Active / Inactive",
+              "note": "Update Status functionality - shows current status"
+            }
+          ]
+        },
+        {
+          "info": "<b>Behavior</b>",
+          "detail": [
+            {
+              "text": "<b>Update</b>\n Save and Display updated data in the issue detail"
+            },
+            {
+              "text": "<b>Reset</b>\n Reset form to initial values"
+            },
+            {
+              "text": "<b>Breadcrumb</b>\n Master Data > Issue > Issue Details: [Kode] - [Tipe] > <b>Update Issue: [Kode] - [Tipe]</b>"
+            },
+            {
+              "text": "<b>Page Title</b>\n <b>Update Issue: [Kode] - [Tipe]</b>"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "<b>IRSK05</b>",
+      "feature": "<b>Delete Master Data Issue</b>",
       "acceptances": [
         {
           "info": "<b>Behavior</b>",
@@ -128,6 +192,12 @@
             },
             {
               "text": "<b>Bulk Delete</b>\n Delete multiple selected items from list page"
+            },
+            {
+              "text": "<b>Delete Confirmation</b>\n Show confirmation popup with 'Konfirmasi Hapus' title and 'Apakah Anda yakin ingin menghapus Issue/Risk ini?' message"
+            },
+            {
+              "text": "<b>Confirmation Buttons</b>\n Delete (danger type) and Cancel buttons"
             }
           ]
         }

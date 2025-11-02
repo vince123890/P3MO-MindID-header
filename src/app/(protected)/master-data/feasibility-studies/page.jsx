@@ -31,25 +31,10 @@ export const Component = () => {
 
   const getStatusColor = (status) => {
     switch (status) {
-      case "Approved":
+      case "Assign":
         return "green";
-      case "Under Review":
+      case "Unassign":
         return "orange";
-      case "Draft":
-        return "blue";
-      default:
-        return "default";
-    }
-  };
-
-  const getSyncStatusColor = (syncStatus) => {
-    switch (syncStatus) {
-      case "Synced":
-        return "green";
-      case "Pending":
-        return "orange";
-      case "Failed":
-        return "red";
       default:
         return "default";
     }
@@ -110,15 +95,6 @@ export const Component = () => {
       ),
     },
     {
-      dataIndex: "sync_status",
-      title: "Sync Status",
-      key: "sync_status",
-      sorter: true,
-      render: (_, record) => (
-        <Tag color={getSyncStatusColor(record.sync_status)} style={{ border: 'none' }}>{record.sync_status}</Tag>
-      ),
-    },
-    {
       dataIndex: "last_sync_date",
       title: "Last Sync Date",
       key: "last_sync_date",
@@ -126,10 +102,13 @@ export const Component = () => {
       render: (_, record) => formatDate(record.last_sync_date),
     },
     {
-      dataIndex: "Action",
-      title: "Action",
-      key: "Action",
+      dataIndex: "Roles",
+      title: "Roles",
+      key: "Roles",
       render: (_, record) => {
+        if (record.status === "Assign") {
+          return "-";
+        }
         return (
           <Flex>
             <Link
@@ -203,21 +182,8 @@ export const Component = () => {
                 placeholder: "Select Status",
                 defaultValue: filters.status,
                 options: [
-                  { label: "Approved", value: "Approved" },
-                  { label: "Under Review", value: "Under Review" },
-                  { label: "Draft", value: "Draft" },
-                ],
-              },
-              {
-                label: "Sync Status",
-                name: "sync_status",
-                type: "Select",
-                placeholder: "Select Sync Status",
-                defaultValue: filters.sync_status,
-                options: [
-                  { label: "Synced", value: "Synced" },
-                  { label: "Pending", value: "Pending" },
-                  { label: "Failed", value: "Failed" },
+                  { label: "Assign", value: "Assign" },
+                  { label: "Unassign", value: "Unassign" },
                 ],
               },
               {

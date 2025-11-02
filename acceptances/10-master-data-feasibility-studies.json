@@ -1,6 +1,6 @@
 {
   "module_name": "Master Data - Feasibility Studies",
-  "updated_at": "2025-10-21T02:46:00Z",
+  "updated_at": "2025-10-29T07:09:00Z",
   "data": [
     {
       "code": "<b>FS01</b>",
@@ -14,11 +14,11 @@
               "note": ""
             },
             {
-              "text": "<b>Filter</b>:\n- Company\n- Status\n- Sync Status\n- Last Sync Date (Date Range)",
+              "text": "<b>Filter</b>:\n- Company\n- Status\n- Last Sync Date (Date Range)",
               "note": ""
             },
             {
-              "text": "<b>Sorting ASC,DESC</b>:\n- Project Code\n- Business Initiative Name\n- Company\n- CAPEX Estimate\n- IRR Estimate\n- NPV Estimate\n- Status\n- Sync Status\n- Last Sync Date",
+              "text": "<b>Sorting ASC,DESC</b>:\n- Project Code\n- Business Initiative Name\n- Company\n- CAPEX Estimate\n- IRR Estimate\n- NPV Estimate\n- Status\n- Last Sync Date",
               "note": "Default sorting by created_at"
             }
           ]
@@ -45,13 +45,13 @@
               "text": "<b>NPV Estimate</b>\n- Currency format (IDR)\n- Read Only"
             },
             {
-              "text": "<b>Status</b>\n- Tag format with color\n- Green: Approved, Orange: Under Review, Blue: Draft"
-            },
-            {
-              "text": "<b>Sync Status</b>\n- Tag format with color\n- Green: Synced, Orange: Pending, Red: Failed"
+              "text": "<b>Status</b>\n- Tag format with color\n- Green: Assign, Orange: Unassign"
             },
             {
               "text": "<b>Last Sync Date</b>\n- Date format\n- Read Only"
+            },
+            {
+              "text": "<b>Roles</b>\n- Shows '-' for status 'Assign'\n- Shows 'Add Approver & Viewer' button for status 'Unassign'"
             }
           ]
         },
@@ -65,7 +65,7 @@
               "text": "Default sorting based on most recent data"
             },
             {
-              "text": "<b>Action</b>: Detail, Tambah Approver & Viewer"
+              "text": "<b>Roles Column Behavior</b>:\n- Display '-' for records with status 'Assign' (already assigned)\n- Display 'Add Approver & Viewer' button for records with status 'Unassign'"
             },
             {
               "text": "<b>Sync Manual Button</b>: Primary button to synchronize data manually"
@@ -78,6 +78,31 @@
       "code": "<b>FS02</b>",
       "feature": "<b>Detail Master Data Feasibility Study</b>",
       "acceptances": [
+        {
+          "info": "<b>Approver & Viewer Information Section</b>",
+          "detail": [
+            {
+              "text": "<b>Perusahaan</b>:\n- Text Field\n- Read Only\n- Display '-' when status is 'Unassign'\n- Display company name when status is 'Assign'",
+              "note": ""
+            },
+            {
+              "text": "<b>Tim Project</b>:\n- Text Field\n- Read Only\n- Display '-' when status is 'Unassign'\n- Display team name when status is 'Assign'",
+              "note": ""
+            },
+            {
+              "text": "<b>Approver PMO AH</b>:\n- Display as comma-separated list\n- Read Only\n- Display '-' when status is 'Unassign'\n- Display approver names when status is 'Assign'",
+              "note": ""
+            },
+            {
+              "text": "<b>Approver PMO Mind ID</b>:\n- Display as comma-separated list\n- Read Only\n- Display '-' when status is 'Unassign'\n- Display approver names when status is 'Assign'",
+              "note": ""
+            },
+            {
+              "text": "<b>Viewer</b>:\n- Display as comma-separated list\n- Read Only\n- Display '-' when status is 'Unassign'\n- Display viewer names when status is 'Assign'",
+              "note": ""
+            }
+          ]
+        },
         {
           "info": "<b>Basic Information Section</b>",
           "detail": [
@@ -153,11 +178,7 @@
           "info": "<b>Status Information Section</b>",
           "detail": [
             {
-              "text": "<b>Status</b>:\n- Tag format with color\n- Green: Approved, Orange: Under Review, Blue: Draft",
-              "note": ""
-            },
-            {
-              "text": "<b>Sync Status</b>:\n- Tag format with color\n- Green: Synced, Orange: Pending, Red: Failed",
+              "text": "<b>Status</b>:\n- Tag format with color\n- Green: Assign, Orange: Unassign",
               "note": ""
             },
             {
@@ -177,13 +198,136 @@
               "text": "<b>Role</b>: Admin"
             },
             {
-              "text": "<b>Tambah Approver & Viewer Button</b>: Add approver and viewer access"
+              "text": "<b>Tambah Approver & Viewer Button</b>:\n- Hidden when status is 'Assign'\n- Visible and clickable when status is 'Unassign'\n- Navigate to add-approver-viewer page"
             },
             {
               "text": "<b>Navigation</b>: Back to list with breadcrumb"
             },
             {
               "text": "All fields are read-only for display purposes"
+            },
+            {
+              "text": "<b>Status Display</b>: Shown as tag chip with color (Green: Assign, Orange: Unassign)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "<b>FS03</b>",
+      "feature": "<b>Tambah Approver & Viewer</b>",
+      "acceptances": [
+        {
+          "info": "<b>Form Fields</b>",
+          "detail": [
+            {
+              "text": "<b>Perusahaan*</b>:\n- Select Dropdown\n- Required field\n- Options: MindID Group companies",
+              "note": ""
+            },
+            {
+              "text": "<b>Tim Project*</b>:\n- Select Dropdown\n- Required field\n- Options: Tim Engineering, Tim Construction, Tim Operations, Tim Finance, Tim IT & Digital, Tim HSE, Tim Procurement, Tim Legal & Compliance",
+              "note": ""
+            },
+            {
+              "text": "<b>Approver PMO AH*</b>:\n- Dynamic field with Add/Delete functionality\n- Each field is a single Select Dropdown\n- Required field (minimum 1 approver)\n- Can add multiple fields using 'Tambah Approver PMO AH' button\n- Can delete fields using delete button (only when more than 1 field exists)\n- Each field has search/filter capability",
+              "note": ""
+            },
+            {
+              "text": "<b>Approver PMO Mind ID*</b>:\n- Dynamic field with Add/Delete functionality\n- Each field is a single Select Dropdown\n- Required field (minimum 1 approver)\n- Can add multiple fields using 'Tambah Approver PMO Mind ID' button\n- Can delete fields using delete button (only when more than 1 field exists)\n- Each field has search/filter capability",
+              "note": ""
+            },
+            {
+              "text": "<b>Viewer*</b>:\n- Dynamic field with Add/Delete functionality\n- Each field is a single Select Dropdown\n- Required field (minimum 1 viewer)\n- Can add multiple fields using 'Tambah Viewer' button\n- Can delete fields using delete button (only when more than 1 field exists)\n- Each field has search/filter capability",
+              "note": ""
+            }
+          ]
+        },
+        {
+          "info": "<b>Confirmation Modal - Flow 1 (From Detail Page)</b>",
+          "detail": [
+            {
+              "text": "<b>Trigger</b>: Displayed when \"Add Approver & Viewer\" button is clicked from detail page",
+              "note": "Breadcrumb: Master Data / Feasibility Studies / [Investment Name] / Tambah Approver & Viewer"
+            },
+            {
+              "text": "<b>Modal Title</b>: \"Konfirmasi Tambah Approver & Viewer\"",
+              "note": ""
+            },
+            {
+              "text": "<b>Confirmation Message</b>: \"Apakah Anda yakin ingin menambahkan Approver & Viewer untuk feasibility study ini?\"",
+              "note": ""
+            },
+            {
+              "text": "<b>Basic Information Section</b>: Shows Investment Name, Company, Investment Code, Project Code",
+              "note": "Same format as detail page"
+            },
+            {
+              "text": "<b>Financial Information Section</b>: Shows CAPEX, OPEX, NPV, IRR",
+              "note": "Same format as detail page"
+            },
+            {
+              "text": "<b>Modal Actions</b>: \"Lanjutkan\" (OK) and \"Batal\" (Cancel) buttons",
+              "note": ""
+            },
+            {
+              "text": "<b>Validation</b>: Form validation before showing modal",
+              "note": "Shows modal only if all required fields are filled"
+            }
+          ]
+        },
+        {
+          "info": "<b>Confirmation Modal - Flow 2 (From List Page)</b>",
+          "detail": [
+            {
+              "text": "<b>Trigger</b>: Displayed when \"Add Approver & Viewer\" button is clicked from list page",
+              "note": "Breadcrumb: Master Data / Feasibility Studies / Tambah Approver & Viewer"
+            },
+            {
+              "text": "<b>Modal Title</b>: \"Konfirmasi Tambah Approver & Viewer\"",
+              "note": ""
+            },
+            {
+              "text": "<b>Confirmation Message</b>: \"Apakah Anda yakin ingin menambahkan Approver & Viewer baru?\"",
+              "note": ""
+            },
+            {
+              "text": "<b>Basic Information Section</b>: Shows Investment Name, Company, Investment Code, Project Code",
+              "note": "Dummy data: Digital Transformation Platform, PT Mind ID Indonesia, DTP-2024-001, PRJ-DTP-001"
+            },
+            {
+              "text": "<b>Financial Information Section</b>: Shows CAPEX, OPEX, NPV, IRR",
+              "note": "Dummy data: CAPEX Rp50.000.000.000, OPEX Rp8.000.000.000, NPV Rp12.000.000.000, IRR 22.5%"
+            },
+            {
+              "text": "<b>Modal Actions</b>: \"Lanjutkan\" (OK) and \"Batal\" (Cancel) buttons",
+              "note": ""
+            },
+            {
+              "text": "<b>Validation</b>: Form validation before showing modal",
+              "note": "Shows modal only if all required fields are filled"
+            }
+          ]
+        },
+        {
+          "info": "<b>Behavior</b>",
+          "detail": [
+            {
+              "text": "<b>Role</b>: Admin"
+            },
+            {
+              "text": "<b>Form Validation</b>: All fields are required"
+            },
+            {
+              "text": "<b>Add Approver & Viewer Button</b>: Shows confirmation modal with Basic Information & Financial Information"
+            },
+            {
+              "text": "<b>Cancel Button</b>: Navigate back to detail page"
+            },
+            {
+              "text": "<b>Search Functionality</b>: All dropdowns have search/filter capability"
+            },
+            {
+              "text": "<b>Success</b>: Show success message and navigate back to detail page"
             }
           ]
         }

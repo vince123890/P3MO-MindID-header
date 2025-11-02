@@ -12,33 +12,37 @@ export const Component = () => {
       path: "/master-data",
     },
     {
-      label: "Issue/Resiko",
+      label: "Issue",
       path: "/master-data/issue-risks",
     },
     {
-      label: "Create Issue/Risk",
+      label: "Tambah Issue",
       path: "#",
     },
   ];
 
   const handleOnFinish = (values) => {
-    // Automatically set status to Active when creating
-    const dataWithStatus = {
-      ...values,
-      status: "Active",
-    };
     message.success("Issue/Risk successfully created");
     navigate("/master-data/issue-risks");
   };
 
   return (
     <Page
-      title="Add Issue/Risk"
+      title="Tambah Issue"
       breadcrumbs={breadcrumb}
       noStyle
       goBack={() => navigate("/master-data/issue-risks")}
     >
-      <FormIssueRisk formProps={{ onFinish: handleOnFinish }} error={null} loading={false} />
+      <FormIssueRisk 
+        formProps={{ 
+          onFinish: handleOnFinish,
+          initialValues: {
+            status: "Active"
+          }
+        }} 
+        error={null} 
+        loading={false} 
+      />
     </Page>
   );
 };

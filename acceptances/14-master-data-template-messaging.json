@@ -13,11 +13,11 @@
               "note": ""
             },
             {
-              "text": "<b>Filter</b>:\n- Status\n- Perusahaan",
+              "text": "<b>Filter</b>:\n- Status\n- Perusahaan\n- Category\n- Trigger",
               "note": ""
             },
             {
-              "text": "<b>Sorting ASC,DESC</b>:\n- Nama Template\n- Perusahaan\n- Created At\n- Status",
+              "text": "<b>Sorting ASC,DESC</b>:\n- Nama Template\n- Perusahaan\n- Category\n- Trigger\n- Created At\n- Status",
               "note": "Default sorting by created_at"
             }
           ]
@@ -35,6 +35,12 @@
               "text": "<b>Created At</b>\n- Read Only\n- Formatted date"
             },
             {
+              "text": "<b>Category</b>\n- Read Only"
+            },
+            {
+              "text": "<b>Trigger</b>\n- Read Only"
+            },
+            {
               "text": "<b>Status</b>\n- Read Only\n- Tag component with color (Green for Active, Red for Inactive)"
             }
           ]
@@ -49,11 +55,7 @@
               "text": "Default sorting based on most recent data"
             },
             {
-              "text": "<b>Action</b>: Detail, Edit, Delete"
-            },
-            {
-              "text": "<b>Bulk Action</b>: Delete",
-              "note": "Multiple Data Check"
+              "text": "<b>Action</b>: Detail, Edit"
             }
           ]
         }
@@ -73,6 +75,18 @@
             {
               "text": "<b>Perusahaan*</b>:\n- Select Dropdown\n- Required\n- Data from Master Data Perusahaan",
               "note": ""
+            },
+            {
+              "text": "<b>Category*</b>:\n- Select Dropdown\n- Required\n- Options: Communication & Announcements, Notifications & Reminders, System & Security Alerts",
+              "note": "Positioned in same row as Trigger field"
+            },
+            {
+              "text": "<b>Trigger*</b>:\n- Select Dropdown\n- Required\n- Options depend on selected Category:\n  • Communication & Announcements: Registration Completed, Event Created\n  • Notifications & Reminders: Project Status, Meeting Scheduled (X hours before start), Due Date Approaching, Significant Decline Curve\n  • System & Security Alerts: Scheduled System Maintenance, Login from New Device",
+              "note": "Positioned in same row as Category field, disabled until Category is selected"
+            },
+            {
+              "text": "<b>Status</b>:\n- Switch Button\n- Default ON (Active)\n- Toggle between Active/Inactive",
+              "note": "Positioned in Template Information section"
             },
             {
               "text": "<b>Body*</b>:\n- WYSIWYG Editor (Future: TinyMCE)\n- Currently: Large Text Area with HTML support\n- Required\n- Minimum 10 characters",
@@ -116,6 +130,12 @@
               "text": "<b>Created At</b>\n- Read Only\n- Formatted date"
             },
             {
+              "text": "<b>Category</b>\n- Read Only"
+            },
+            {
+              "text": "<b>Trigger</b>\n- Read Only"
+            },
+            {
               "text": "<b>Updated At</b>\n- Read Only\n- Formatted date"
             }
           ]
@@ -135,10 +155,7 @@
           "info": "<b>Behavior</b>",
           "detail": [
             {
-              "text": "<b>Action Buttons</b>: Edit, Delete"
-            },
-            {
-              "text": "<b>Delete</b>: Confirmation and redirect to list"
+              "text": "<b>Action Button</b>: Edit"
             },
             {
               "text": "<b>Edit</b>: Navigate to update page"
@@ -163,12 +180,20 @@
               "note": ""
             },
             {
+              "text": "<b>Category*</b>:\n- Select Dropdown\n- Required\n- Options: Communication & Announcements, Notifications & Reminders, System & Security Alerts\n- Pre-filled with current value",
+              "note": "Positioned in same row as Trigger field"
+            },
+            {
+              "text": "<b>Trigger*</b>:\n- Select Dropdown\n- Required\n- Options depend on selected Category\n- Pre-filled with current value",
+              "note": "Positioned in same row as Category field"
+            },
+            {
               "text": "<b>Body*</b>:\n- WYSIWYG Editor (Future: TinyMCE)\n- Currently: Large Text Area with HTML support\n- Required\n- Minimum 10 characters\n- Pre-filled with current value",
               "note": "Supports HTML formatting and placeholders"
             },
             {
-              "text": "<b>Status*</b>:\n- Select Dropdown\n- Options: Active, Inactive\n- Required\n- Pre-filled with current value",
-              "note": "Only visible in edit mode"
+              "text": "<b>Status</b>:\n- Switch Button\n- Toggle between Active/Inactive\n- Pre-filled with current value",
+              "note": "Shows current status and allows toggling"
             }
           ]
         },
@@ -176,7 +201,7 @@
           "info": "<b>Behavior</b>",
           "detail": [
             {
-              "text": "<b>Cancel</b>:\n Reset and Back to template detail or list"
+              "text": "<b>Status</b>: Default to 'Active' (Switch ON) when creating"
             },
             {
               "text": "<b>Save Changes</b>\n Update data and Display success message"
@@ -190,5 +215,5 @@
     }
   ],
   "created_at": "2025-10-21T04:56:43.000Z",
-  "updated_at": "2025-10-21T04:56:43.000Z"
+  "updated_at": "2025-10-23T07:29:00.000Z"
 }

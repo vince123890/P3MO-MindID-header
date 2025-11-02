@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { MapContainer, TileLayer, CircleMarker, Popup, useMap, Marker } from "react-leaflet";
-import { Card, Tag, Typography, Space, Badge } from "antd";
+import { Card, Tag, Typography, Space, Badge, Row, Col } from "antd";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { projectsData } from "../_data";
@@ -63,35 +63,41 @@ const createCountMarker = (count) => {
   });
 };
 
-// Komponen Legend
+// Komponen Legend (separate from map)
 const MapLegend = ({ projects }) => {
+  // Define fixed legend items for holding companies using actual map colors
+  const legendItems = [
+    { name: "PT Aneka Tambang Tbk", color: "#ff4d4f" },
+    { name: "PT Bukit Asam Tbk", color: "#1890ff" },
+    { name: "PT Freeport Indonesia", color: "#fadb14" },
+    { name: "PT Indonesia Asahan Aluminium (Inalum)", color: "#52c41a" },
+    { name: "PT Timah Tbk", color: "#fa541c" },
+    { name: "PT Vale Indonesia", color: "#722ed1" },
+  ];
+
   return (
     <Card
+      title="Legend"
       size="small"
       style={{
-        position: "absolute",
-        bottom: "20px",
-        left: "20px",
-        zIndex: 1000,
-        maxWidth: "250px",
-        boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+        height: "100%",
+        boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
       }}
     >
       <Space direction="vertical" size="small" style={{ width: "100%" }}>
-        <Text strong style={{ fontSize: "12px" }}>Legend</Text>
-        {projects.map((project) => (
-          <div key={project.id} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+        {legendItems.map((item, index) => (
+          <div key={index} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
             <div
               style={{
-                width: "20px",
-                height: "20px",
+                width: "16px",
+                height: "16px",
                 borderRadius: "50%",
-                backgroundColor: project.color,
+                backgroundColor: item.color,
                 border: "2px solid white",
                 boxShadow: "0 0 4px rgba(0,0,0,0.3)",
               }}
             />
-            <Text style={{ fontSize: "11px" }}>{project.location}</Text>
+            <Text style={{ fontSize: "12px" }}>{item.name}</Text>
           </div>
         ))}
       </Space>
@@ -147,132 +153,139 @@ const MapContent = () => {
   };
 
   return (
-    <div style={{ position: "relative", width: "100%", height: "600px" }}>
-      <MapContainer
-        center={[-2.5, 118]}
-        zoom={5}
-        style={{ width: "100%", height: "100%", borderRadius: "8px" }}
-        scrollWheelZoom={true}
-      >
-        <SetMapBounds />
-        
-        {/* Tile Layer - OpenStreetMap */}
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
+    <Row gutter={16} style={{ width: "100%", height: "600px" }}>
+      {/* Map on the left */}
+      <Col span={18} style={{ height: "100%" }}>
+        <div style={{ position: "relative", width: "100%", height: "100%" }}>
+          <MapContainer
+            center={[-2.5, 118]}
+            zoom={5}
+            style={{ width: "100%", height: "100%", borderRadius: "8px" }}
+            scrollWheelZoom={true}
+          >
+            <SetMapBounds />
+            
+            {/* Tile Layer - OpenStreetMap */}
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
 
-        {/* City Groups - show count markers for cities with multiple projects */}
-        {cityGroups.map((cityGroup) => {
-          if (cityGroup.projectCount > 1) {
-            // Show count marker for cities with multiple projects
-            return (
-              <Marker
-                key={`city-${cityGroup.city}`}
-                position={cityGroup.coordinates}
-                icon={createCountMarker(cityGroup.projectCount)}
-              >
-                <Popup>
-                  <div style={{ minWidth: "300px" }}>
-                    <Title level={4} style={{ marginBottom: "12px", marginTop: 0, color: "#1890ff" }}>
-                      {cityGroup.city} ({cityGroup.projectCount} Projects)
-                    </Title>
-                    <Space direction="vertical" size="small" style={{ width: "100%" }}>
-                      <div>
-                        <Text strong>Total Budget: </Text>
-                        <Text style={{ color: "#fa8c16", fontWeight: "bold" }}>
-                          {formatCurrency(cityGroup.totalBudget)}
-                        </Text>
-                      </div>
-                      <div>
-                        <Text strong>Projects:</Text>
-                        <div style={{ marginTop: "8px" }}>
-                          {cityGroup.projects.map((project, index) => (
-                            <div key={project.id} style={{ 
-                              marginBottom: "8px", 
-                              padding: "8px", 
-                              backgroundColor: "#f5f5f5", 
-                              borderRadius: "4px",
-                              borderLeft: `4px solid ${project.color}`
-                            }}>
-                              <Text strong style={{ fontSize: "12px" }}>{project.name}</Text>
-                              <br />
-                              <Space size="small" style={{ marginTop: "4px" }}>
-                                <Text style={{ fontSize: "11px" }}>PIC: {project.pic}</Text>
-                                <Text style={{ fontSize: "11px" }}>Progress: {project.progress}%</Text>
-                                <Tag size="small" color={project.status === "In Progress" ? "blue" : "orange"}>
-                                  {project.status}
-                                </Tag>
-                              </Space>
-                              <br />
-                              <Text style={{ fontSize: "11px", color: "#666" }}>
-                                Budget: {formatCurrency(project.budget)}
-                              </Text>
+            {/* City Groups - show count markers for cities with multiple projects */}
+            {cityGroups.map((cityGroup) => {
+              if (cityGroup.projectCount > 1) {
+                // Show count marker for cities with multiple projects
+                return (
+                  <Marker
+                    key={`city-${cityGroup.city}`}
+                    position={cityGroup.coordinates}
+                    icon={createCountMarker(cityGroup.projectCount)}
+                  >
+                    <Popup>
+                      <div style={{ minWidth: "300px" }}>
+                        <Title level={4} style={{ marginBottom: "12px", marginTop: 0, color: "#1890ff" }}>
+                          {cityGroup.city} ({cityGroup.projectCount} Projects)
+                        </Title>
+                        <Space direction="vertical" size="small" style={{ width: "100%" }}>
+                          <div>
+                            <Text strong>Total Budget: </Text>
+                            <Text style={{ color: "#fa8c16", fontWeight: "bold" }}>
+                              {formatCurrency(cityGroup.totalBudget)}
+                            </Text>
+                          </div>
+                          <div>
+                            <Text strong>Projects:</Text>
+                            <div style={{ marginTop: "8px" }}>
+                              {cityGroup.projects.map((project, index) => (
+                                <div key={project.id} style={{ 
+                                  marginBottom: "8px", 
+                                  padding: "8px", 
+                                  backgroundColor: "#f5f5f5", 
+                                  borderRadius: "4px",
+                                  borderLeft: `4px solid ${project.color}`
+                                }}>
+                                  <Text strong style={{ fontSize: "12px" }}>{project.name}</Text>
+                                  <br />
+                                  <Space size="small" style={{ marginTop: "4px" }}>
+                                    <Text style={{ fontSize: "11px" }}>PIC: {project.pic}</Text>
+                                    <Text style={{ fontSize: "11px" }}>Progress: {project.progress}%</Text>
+                                    <Tag size="small" color={project.status === "In Progress" ? "blue" : "orange"}>
+                                      {project.status}
+                                    </Tag>
+                                  </Space>
+                                  <br />
+                                  <Text style={{ fontSize: "11px", color: "#666" }}>
+                                    Budget: {formatCurrency(project.budget)}
+                                  </Text>
+                                </div>
+                              ))}
                             </div>
-                          ))}
-                        </div>
+                          </div>
+                        </Space>
                       </div>
-                    </Space>
-                  </div>
-                </Popup>
-              </Marker>
-            );
-          } else {
-            // Show regular circle marker for single project cities
-            const project = cityGroup.projects[0];
-            return (
-              <CircleMarker
-                key={project.id}
-                center={project.coordinates}
-                radius={calculateRadius(project.budget)}
-                pathOptions={{
-                  fillColor: project.color,
-                  fillOpacity: 0.7,
-                  color: "white",
-                  weight: 3,
-                  opacity: 1,
-                }}
-              >
-                <Popup>
-                  <div style={{ minWidth: "250px" }}>
-                    <Title level={5} style={{ marginBottom: "8px", marginTop: 0 }}>
-                      {project.name}
-                    </Title>
-                    <Space direction="vertical" size="small" style={{ width: "100%" }}>
-                      <div>
-                        <Text strong>Location: </Text>
-                        <Text>{project.location}</Text>
+                    </Popup>
+                  </Marker>
+                );
+              } else {
+                // Show regular circle marker for single project cities
+                const project = cityGroup.projects[0];
+                return (
+                  <CircleMarker
+                    key={project.id}
+                    center={project.coordinates}
+                    radius={calculateRadius(project.budget)}
+                    pathOptions={{
+                      fillColor: project.color,
+                      fillOpacity: 0.7,
+                      color: "white",
+                      weight: 3,
+                      opacity: 1,
+                    }}
+                  >
+                    <Popup>
+                      <div style={{ minWidth: "250px" }}>
+                        <Title level={5} style={{ marginBottom: "8px", marginTop: 0 }}>
+                          {project.name}
+                        </Title>
+                        <Space direction="vertical" size="small" style={{ width: "100%" }}>
+                          <div>
+                            <Text strong>Location: </Text>
+                            <Text>{project.location}</Text>
+                          </div>
+                          <div>
+                            <Text strong>PIC: </Text>
+                            <Text>{project.pic}</Text>
+                          </div>
+                          <div>
+                            <Text strong>Budget: </Text>
+                            <Text>{formatCurrency(project.budget)}</Text>
+                          </div>
+                          <div>
+                            <Text strong>Progress: </Text>
+                            <Text>{project.progress}%</Text>
+                          </div>
+                          <div>
+                            <Text strong>Status: </Text>
+                            <Tag color={project.status === "In Progress" ? "blue" : "orange"}>
+                              {project.status}
+                            </Tag>
+                          </div>
+                        </Space>
                       </div>
-                      <div>
-                        <Text strong>PIC: </Text>
-                        <Text>{project.pic}</Text>
-                      </div>
-                      <div>
-                        <Text strong>Budget: </Text>
-                        <Text>{formatCurrency(project.budget)}</Text>
-                      </div>
-                      <div>
-                        <Text strong>Progress: </Text>
-                        <Text>{project.progress}%</Text>
-                      </div>
-                      <div>
-                        <Text strong>Status: </Text>
-                        <Tag color={project.status === "In Progress" ? "blue" : "orange"}>
-                          {project.status}
-                        </Tag>
-                      </div>
-                    </Space>
-                  </div>
-                </Popup>
-              </CircleMarker>
-            );
-          }
-        })}
-      </MapContainer>
+                    </Popup>
+                  </CircleMarker>
+                );
+              }
+            })}
+          </MapContainer>
+        </div>
+      </Col>
 
-      {/* Legend */}
-      <MapLegend projects={projects} />
-    </div>
+      {/* Legend on the right */}
+      <Col span={6} style={{ height: "100%" }}>
+        <MapLegend projects={projects} />
+      </Col>
+    </Row>
   );
 };
 

@@ -32,7 +32,7 @@ export const Component = () => {
       path: generatePath("/master-data/perusahaans/:id", { id: params.id }),
     },
     {
-      label: "Update",
+      label: `Update Perusahaan: ${data?.data?.nama_perusahaan}`,
       path: "#",
     },
   ];

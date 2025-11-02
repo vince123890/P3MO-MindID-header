@@ -1,5 +1,5 @@
-import { Button, Flex, message, Tag } from "antd";
-import { DeleteOutlined, EditOutlined, EyeOutlined, PlusCircleOutlined } from "@ant-design/icons";
+import { Button, Flex, message, Tag, Modal } from "antd";
+import { EditOutlined, EyeOutlined, PlusOutlined } from "@ant-design/icons";
 import { Link } from "react-router";
 import { Page, DataTable } from "admiral";
 
@@ -7,7 +7,6 @@ import { makeSource } from "@/utils/data-table";
 import { useFilter } from "@/app/_hooks/datatable/use-filter";
 import { urlParser } from "@/utils/url-parser";
 import { useGetData } from "@/app/_hooks/use-get-data";
-import { formatDate } from "@/utils/date-format";
 import { allTemplateMessagings } from "./_data";
 import { allPerusahaans } from "../perusahaans/_data";
 
@@ -35,25 +34,12 @@ export const Component = () => {
       ),
     },
     {
-      dataIndex: "perusahaan",
-      title: "Perusahaan",
-      key: "perusahaan",
-      sorter: true,
-    },
-    {
-      dataIndex: "created_at",
-      title: "Created At",
-      key: "created_at",
-      sorter: true,
-      render: (_, record) => {
-        return formatDate(record.created_at);
-      },
-    },
-    {
       dataIndex: "status",
       title: "Status",
       key: "status",
       sorter: true,
+      width: 120,
+      align: "center",
       render: (_, record) => {
         const color = record.status === "Active" ? "green" : "red";
         return <Tag color={color} style={{ border: 'none' }}>{record.status}</Tag>;
@@ -63,24 +49,17 @@ export const Component = () => {
       dataIndex: "Action",
       title: "Action",
       key: "Action",
+      width: 80,
+      align: "center",
       render: (_, record) => {
         return (
-          <Flex>
-            <Link
-              to={urlParser("/master-data/template-messaging/:id/update", {
-                id: record.id,
-              })}
-            >
-              <Button type="link" icon={<EditOutlined />} />
-            </Link>
-            <Button
-              type="link"
-              icon={<DeleteOutlined style={{ color: "red" }} />}
-              onClick={() => {
-                message.success("Template Messaging successfully deleted");
-              }}
-            />
-          </Flex>
+          <Link
+            to={urlParser("/master-data/template-messaging/:id/update", {
+              id: record.id,
+            })}
+          >
+            <Button type="link" icon={<EditOutlined />} />
+          </Link>
         );
       },
     },
@@ -103,7 +82,7 @@ export const Component = () => {
       breadcrumbs={breadcrumbs}
       topActions={
         <Link to={"/master-data/template-messaging/create"}>
-          <Button type="primary" icon={<PlusCircleOutlined />}>Tambah Template</Button>
+          <Button type="primary" icon={<PlusOutlined />}>Tambah Template</Button>
         </Link>
       }
       noStyle
@@ -122,15 +101,6 @@ export const Component = () => {
               { label: "Inactive", value: "Inactive" },
             ],
           },
-          {
-            label: "Perusahaan",
-            name: "perusahaan",
-            type: "Select",
-            placeholder: "Select Company",
-            width: 220,
-            defaultValue: filters.perusahaan,
-            options: companyOptions,
-          },
         ]}
         onChange={handleChange}
         rowKey="id"
@@ -138,19 +108,7 @@ export const Component = () => {
         source={makeSource(allTemplateMessagingsData.data)}
         columns={allTemplateMessagingsColumns}
         search={filters.search}
-        showRowSelection={true}
-        batchActionMenus={[
-          {
-            key: "delete",
-            label: "Delete",
-            onClick: (_values, cb) => {
-              message.success("Selected templates successfully deleted");
-              cb.reset();
-            },
-            danger: true,
-            icon: <DeleteOutlined />,
-          },
-        ]}
+        showRowSelection={false}
       />
     </Page>
   );

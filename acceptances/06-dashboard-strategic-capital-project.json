@@ -1,94 +1,63 @@
 {
-  "module_name": "Dashboard - Strategic Capital Project",
+  "module_name": "Dashboard - Projects",
   "created_at": "2025-10-20T21:06:00Z",
-  "updated_at": "2025-10-21T10:56:00Z",
+  "updated_at": "2025-10-28T01:27:00.000Z",
   "data": [
     {
       "code": "<b>DSCP01</b>",
-      "feature": "<b>Strategic Capital Project Dashboard</b>",
+      "feature": "<b>Projects List Page</b>",
       "acceptances": [
         {
-          "info": "<b>Main Dashboard Layout</b>",
+          "info": "<b>Page Structure</b>",
           "detail": [
             {
-              "text": "<b>Page Structure</b>:\n- Title integrated within main Section component\n- Organized into multiple subsections with titles\n- Clean sectioned layout with proper spacing",
-              "note": ""
+              "text": "<b>Title & Breadcrumb</b>:\n- Page title: Projects\n- Breadcrumb: Dashboard → Projects\n- Uses Page component from Admiral",
+              "note": "Changed from 'Strategic Capital Project' to 'Projects'"
             },
             {
-              "text": "<b>Loading State</b>:\n- Shows spinner while loading data\n- Graceful error handling\n- Loading prop passed to main Section",
+              "text": "<b>Layout</b>:\n- Full width DataTable\n- Clean, modern interface\n- Responsive design",
               "note": ""
             }
           ]
         },
         {
-          "info": "<b>Filters Section</b>",
+          "info": "<b>Search & Filter</b>",
           "detail": [
             {
-              "text": "<b>Filter Controls</b>:\n- Company: Multi-select dropdown (PTFI, PTBA, Inalum, Antam, Vale, Timah)\n- Project Phase: Multi-select dropdown (FEL 2, FEL 3, Detail Engineering, Construction, Commissioning, Operate Optimize)\n- Commodity: Multi-select dropdown (Nickel, Aluminium, Gold, Tin, Copper)\n- Date Range: Date range picker",
+              "text": "<b>Search Functionality</b>:\n- Auto-suggest search box\n- Searches by Project Code and Business Initiative Name\n- Shows suggestions with context (company info)\n- Real-time filtering as user types",
               "note": ""
             },
             {
-              "text": "<b>Filter Actions</b>:\n- Reset Filters button with reload icon\n- Apply Filters button with filter icon (primary style)\n- Responsive grid layout for filter controls",
+              "text": "<b>Status Filter</b>:\n- Single select dropdown\n- Options: Active, Pending, Completed, Cancelled\n- Width: 140px",
               "note": ""
             }
           ]
         },
         {
-          "info": "<b>Summary Information Section</b>",
+          "info": "<b>Table Columns</b>",
           "detail": [
             {
-              "text": "<b>Project Counter</b>:\n- Shows X of Y Projects counter\n- Secondary text styling\n- Positioned in dedicated section",
-              "note": ""
-            }
-          ]
-        },
-        {
-          "info": "<b>Investment and Performance Overview Section</b>",
-          "detail": [
-            {
-              "text": "<b>Total Investment</b>:\n- Donut chart visualization\n- Shows Upstream, Midstream, Downstream distribution\n- Brand-aligned colors (#1890ff, #52c41a, #fa8c16)",
+              "text": "<b>Project Code</b>:\n- Hyperlink to detail page\n- Underlined style\n- Sortable column\n- Links to /strategic-capital-project/{id}",
               "note": ""
             },
             {
-              "text": "<b>Total Project</b>:\n- Large number display showing total projects (22)\n- SPI indicator with color coding (green if ≥1, red if <1)\n- CPI indicator with color coding (green if ≥1, red if <1)\n- High Risk count in red (#f5222d)",
+              "text": "<b>Project Name</b>:\n- Full business initiative name\n- Sortable column\n- Width: 300px\n- Text ellipsis for long names",
               "note": ""
             },
             {
-              "text": "<b>Company Distribution</b>:\n- Donut chart showing company breakdown\n- Companies: PTFI, PTBA, Inalum, Antam, Vale, Timah\n- Brand-consistent color palette\n- Color-coded with legend",
+              "text": "<b>Company</b>:\n- Company name\n- Sortable column",
               "note": ""
             },
             {
-              "text": "<b>Project Objectives</b>:\n- Vertical bar chart showing objectives A, B, C, D, E\n- Primary brand color (#1890ff)\n- Tooltips show full objective names",
-              "note": ""
-            }
-          ]
-        },
-        {
-          "info": "<b>Detailed Analysis Section</b>",
-          "detail": [
-            {
-              "text": "<b>Project Phase</b>:\n- Vertical bar chart\n- Phases: FEL 2, FEL 3, Detail Engineering, Construction, Commissioning, Operate Optimize\n- Brand-consistent color palette\n- Rotated labels for better readability",
+              "text": "<b>Status Indicator</b>:\n- Tag component with color coding\n- On Track: green\n- At Risk: orange\n- Off Track: red\n- Sortable column",
               "note": ""
             },
             {
-              "text": "<b>Commodity Distribution</b>:\n- Vertical bar chart (improved from horizontal)\n- Commodities: Nickel, Aluminium, Gold, Tin, Copper\n- Consistent with other chart layouts\n- Rotated labels with proper spacing",
+              "text": "<b>Workflow Status</b>:\n- Tag component with color coding\n- Active: green\n- Pending: orange\n- Completed: blue\n- Cancelled: red\n- Sortable column",
               "note": ""
             },
             {
-              "text": "<b>Project Type</b>:\n- Vertical bar chart\n- Types: New First Pass Substitute, New Missing Facilities, Major Modifications, Minor Plant Relocation, Life Support Relocation\n- Brand-aligned color scheme\n- Rotated labels with smaller font for readability",
-              "note": ""
-            }
-          ]
-        },
-        {
-          "info": "<b>Design & Brand Guidelines</b>",
-          "detail": [
-            {
-              "text": "<b>Color Scheme</b>:\n- Primary Blue: #19315a\n- Primary Red: #c41e3a\n- Blue Light: #2a4a7a\n- Blue Hover: #21426e\n- Red Light: #d14458\n- Blue Dark: #0f1e3a",
-              "note": "Updated to match official brand guidelines from theme.css"
-            },
-            {
-              "text": "<b>Chart Consistency</b>:\n- All bar charts use vertical orientation\n- Consistent tooltip styling\n- Uniform spacing and margins\n- Responsive design for all screen sizes",
+              "text": "<b>Days Remaining till COD</b>:\n- Tag component with color coding\n- >90 days: green\n- 30-90 days: orange\n- <30 days: red\n- Shows '-' if null/undefined\n- Sortable column",
               "note": ""
             }
           ]
@@ -97,32 +66,199 @@
           "info": "<b>Data & Behavior</b>",
           "detail": [
             {
-              "text": "<b>Data Source</b>:\n- Uses dummy data from _data/index.js\n- Simulated API call with loading state\n- Filter state management with useState",
+              "text": "<b>Data Source</b>:\n- Uses allProjects from _data/index.js\n- Shares same data with PIMS module\n- Pagination support through meta data",
               "note": ""
             },
             {
-              "text": "<b>Filter Functionality</b>:\n- State-managed filter values\n- Reset filters functionality\n- Apply filters action (UI ready for backend integration)\n- Responsive filter layout",
+              "text": "<b>Loading State</b>:\n- Shows loading spinner while fetching\n- Graceful error handling",
               "note": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "<b>DSCP02</b>",
+      "feature": "<b>Project Detail Page</b>",
+      "acceptances": [
+        {
+          "info": "<b>Page Structure</b>",
+          "detail": [
+            {
+              "text": "<b>Title & Breadcrumb</b>:\n- Page title: Projects Detail: {project_code}\n- Breadcrumb: Dashboard → Projects → {project_code}\n- Back button navigates to /strategic-capital-project",
+              "note": "Reuses all components from PIMS detail page"
             },
             {
-              "text": "<b>Responsive Design</b>:\n- Grid layout with responsive columns\n- Charts resize automatically\n- Mobile-friendly layout\n- Section-based organization",
-              "note": ""
-            },
-            {
-              "text": "<b>Interactivity</b>:\n- Tooltips on all charts\n- Legends for pie charts\n- Hover effects on chart elements\n- Filter control interactions",
+              "text": "<b>Wizard Layout</b>:\n- Full-width wizard interface\n- Step-based navigation\n- Progress tracking\n- Submit and approval actions",
               "note": ""
             }
           ]
         },
         {
-          "info": "<b>Navigation</b>",
+          "info": "<b>Main Tabs</b>",
           "detail": [
             {
-              "text": "<b>Menu Integration</b>:\n- Available under Dashboard > Strategic Capital Project\n- Accessible to all roles",
+              "text": "<b>Data Input Tab</b>:\n- Contains 8 sub-tabs\n- Bordered card style navigation\n- Default active: Feasibility Study",
               "note": ""
             },
             {
-              "text": "<b>Route</b>:\n- Path: /strategic-capital-project\n- Protected route within dashboard structure",
+              "text": "<b>Data Visualisasi Tab</b>:\n- Charts and graphs\n- Project metrics visualization",
+              "note": ""
+            },
+            {
+              "text": "<b>Document Management Tab</b>:\n- Document upload/download\n- File management interface",
+              "note": ""
+            }
+          ]
+        },
+        {
+          "info": "<b>Data Input Sub-tabs</b>",
+          "detail": [
+            {
+              "text": "<b>Feasibility Study</b>:\n- Project feasibility information\n- Financial metrics\n- Technical details",
+              "note": ""
+            },
+            {
+              "text": "<b>Project Profile</b>:\n- Basic project information\n- Stakeholder details",
+              "note": ""
+            },
+            {
+              "text": "<b>Project Baseline</b>:\n- Baseline metrics\n- Initial project parameters",
+              "note": ""
+            },
+            {
+              "text": "<b>Project Performance</b>:\n- Performance tracking\n- KPI monitoring",
+              "note": ""
+            },
+            {
+              "text": "<b>Project Issues</b>:\n- Issue tracking table\n- Create/view/edit issues\n- Issue status management",
+              "note": ""
+            },
+            {
+              "text": "<b>Project Risks</b>:\n- Risk tracking table\n- Create/view/edit risks\n- Risk mitigation plans",
+              "note": ""
+            },
+            {
+              "text": "<b>Current Activity</b>:\n- Activity timeline\n- Task management",
+              "note": ""
+            },
+            {
+              "text": "<b>Change Status</b>:\n- Status change workflow\n- Approval process",
+              "note": ""
+            }
+          ]
+        },
+        {
+          "info": "<b>Approval Features</b>",
+          "detail": [
+            {
+              "text": "<b>Floating Approval Log</b>:\n- WhatsApp-style floating panel\n- Shows approval timeline\n- Creator and approver information\n- Status indicators (created, approved, pending, rejected)\n- Toggle visibility with eye icon button",
+              "note": ""
+            },
+            {
+              "text": "<b>Approval Actions</b>:\n- Approve button (green)\n- Reject button (red)\n- Modal confirmation\n- Optional notes field",
+              "note": ""
+            }
+          ]
+        },
+        {
+          "info": "<b>Components Reused from PIMS</b>",
+          "detail": [
+            {
+              "text": "<b>All Components</b>:\n- FeasibilityContent\n- ProjectProfileContent\n- ProjectBaselineContent\n- ProjectPerformanceContent\n- ProjectIssuesContent\n- ProjectRisksContent\n- ProjectActivitiesContent\n- ProjectChangeStatusContent\n- DocumentManagerContent\n- DataVisualizationContent\n- ProjectWizard",
+              "note": "All components imported from ../../projects/[id]/_components/"
+            },
+            {
+              "text": "<b>Data Sources</b>:\n- Uses same project data as PIMS\n- Shares issue, risk, and activity data\n- Identical functionality to PIMS detail page",
+              "note": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "<b>DSCP04</b>",
+      "feature": "<b>Sebaran Project per Kota Section</b>",
+      "acceptances": [
+        {
+          "info": "<b>Section Structure</b>",
+          "detail": [
+            {
+              "text": "<b>Location</b>:\n- Positioned below the DataTable\n- Wrapped in Space component with 'middle' size\n- Full width display",
+              "note": "Shows individual project cards instead of city summary"
+            },
+            {
+              "text": "<b>Component</b>:\n- Uses CityDistributionContent component\n- Imported from ../project-anggota-holding/_components/CityDistributionContent\n- Prop: showProjectCards={true}",
+              "note": "Enhanced component with project cards display mode"
+            }
+          ]
+        },
+        {
+          "info": "<b>Project Card Display</b>",
+          "detail": [
+            {
+              "text": "<b>Card Information</b>:\n- Project Code (clickable link)\n- Project Name (with ellipsis for long names)\n- Company name",
+              "note": "Clean, organized layout with labeled fields"
+            },
+            {
+              "text": "<b>Interactive Features</b>:\n- Project Code links to project detail page (/strategic-capital-project/{id})\n- Hover tooltip displays additional status information\n- Responsive grid layout (4 columns on desktop, 2 on tablet, 1 on mobile)",
+              "note": ""
+            },
+            {
+              "text": "<b>Tooltip Content</b>:\n- Status Indicator (On Track/At Risk/Off Track)\n- Workflow Status (Active/Pending/Completed/Cancelled)\n- Days Remaining till COD",
+              "note": "Appears on card hover"
+            },
+            {
+              "text": "<b>Visual Design</b>:\n- Small card size with hover effect\n- Border radius: 8px\n- Box shadow for depth\n- Info icon with 'Hover untuk detail status' message",
+              "note": "Consistent with overall design system"
+            }
+          ]
+        },
+        {
+          "info": "<b>Data & Behavior</b>",
+          "detail": [
+            {
+              "text": "<b>Data Source</b>:\n- Uses allProjects data\n- Displays all projects from the table\n- Real-time sync with table data",
+              "note": ""
+            },
+            {
+              "text": "<b>Loading State</b>:\n- Suspense boundary with fallback message\n- Shows 'Loading city distribution...' while loading",
+              "note": ""
+            },
+            {
+              "text": "<b>User Experience</b>:\n- Provides quick visual overview of all projects\n- Clickable cards for easy navigation\n- Tooltip provides status summary without cluttering the card\n- Complements table view with visual card layout",
+              "note": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "<b>DSCP03</b>",
+      "feature": "<b>Navigation & Routing</b>",
+      "acceptances": [
+        {
+          "info": "<b>Menu Integration</b>",
+          "detail": [
+            {
+              "text": "<b>Sidebar Menu</b>:\n- Menu label changed to 'Projects'\n- Located under Dashboard menu\n- Available to all roles (permissions: [\"All\"])",
+              "note": "Changed from 'Strategic Capital Project' to 'Projects'"
+            },
+            {
+              "text": "<b>Routes</b>:\n- List page: /strategic-capital-project\n- Detail page: /strategic-capital-project/{id}\n- All routes protected within dashboard structure",
+              "note": "URL path remains /strategic-capital-project but display name is 'Projects'"
+            }
+          ]
+        },
+        {
+          "info": "<b>Breadcrumb Updates</b>",
+          "detail": [
+            {
+              "text": "<b>List Page</b>:\n- Dashboard → Projects",
+              "note": ""
+            },
+            {
+              "text": "<b>Detail Page</b>:\n- Dashboard → Projects → {project_code}",
               "note": ""
             }
           ]

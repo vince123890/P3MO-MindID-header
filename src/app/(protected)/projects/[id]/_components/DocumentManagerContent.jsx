@@ -1,17 +1,45 @@
-import { useState } from "react";
-import { Space, Button, Modal, Avatar, Typography, Divider, Input, message, Tooltip, Popover, Table } from "antd";
-import { Section } from "admiral";
-import { MessageOutlined, DownloadOutlined, EyeOutlined, PlusOutlined } from "@ant-design/icons";
+import { useState, useMemo } from "react";
+import { Space, Button, Modal, Avatar, Typography, Divider, Input, message, Form, Select, Flex, Upload, Row, Col, Descriptions } from "antd";
+import { Section, DataTable } from "admiral";
+import { MessageOutlined, EditOutlined, DeleteOutlined, PlusOutlined, ArrowLeftOutlined, UploadOutlined, EyeOutlined, SearchOutlined } from "@ant-design/icons";
 import { documentData } from "../_data/documents";
+import { makeSource } from "@/utils/data-table";
 
-const { Text, Title } = Typography;
+const { Text } = Typography;
 const { TextArea } = Input;
 
-const DocumentManagerContent = () => {
+const DocumentManagerContent = ({ readOnly = false }) => {
+  // State to manage view mode: 'list', 'create', 'detail', or 'edit'
+  const [viewMode, setViewMode] = useState("list");
   const [isCommentModalVisible, setIsCommentModalVisible] = useState(false);
-  const [isDetailModalVisible, setIsDetailModalVisible] = useState(false);
   const [selectedDocument, setSelectedDocument] = useState(null);
   const [newComment, setNewComment] = useState("");
+  const [uploadModalVisible, setUploadModalVisible] = useState(false);
+  const [searchText, setSearchText] = useState("");
+  const [form] = Form.useForm();
+
+  // Filter documents based on search text
+  const filteredDocuments = useMemo(() => {
+    if (!searchText.trim()) {
+      return documentData;
+    }
+    
+    const searchLower = searchText.toLowerCase();
+    const filtered = {
+      ...documentData,
+      data: {
+        ...documentData.data,
+        items: documentData.data.items.filter(item => 
+          item.stage?.toLowerCase().includes(searchLower) ||
+          item.document?.toLowerCase().includes(searchLower) ||
+          item.type?.toLowerCase().includes(searchLower) ||
+          item.chapter?.toLowerCase().includes(searchLower)
+        )
+      }
+    };
+    
+    return filtered;
+  }, [searchText]);
 
   const handleCommentClick = (record) => {
     setSelectedDocument(record);
@@ -20,18 +48,13 @@ const DocumentManagerContent = () => {
 
   const handleDetailClick = (record) => {
     setSelectedDocument(record);
-    setIsDetailModalVisible(true);
+    setViewMode('detail');
   };
 
   const handleCloseCommentModal = () => {
     setIsCommentModalVisible(false);
     setSelectedDocument(null);
     setNewComment("");
-  };
-
-  const handleCloseDetailModal = () => {
-    setIsDetailModalVisible(false);
-    setSelectedDocument(null);
   };
 
   const handleSubmitComment = () => {
@@ -44,231 +67,616 @@ const DocumentManagerContent = () => {
     }
   };
 
+  // Handle form submission for create/edit
+  const handleFileUpload = () => {
+    setUploadModalVisible(true);
+  };
+
+  const handleUploadModalOk = () => {
+    message.success("File uploaded successfully");
+    setUploadModalVisible(false);
+  };
+
+  const handleUploadModalCancel = () => {
+    setUploadModalVisible(false);
+  };
+
+  const handleFileAction = (fileName) => {
+    message.info(`View/Download ${fileName}`);
+  };
+
+  const handleFormSubmit = (values) => {
+    if (viewMode === 'edit') {
+      message.success("Document updated successfully");
+    } else {
+      message.success("Document created successfully");
+    }
+    form.resetFields();
+    setViewMode('list');
+    setSelectedDocument(null);
+  };
+
+  // Handle back button
+  const handleBack = () => {
+    form.resetFields();
+    setViewMode('list');
+    setSelectedDocument(null);
+  };
+
+  // Handle delete confirmation
+  const handleDeleteConfirm = (record) => {
+    Modal.confirm({
+      title: 'Konfirmasi Hapus',
+      content: 'Apakah Anda yakin ingin menghapus document ini?',
+      okText: 'Delete',
+      cancelText: 'Cancel',
+      okType: 'danger',
+      onOk() {
+        message.success("Document successfully deleted");
+      },
+    });
+  };
+
   const columns = [
     {
-      title: "Stage",
       dataIndex: "stage",
       key: "stage",
-      width: 150,
+      title: "Stage",
       sorter: true,
-    },
-    {
-      title: "Document",
-      dataIndex: "document",
-      key: "document",
-      sorter: true,
-    },
-    {
-      title: "Type",
-      dataIndex: "type",
-      key: "type",
-      width: 120,
-      sorter: true,
-    },
-    {
-      title: "Chapter",
-      dataIndex: "chapter",
-      key: "chapter",
-      width: 120,
-      sorter: true,
-    },
-    {
-      title: "Actions",
-      key: "actions",
-      width: 130,
-      render: (_, record) => (
-        <Space>
-          <Button
-            type="text"
-            icon={<EyeOutlined />}
-            onClick={() => handleDetailClick(record)}
-            title="View Detail"
-          />
-          <Button
-            type="text"
-            icon={<MessageOutlined />}
-            onClick={() => handleCommentClick(record)}
-            title="View Comments"
-          />
-          <Button
-            type="text"
-            icon={<DownloadOutlined />}
-            title="Download Document"
-          />
-        </Space>
+      width: 180,
+      render: (text, record) => (
+        <Button
+          type="link"
+          onClick={() => handleDetailClick(record)}
+          style={{ 
+            color: '#0F1E3A', 
+            textDecoration: 'underline',
+            textDecorationColor: '#0F1E3A',
+            padding: 0,
+            height: 'auto',
+            textAlign: 'left'
+          }}
+        >
+          {text}
+        </Button>
       ),
     },
     {
-      title: "Comment",
-      key: "comment",
+      dataIndex: "document",
+      key: "document",
+      title: "Document",
+      sorter: true,
+      ellipsis: true,
+    },
+    {
+      dataIndex: "type",
+      key: "type",
+      title: "Type",
+      sorter: true,
+      width: 150,
+    },
+    {
+      dataIndex: "chapter",
+      key: "chapter",
+      title: "Chapter",
+      sorter: true,
+      width: 180,
+    },
+    ...(!readOnly ? [{
+      dataIndex: "Action",
+      title: "Action",
+      key: "Action",
       width: 120,
-      render: (_, record) => {
-        const commentsCount = record.comments?.length || 0;
-        
-        if (commentsCount === 0) {
-          return (
-            <Button
-              type="link"
-              onClick={() => handleCommentClick(record)}
-              style={{ padding: 0 }}
-            >
-              0 Comments
-            </Button>
-          );
-        }
+      render: (_, record) => (
+        <Flex>
+          <Button
+            type="link"
+            icon={<MessageOutlined />}
+            size="small"
+            onClick={() => handleCommentClick(record)}
+          />
+          <Button
+            type="link"
+            icon={<EditOutlined />}
+            size="small"
+            onClick={() => {
+              setSelectedDocument(record);
+              setViewMode('edit');
+              form.setFieldsValue(record);
+            }}
+          />
+          <Button
+            type="link"
+            icon={<DeleteOutlined style={{ color: "red" }} />}
+            size="small"
+            onClick={() => handleDeleteConfirm(record)}
+          />
+        </Flex>
+      ),
+    }] : []),
+  ];
 
-        const previewContent = (
-          <div style={{ maxWidth: 350 }}>
-            <div style={{ marginBottom: 12, fontWeight: 'bold' }}>
-              Recent Comments ({commentsCount})
-            </div>
-            {record.comments?.slice(0, 2).map((comment) => (
-              <div key={comment.id} style={{ marginBottom: 12 }}>
-                <Space align="start" size={8}>
-                  <Avatar size={24} style={{ backgroundColor: "#1890ff" }}>
-                    {comment.user?.charAt(0)}
-                  </Avatar>
-                  <div style={{ flex: 1 }}>
-                    <div style={{ marginBottom: 4 }}>
-                      <Text strong style={{ fontSize: 12 }}>{comment.user}</Text>
-                      <br />
-                      <Text type="secondary" style={{ fontSize: 11 }}>
-                        {comment.date}
-                      </Text>
-                    </div>
-                    <div style={{ 
-                      backgroundColor: "#f9f9f9", 
-                      padding: 8, 
-                      borderRadius: 6,
-                      fontSize: 12,
-                      border: "1px solid #e8e8e8"
-                    }}>
-                      <Text style={{ fontSize: 12 }}>
-                        {comment.content.length > 100 
-                          ? `${comment.content.substring(0, 100)}...` 
-                          : comment.content
-                        }
-                      </Text>
-                    </div>
-                  </div>
-                </Space>
-              </div>
-            ))}
-            {commentsCount > 2 && (
-              <div style={{ textAlign: 'center', marginTop: 8 }}>
-                <Text type="secondary" style={{ fontSize: 11 }}>
-                  +{commentsCount - 2} more comments
-                </Text>
-              </div>
-            )}
-            <Divider style={{ margin: "8px 0" }} />
-            <div style={{ textAlign: 'center' }}>
+  // Render detail view
+  if (viewMode === 'detail' && selectedDocument) {
+    return (
+      <Space direction="vertical" size="middle" style={{ width: "100%" }}>
+        {/* Header with back button */}
+        <Flex align="center" justify="space-between" style={{ paddingTop: '16px', paddingBottom: '16px' }}>
+          <Flex align="center" gap={12}>
+            <Button 
+              icon={<ArrowLeftOutlined />} 
+              onClick={handleBack}
+              type="text"
+            />
+            <Text strong style={{ fontSize: '18px' }}>Document Detail: {selectedDocument.stage || ""}</Text>
+          </Flex>
+          {!readOnly && (
+            <Space>
               <Button 
-                type="primary" 
-                size="small"
-                onClick={() => handleCommentClick(record)}
+                danger
+                onClick={() => handleDeleteConfirm(selectedDocument)}
               >
-                View All Comments
+                Delete
               </Button>
-            </div>
-          </div>
-        );
+              <Button 
+                type="primary"
+                onClick={() => {
+                  setViewMode('edit');
+                  form.setFieldsValue(selectedDocument);
+                }}
+              >
+                Edit
+              </Button>
+            </Space>
+          )}
+        </Flex>
 
-        return (
-          <Popover
-            content={previewContent}
-            title={null}
-            trigger="hover"
-            placement="left"
-            overlayStyle={{ maxWidth: 380 }}
+        <Section title="Document Information">
+          <Space direction="vertical" size="middle" style={{ width: "100%" }}>
+            <Descriptions
+              bordered
+              layout="horizontal"
+              labelStyle={{ width: '25%' }}
+              contentStyle={{ width: '25%' }}
+              column={2}
+              items={[
+                {
+                  key: "stage",
+                  label: "Stage",
+                  children: <Text strong>{selectedDocument.stage}</Text>,
+                },
+                {
+                  key: "type",
+                  label: "Type",
+                  children: <Text strong>{selectedDocument.type}</Text>,
+                },
+                {
+                  key: "document",
+                  label: "Document",
+                  children: selectedDocument.document ? (
+                    <a 
+                      href={`/files/${selectedDocument.document}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ 
+                        color: "#1890ff", 
+                        textDecoration: "underline",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "6px"
+                      }}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleFileAction(selectedDocument.document);
+                      }}
+                    >
+                      <EyeOutlined />
+                      <Text strong>{selectedDocument.document}</Text>
+                    </a>
+                  ) : (
+                    <Text strong>-</Text>
+                  ),
+                },
+                {
+                  key: "chapter",
+                  label: "Chapter",
+                  children: <Text strong>{selectedDocument.chapter}</Text>,
+                },
+                {
+                  key: "total_comments",
+                  label: "Total Comments",
+                  children: <Text strong>{selectedDocument.comments?.length || 0}</Text>,
+                },
+              ]}
+            />
+          </Space>
+        </Section>
+      </Space>
+    );
+  }
+
+  // Render create form view
+  if (viewMode === 'create') {
+    return (
+      <Space direction="vertical" size="middle" style={{ width: "100%" }}>
+        {/* Header with back button */}
+        <Flex align="center" gap={12} style={{ paddingTop: '16px', paddingBottom: '16px' }}>
+          <Button 
+            icon={<ArrowLeftOutlined />} 
+            onClick={handleBack}
+            type="text"
+          />
+          <Text strong style={{ fontSize: '18px' }}>Create New Document</Text>
+        </Flex>
+
+        <Section title="Document Information">
+          <Form
+            form={form}
+            layout="vertical"
+            onFinish={handleFormSubmit}
           >
-            <Button
-              type="link"
-              onClick={() => handleCommentClick(record)}
-              style={{ padding: 0 }}
-            >
-              {commentsCount} Comments
-            </Button>
-          </Popover>
-        );
-      },
-    },
-  ];
+            <Row gutter={[24, 16]}>
+              <Col xs={24} md={12}>
+                <Form.Item
+                  label="Stage"
+                  name="stage"
+                  rules={[{ required: true, message: 'Please select stage' }]}
+                >
+                  <Select placeholder="Select stage">
+                    <Select.Option value="FEL 2">FEL 2</Select.Option>
+                    <Select.Option value="FEL 3">FEL 3</Select.Option>
+                    <Select.Option value="FID">FID</Select.Option>
+                    <Select.Option value="Detail Engineering">Detail Engineering</Select.Option>
+                    <Select.Option value="Construction">Construction</Select.Option>
+                    <Select.Option value="Commissioning">Commissioning</Select.Option>
+                    <Select.Option value="Operate Optimize">Operate Optimize</Select.Option>
+                  </Select>
+                </Form.Item>
+              </Col>
 
-  const filters = [
-    {
-      label: "Stage",
-      name: "stage",
-      type: "Select",
-      placeholder: "Select stage",
-      options: [
-        { label: "Commissioning", value: "Commissioning" },
-        { label: "Construction", value: "Construction" },
-        { label: "Detail Engineering", value: "Detail Engineering" },
-        { label: "Operate & Optimize", value: "Operate & Optimize" },
-      ],
-    },
-    {
-      label: "Type",
-      name: "type",
-      type: "Select",
-      placeholder: "Select type",
-      options: [
-        { label: "Project Docs.", value: "Project Docs." },
-        { label: "Contract", value: "Contract" },
-        { label: "Permit", value: "Permit" },
-        { label: "Commercial", value: "Commercial" },
-        { label: "Technical Manual", value: "Technical Manual" },
-      ],
-    },
-    {
-      label: "Chapter",
-      name: "chapter",
-      type: "Select",
-      placeholder: "Select chapter",
-      options: [
-        { label: "Engineering", value: "Engineering" },
-        { label: "Quality Assurance", value: "Quality Assurance" },
-        { label: "Procurement", value: "Procurement" },
-        { label: "Installation", value: "Installation" },
-        { label: "Operations", value: "Operations" },
-        { label: "Project Management", value: "Project Management" },
-        { label: "Risk Management", value: "Risk Management" },
-        { label: "Testing", value: "Testing" },
-      ],
-    },
-  ];
+              <Col xs={24} md={12}>
+                <Form.Item
+                  label="Type"
+                  name="type"
+                  rules={[{ required: true, message: 'Please select type' }]}
+                >
+                  <Select placeholder="Select type">
+                    <Select.Option value="Project Docs.">Project Docs.</Select.Option>
+                    <Select.Option value="Contract">Contract</Select.Option>
+                    <Select.Option value="Permit">Permit</Select.Option>
+                    <Select.Option value="Commercial">Commercial</Select.Option>
+                    <Select.Option value="Technical Manual">Technical Manual</Select.Option>
+                  </Select>
+                </Form.Item>
+              </Col>
 
+              <Col xs={24} md={12}>
+                <Form.Item 
+                  label="Document"
+                  name="document"
+                  rules={[{ required: true, message: 'Please upload document' }]}
+                >
+                  <div style={{ 
+                    display: "flex", 
+                    alignItems: "center", 
+                    gap: "12px",
+                    flexWrap: "wrap"
+                  }}>
+                    {/* File Display Area */}
+                    <div style={{ 
+                      flex: 1,
+                      minWidth: "200px",
+                      padding: "8px 12px", 
+                      border: "1px solid #d9d9d9", 
+                      borderRadius: "6px",
+                      backgroundColor: "#fafafa",
+                      display: "flex",
+                      alignItems: "center",
+                      height: "32px"
+                    }}>
+                      {form.getFieldValue('document') ? (
+                        <a 
+                          href={`/files/${form.getFieldValue('document')}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{ 
+                            color: "#1890ff", 
+                            textDecoration: "underline",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "6px"
+                          }}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleFileAction(form.getFieldValue('document'));
+                          }}
+                        >
+                          <EyeOutlined />
+                          {form.getFieldValue('document')}
+                        </a>
+                      ) : (
+                        <span style={{ color: "#999" }}>No file uploaded</span>
+                      )}
+                    </div>
+                    
+                    {/* Upload Button */}
+                    <Button
+                      icon={<UploadOutlined />}
+                      onClick={handleFileUpload}
+                      style={{ height: "32px" }}
+                    >
+                      Upload
+                    </Button>
+                  </div>
+                </Form.Item>
+              </Col>
+
+              <Col xs={24} md={12}>
+                <Form.Item
+                  label="Chapter"
+                  name="chapter"
+                  rules={[{ required: true, message: 'Please select chapter' }]}
+                >
+                  <Select placeholder="Select chapter">
+                    <Select.Option value="Engineering">Engineering</Select.Option>
+                    <Select.Option value="Quality Assurance">Quality Assurance</Select.Option>
+                    <Select.Option value="Procurement">Procurement</Select.Option>
+                    <Select.Option value="Installation">Installation</Select.Option>
+                    <Select.Option value="Operations">Operations</Select.Option>
+                    <Select.Option value="Project Management">Project Management</Select.Option>
+                    <Select.Option value="Risk Management">Risk Management</Select.Option>
+                    <Select.Option value="Testing">Testing</Select.Option>
+                  </Select>
+                </Form.Item>
+              </Col>
+            </Row>
+
+            <Row justify="end" style={{ marginTop: "24px" }}>
+              <Space>
+                <Button onClick={handleBack}>
+                  Cancel
+                </Button>
+                <Button type="primary" htmlType="submit">
+                  Create
+                </Button>
+              </Space>
+            </Row>
+          </Form>
+        </Section>
+      </Space>
+    );
+  }
+
+  // Render edit form view
+  if (viewMode === 'edit' && selectedDocument) {
+    return (
+      <Space direction="vertical" size="middle" style={{ width: "100%" }}>
+        {/* Header with back button */}
+        <Flex align="center" gap={12} style={{ paddingTop: '16px', paddingBottom: '16px' }}>
+          <Button 
+            icon={<ArrowLeftOutlined />} 
+            onClick={handleBack}
+            type="text"
+          />
+          <Text strong style={{ fontSize: '18px' }}>Edit Document: {selectedDocument.stage || ""}</Text>
+        </Flex>
+
+        <Section title="Document Information">
+          <Form
+            form={form}
+            layout="vertical"
+            onFinish={handleFormSubmit}
+            initialValues={selectedDocument}
+          >
+            <Row gutter={[24, 16]}>
+              <Col xs={24} md={12}>
+                <Form.Item
+                  label="Stage"
+                  name="stage"
+                  rules={[{ required: true, message: 'Please select stage' }]}
+                >
+                  <Select placeholder="Select stage">
+                    <Select.Option value="FEL 2">FEL 2</Select.Option>
+                    <Select.Option value="FEL 3">FEL 3</Select.Option>
+                    <Select.Option value="FID">FID</Select.Option>
+                    <Select.Option value="Detail Engineering">Detail Engineering</Select.Option>
+                    <Select.Option value="Construction">Construction</Select.Option>
+                    <Select.Option value="Commissioning">Commissioning</Select.Option>
+                    <Select.Option value="Operate Optimize">Operate Optimize</Select.Option>
+                  </Select>
+                </Form.Item>
+              </Col>
+
+              <Col xs={24} md={12}>
+                <Form.Item
+                  label="Type"
+                  name="type"
+                  rules={[{ required: true, message: 'Please select type' }]}
+                >
+                  <Select placeholder="Select type">
+                    <Select.Option value="Project Docs.">Project Docs.</Select.Option>
+                    <Select.Option value="Contract">Contract</Select.Option>
+                    <Select.Option value="Permit">Permit</Select.Option>
+                    <Select.Option value="Commercial">Commercial</Select.Option>
+                    <Select.Option value="Technical Manual">Technical Manual</Select.Option>
+                  </Select>
+                </Form.Item>
+              </Col>
+
+              <Col xs={24} md={12}>
+                <Form.Item 
+                  label="Document"
+                  name="document"
+                  rules={[{ required: true, message: 'Please upload document' }]}
+                >
+                  <div style={{ 
+                    display: "flex", 
+                    alignItems: "center", 
+                    gap: "12px",
+                    flexWrap: "wrap"
+                  }}>
+                    {/* File Display Area */}
+                    <div style={{ 
+                      flex: 1,
+                      minWidth: "200px",
+                      padding: "8px 12px", 
+                      border: "1px solid #d9d9d9", 
+                      borderRadius: "6px",
+                      backgroundColor: "#fafafa",
+                      display: "flex",
+                      alignItems: "center",
+                      height: "32px"
+                    }}>
+                      {selectedDocument.document ? (
+                        <a 
+                          href={`/files/${selectedDocument.document}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{ 
+                            color: "#1890ff", 
+                            textDecoration: "underline",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "6px"
+                          }}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleFileAction(selectedDocument.document);
+                          }}
+                        >
+                          <EyeOutlined />
+                          {selectedDocument.document}
+                        </a>
+                      ) : (
+                        <span style={{ color: "#999" }}>No file uploaded</span>
+                      )}
+                    </div>
+                    
+                    {/* Upload Button */}
+                    <Button
+                      icon={<UploadOutlined />}
+                      onClick={handleFileUpload}
+                      style={{ height: "32px" }}
+                    >
+                      Upload
+                    </Button>
+                  </div>
+                </Form.Item>
+              </Col>
+
+              <Col xs={24} md={12}>
+                <Form.Item
+                  label="Chapter"
+                  name="chapter"
+                  rules={[{ required: true, message: 'Please select chapter' }]}
+                >
+                  <Select placeholder="Select chapter">
+                    <Select.Option value="Engineering">Engineering</Select.Option>
+                    <Select.Option value="Quality Assurance">Quality Assurance</Select.Option>
+                    <Select.Option value="Procurement">Procurement</Select.Option>
+                    <Select.Option value="Installation">Installation</Select.Option>
+                    <Select.Option value="Operations">Operations</Select.Option>
+                    <Select.Option value="Project Management">Project Management</Select.Option>
+                    <Select.Option value="Risk Management">Risk Management</Select.Option>
+                    <Select.Option value="Testing">Testing</Select.Option>
+                  </Select>
+                </Form.Item>
+              </Col>
+            </Row>
+
+            <Row justify="end" style={{ marginTop: "24px" }}>
+              <Space>
+                <Button onClick={handleBack}>
+                  Cancel
+                </Button>
+                <Button type="primary" htmlType="submit">
+                  Save Changes
+                </Button>
+              </Space>
+            </Row>
+          </Form>
+        </Section>
+      </Space>
+    );
+  }
+
+  // Render list view
   return (
     <Space direction="vertical" size="middle" style={{ width: "100%" }}>
-      <Section>
-        <Section 
-          title="Document Manager"
-          actions={[
-            <Button key="create" type="primary" icon={<PlusOutlined />}>
+      {/* Document Management List with Create Button */}
+      <Section bodyStyle={{ padding: 24 }}>
+        <Flex align="center" justify="space-between" style={{ width: '100%' }}>
+          <Text strong style={{ fontSize: '16px' }}>Document Management</Text>
+          {!readOnly && (
+            <Button type="primary" icon={<PlusOutlined />} onClick={() => setViewMode('create')}>
               Create New
             </Button>
-          ]}
-        >
-          <div style={{ marginBottom: 16 }}>
-            <Text>Total Documents: {documentData?.data?.items?.length || 0}</Text>
-          </div>
-          
-          <Table
-            columns={columns}
-            dataSource={documentData?.data?.items || []}
-            pagination={{
-              current: documentData?.data?.meta?.page || 1,
-              pageSize: documentData?.data?.meta?.per_page || 10,
-              total: documentData?.data?.meta?.total || 0,
-              showSizeChanger: true,
-              showQuickJumper: true,
-            }}
-            rowKey="id"
-            scroll={{ x: 1000 }}
-          />
-        </Section>
+          )}
+        </Flex>
       </Section>
+      
+      <Section bodyStyle={{ padding: 16 }} bordered={false}>
+        {/* Search Input */}
+        <Input
+          placeholder="Search by Stage, Document, Type, or Chapter..."
+          prefix={<SearchOutlined />}
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+          style={{ marginBottom: 16 }}
+          allowClear
+        />
+        
+        <DataTable
+          rowKey="id"
+          loading={false}
+          source={makeSource(filteredDocuments)}
+          columns={columns}
+          search=""
+          hideSearch
+          showRowSelection={false}
+          scroll={{ x: 830 }}
+          pagination={{
+            sticky: true,
+            showSizeChanger: true,
+            showQuickJumper: true,
+            showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+          }}
+        />
+      </Section>
+
+      {/* Upload Modal */}
+      <Modal
+        title="Upload Document"
+        open={uploadModalVisible}
+        onOk={handleUploadModalOk}
+        onCancel={handleUploadModalCancel}
+        footer={[
+          <Button key="cancel" onClick={handleUploadModalCancel}>
+            Cancel
+          </Button>,
+          <Button key="upload" type="primary" onClick={handleUploadModalOk}>
+            Upload
+          </Button>,
+        ]}
+      >
+        <Space direction="vertical" style={{ width: '100%' }}>
+          <Text>Upload document file</Text>
+          <Upload.Dragger
+            name="file"
+            multiple={false}
+            beforeUpload={() => false}
+            onChange={(info) => {
+              console.log('File info:', info);
+            }}
+          >
+            <p className="ant-upload-drag-icon">
+              <UploadOutlined />
+            </p>
+            <p className="ant-upload-text">Click or drag file to this area to upload</p>
+            <p className="ant-upload-hint">Support for single file upload.</p>
+          </Upload.Dragger>
+        </Space>
+      </Modal>
 
       {/* Comment Modal */}
       <Modal
@@ -329,103 +737,6 @@ const DocumentManagerContent = () => {
                 onChange={(e) => setNewComment(e.target.value)}
                 placeholder="Enter your comment here..."
               />
-            </div>
-          </Space>
-        )}
-      </Modal>
-
-      {/* Detail Modal */}
-      <Modal
-        title={`Document Detail - ${selectedDocument?.document || "Document"}`}
-        open={isDetailModalVisible}
-        onCancel={handleCloseDetailModal}
-        footer={[
-          <Button key="close" onClick={handleCloseDetailModal}>
-            Close
-          </Button>
-        ]}
-        width={700}
-      >
-        {selectedDocument && (
-          <Space direction="vertical" size="large" style={{ width: "100%" }}>
-            <div>
-              <Space direction="vertical" size="middle" style={{ width: "100%" }}>
-                <div>
-                  <Text strong>Document Name:</Text>
-                  <br />
-                  <Text style={{ fontSize: 16 }}>{selectedDocument.document}</Text>
-                </div>
-                
-                <Divider />
-                
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-                  <div>
-                    <Text strong>Stage:</Text>
-                    <br />
-                    <Text>{selectedDocument.stage}</Text>
-                  </div>
-                  <div>
-                    <Text strong>Type:</Text>
-                    <br />
-                    <Text>{selectedDocument.type}</Text>
-                  </div>
-                  <div>
-                    <Text strong>Chapter:</Text>
-                    <br />
-                    <Text>{selectedDocument.chapter}</Text>
-                  </div>
-                  <div>
-                    <Text strong>Total Comments:</Text>
-                    <br />
-                    <Text>{selectedDocument.comments?.length || 0}</Text>
-                  </div>
-                </div>
-
-                <Divider />
-
-                <div>
-                  <Text strong>Recent Comments:</Text>
-                  <div style={{ marginTop: 12 }}>
-                    {selectedDocument.comments?.slice(0, 3).map((comment, index) => (
-                      <div key={comment.id} style={{ 
-                        marginBottom: 12, 
-                        padding: 12, 
-                        backgroundColor: "#fafafa", 
-                        borderRadius: 8,
-                        border: "1px solid #e8e8e8"
-                      }}>
-                        <Space align="start">
-                          <Avatar size={32} style={{ backgroundColor: "#1890ff" }}>
-                            {comment.user?.charAt(0)}
-                          </Avatar>
-                          <div style={{ flex: 1 }}>
-                            <div style={{ marginBottom: 4 }}>
-                              <Text strong>{comment.user}</Text>
-                              <Text type="secondary" style={{ marginLeft: 8, fontSize: 12 }}>
-                                {comment.date}
-                              </Text>
-                            </div>
-                            <Text>{comment.content}</Text>
-                          </div>
-                        </Space>
-                      </div>
-                    ))}
-                    {selectedDocument.comments?.length > 3 && (
-                      <div style={{ textAlign: 'center', marginTop: 8 }}>
-                        <Button 
-                          type="link" 
-                          onClick={() => {
-                            handleCloseDetailModal();
-                            handleCommentClick(selectedDocument);
-                          }}
-                        >
-                          View All {selectedDocument.comments.length} Comments
-                        </Button>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </Space>
             </div>
           </Space>
         )}

@@ -13,7 +13,8 @@ export const ActivityForm = ({
   isEdit = false, 
   isView = false,
   initialData = null,
-  onSubmit 
+  onSubmit,
+  onCancel 
 }) => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
@@ -23,11 +24,27 @@ export const ActivityForm = ({
   );
 
   // Form field options
-  const faseOptions = [
-    { label: "Perencanaan", value: "Perencanaan" },
-    { label: "Pengembangan", value: "Pengembangan" },
-    { label: "In HPO", value: "In HPO" },
+  const taskIdOptions = [
+    { label: "TASK-001", value: "TASK-001" },
+    { label: "TASK-002", value: "TASK-002" },
+    { label: "TASK-003", value: "TASK-003" },
+    { label: "TASK-004", value: "TASK-004" },
+    { label: "TASK-005", value: "TASK-005" },
+    { label: "TASK-006", value: "TASK-006" },
+    { label: "TASK-007", value: "TASK-007" },
+    { label: "TASK-008", value: "TASK-008" },
+    { label: "TASK-009", value: "TASK-009" },
+    { label: "TASK-010", value: "TASK-010" },
+  ];
+
+  const stageOptions = [
+    { label: "FEL 2", value: "FEL 2" },
+    { label: "FEL 3", value: "FEL 3" },
     { label: "FID", value: "FID" },
+    { label: "Detail Engineering", value: "Detail Engineering" },
+    { label: "Construction", value: "Construction" },
+    { label: "Commissioning", value: "Commissioning" },
+    { label: "Operate Optimize", value: "Operate Optimize" },
   ];
 
   const statusOptions = [
@@ -74,335 +91,309 @@ export const ActivityForm = ({
       onFinish={handleFinish}
       initialValues={{
         ...initialData,
-        bulan_pelaporan_start: initialData?.bulan_pelaporan_start ? dayjs(initialData.bulan_pelaporan_start) : null,
-        bulan_pelaporan_end: initialData?.bulan_pelaporan_end ? dayjs(initialData.bulan_pelaporan_end) : null,
+        bulan_pelaporan: initialData?.bulan_pelaporan ? dayjs(initialData.bulan_pelaporan) : null,
         tanggal_aktivitas: initialData?.tanggal_aktivitas ? dayjs(initialData.tanggal_aktivitas) : dayjs(),
         latest_modified: initialData?.latest_modified ? dayjs(initialData.latest_modified) : dayjs(),
-        milestone: initialData?.milestone || false,
+        critical_task: initialData?.critical_task || false,
       }}
     >
       <Space direction="vertical" size="middle" style={{ width: "100%" }}>
         {/* Basic Information Section */}
-        <Section>
-          <Section title="Basic Information">
-            <Row gutter={16}>
-              <Col span={12}>
-                <Form.Item
-                  label="Task ID"
-                  name="task_id"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Task ID is required",
-                    },
-                  ]}
-                >
-                  <Input 
-                    placeholder="TASK-001"
-                    disabled={isView || isEdit}
-                  />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item
-                  label="Fase"
-                  name="fase"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Fase is required",
-                    },
-                  ]}
-                >
-                  <Select 
-                    placeholder="Select fase"
-                    options={faseOptions}
-                    disabled={isView}
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={16}>
-              <Col span={12}>
-                <Form.Item
-                  label="Bulan Pelaporan (Start)"
-                  name="bulan_pelaporan_start"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Start date is required",
-                    },
-                  ]}
-                >
-                  <DatePicker 
-                    style={{ width: "100%" }} 
-                    placeholder="Select start date"
-                    disabled={isView}
-                  />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item
-                  label="Bulan Pelaporan (End)"
-                  name="bulan_pelaporan_end"
-                  rules={[
-                    {
-                      required: true,
-                      message: "End date is required",
-                    },
-                  ]}
-                >
-                  <DatePicker 
-                    style={{ width: "100%" }} 
-                    placeholder="Select end date"
-                    disabled={isView}
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
-          </Section>
+        <Section title="Basic Information" shadow={false} style={{ padding: 0 }}>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item
+                label="Task ID"
+                name="task_id"
+                rules={[
+                  {
+                    required: true,
+                    message: "Task ID is required",
+                  },
+                ]}
+              >
+                <Select 
+                  placeholder="Select Task ID"
+                  options={taskIdOptions}
+                  disabled={isView || isEdit}
+                />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                label="Stage"
+                name="stage"
+                rules={[
+                  {
+                    required: true,
+                    message: "Stage is required",
+                  },
+                ]}
+              >
+                <Select 
+                  placeholder="Select stage"
+                  options={stageOptions}
+                  disabled={isView}
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item
+                label="Bulan Pelaporan"
+                name="bulan_pelaporan"
+                rules={[
+                  {
+                    required: true,
+                    message: "Bulan Pelaporan is required",
+                  },
+                ]}
+              >
+                <DatePicker 
+                  picker="month"
+                  style={{ width: "100%" }} 
+                  placeholder="Select month and year"
+                  format="MMMM YYYY"
+                  disabled={isView}
+                />
+              </Form.Item>
+            </Col>
+          </Row>
         </Section>
 
         {/* Activity Progress Section */}
-        <Section>
-          <Section title="Activity Progress">
-            <Row gutter={16}>
-              <Col span={24}>
-                <Form.Item
-                  label="Aktivitas Bulan Sebelumnya"
-                  name="aktivitas_bulan_sebelumnya"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Previous month activity is required",
-                    },
-                  ]}
-                >
-                  <Input.TextArea 
-                    placeholder="Enter previous month activity description"
-                    rows={3}
-                    disabled={isView}
-                  />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item
-                  label="Status Bulan Sebelumnya"
-                  name="status_bulan_sebelumnya"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Previous month status is required",
-                    },
-                  ]}
-                >
-                  <Select 
-                    placeholder="Select status"
-                    options={statusOptions}
-                    disabled={isView}
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={16}>
-              <Col span={24}>
-                <Form.Item
-                  label="Aktivitas Bulan Berjalan"
-                  name="aktivitas_bulan_berjalan"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Current month activity is required",
-                    },
-                  ]}
-                >
-                  <Input.TextArea 
-                    placeholder="Enter current month activity description"
-                    rows={3}
-                    disabled={isView}
-                  />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item
-                  label="Status Bulan Berjalan"
-                  name="status_bulan_berjalan"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Current month status is required",
-                    },
-                  ]}
-                >
-                  <Select 
-                    placeholder="Select status"
-                    options={statusOptions}
-                    disabled={isView}
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
-          </Section>
+        <Section title="Activity Progress" shadow={false} style={{ padding: 0 }}>
+          <Row gutter={16}>
+            <Col span={24}>
+              <Form.Item
+                label="Aktivitas Bulan Berjalan"
+                name="aktivitas_bulan_sebelumnya"
+                rules={[
+                  {
+                    required: true,
+                    message: "Current month activity is required",
+                  },
+                ]}
+              >
+                <Input.TextArea 
+                  placeholder="Enter current month activity description"
+                  rows={3}
+                  disabled={isView}
+                />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                label="Status Berjalan"
+                name="status_bulan_sebelumnya"
+                rules={[
+                  {
+                    required: true,
+                    message: "Current status is required",
+                  },
+                ]}
+              >
+                <Select 
+                  placeholder="Select status"
+                  options={statusOptions}
+                  disabled={isView}
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={24}>
+              <Form.Item
+                label="Aktivitas Bulan Selanjutnya"
+                name="aktivitas_bulan_berjalan"
+                rules={[
+                  {
+                    required: true,
+                    message: "Next month activity is required",
+                  },
+                ]}
+              >
+                <Input.TextArea 
+                  placeholder="Enter next month activity description"
+                  rows={3}
+                  disabled={isView}
+                />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                label="Status Selanjutnya"
+                name="status_bulan_berjalan"
+                rules={[
+                  {
+                    required: true,
+                    message: "Next status is required",
+                  },
+                ]}
+              >
+                <Select 
+                  placeholder="Select status"
+                  options={statusOptions}
+                  disabled={isView}
+                />
+              </Form.Item>
+            </Col>
+          </Row>
         </Section>
 
         {/* Activity Details Section */}
-        <Section>
-          <Section title="Activity Details">
-            <Row gutter={16}>
-              <Col span={12}>
-                <Form.Item
-                  label="PIC Aktivitas"
-                  name="pic_aktivitas"
-                  rules={[
-                    {
-                      required: true,
-                      message: "PIC is required",
-                    },
-                  ]}
-                >
-                  <Select 
-                    placeholder="Select PIC"
-                    options={picOptions}
-                    disabled={isView}
-                  />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item
-                  label="Tanggal Aktivitas"
-                  name="tanggal_aktivitas"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Activity date is required",
-                    },
-                  ]}
-                >
-                  <DatePicker 
-                    style={{ width: "100%" }} 
-                    placeholder="Select activity date"
-                    disabled={isView}
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={16}>
-              <Col span={24}>
-                <Form.Item
-                  label="Aktivitas"
-                  name="aktivitas"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Activity description is required",
-                    },
-                  ]}
-                >
-                  <Input.TextArea 
-                    placeholder="Enter detailed activity description"
-                    rows={4}
-                    disabled={isView}
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={16}>
-              <Col span={12}>
-                <Form.Item
-                  label="Milestone"
-                  name="milestone"
-                  valuePropName="checked"
-                >
-                  <Checkbox disabled={isView}>
-                    Mark as milestone
-                  </Checkbox>
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item
-                  label="Latest Modified"
-                  name="latest_modified"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Latest modified date is required",
-                    },
-                  ]}
-                >
-                  <DatePicker 
-                    style={{ width: "100%" }} 
-                    placeholder="Select modified date"
-                    disabled={isView}
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
-          </Section>
+        <Section title="Activity Details" shadow={false} style={{ padding: 0 }}>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item
+                label="PIC Aktivitas"
+                name="pic_aktivitas"
+                rules={[
+                  {
+                    required: true,
+                    message: "PIC is required",
+                  },
+                ]}
+              >
+                <Select 
+                  placeholder="Select PIC"
+                  options={picOptions}
+                  disabled={isView}
+                />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                label="Tanggal Aktivitas"
+                name="tanggal_aktivitas"
+                rules={[
+                  {
+                    required: true,
+                    message: "Activity date is required",
+                  },
+                ]}
+              >
+                <DatePicker 
+                  style={{ width: "100%" }} 
+                  placeholder="Select activity date"
+                  disabled={isView}
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={24}>
+              <Form.Item
+                label="Aktivitas"
+                name="aktivitas"
+                rules={[
+                  {
+                    required: true,
+                    message: "Activity description is required",
+                  },
+                ]}
+              >
+                <Input.TextArea 
+                  placeholder="Enter detailed activity description"
+                  rows={4}
+                  disabled={isView}
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item
+                label="Critical Task"
+                name="critical_task"
+                valuePropName="checked"
+              >
+                <Checkbox disabled={isView}>
+                  Mark as critical task
+                </Checkbox>
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                label="Latest Modified"
+                name="latest_modified"
+                rules={[
+                  {
+                    required: true,
+                    message: "Latest modified date is required",
+                  },
+                ]}
+              >
+                <DatePicker 
+                  style={{ width: "100%" }} 
+                  placeholder="Select modified date"
+                  disabled={isView}
+                />
+              </Form.Item>
+            </Col>
+          </Row>
         </Section>
 
         {/* Photo Documentation Section */}
-        <Section>
-          <Section title="Photo Documentation">
-            <Row gutter={16}>
-              <Col span={24}>
-                <Form.Item
-                  label="Foto"
-                  name="foto"
+        <Section title="Photo Documentation" shadow={false} style={{ padding: 0 }}>
+          <Row gutter={16}>
+            <Col span={24}>
+              <Form.Item
+                label="Foto"
+                name="foto"
+              >
+                <Upload
+                  multiple
+                  accept="image/*"
+                  beforeUpload={handlePhotoUpload}
+                  onChange={handlePhotoListChange}
+                  disabled={isView}
+                  fileList={form.getFieldValue('foto') || []}
                 >
-                  <Upload
-                    multiple
-                    accept="image/*"
-                    beforeUpload={handlePhotoUpload}
-                    onChange={handlePhotoListChange}
+                  <Button 
+                    icon={<UploadOutlined />} 
                     disabled={isView}
-                    fileList={form.getFieldValue('foto') || []}
                   >
-                    <Button 
-                      icon={<UploadOutlined />} 
-                      disabled={isView}
-                    >
-                      Upload Photos
-                    </Button>
-                  </Upload>
-                  <div style={{ marginTop: 8, fontSize: 12, color: "#666" }}>
-                    Multiple photos can be uploaded
-                  </div>
-                </Form.Item>
-              </Col>
-              <Col span={24}>
-                <Form.Item
-                  label="Keterangan Foto"
-                  name="keterangan_foto"
-                >
-                  <Input.TextArea 
-                    placeholder="Enter photo description"
-                    rows={3}
-                    disabled={isView}
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
-          </Section>
+                    Upload Photos
+                  </Button>
+                </Upload>
+                <div style={{ marginTop: 8, fontSize: 12, color: "#666" }}>
+                  Multiple photos can be uploaded
+                </div>
+              </Form.Item>
+            </Col>
+            <Col span={24}>
+              <Form.Item
+                label="Keterangan Foto"
+                name="keterangan_foto"
+              >
+                <Input.TextArea 
+                  placeholder="Enter photo description"
+                  rows={3}
+                  disabled={isView}
+                />
+              </Form.Item>
+            </Col>
+          </Row>
         </Section>
 
         {/* Remarks Section */}
-        <Section>
-          <Section title="Remarks">
-            <Row gutter={16}>
-              <Col span={24}>
-                <Form.Item
-                  label="Keterangan"
-                  name="keterangan"
-                >
-                  <Input.TextArea 
-                    placeholder="Enter additional remarks"
-                    rows={4}
-                    disabled={isView}
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
-          </Section>
+        <Section title="Remarks" shadow={false} style={{ padding: 0 }}>
+          <Row gutter={16}>
+            <Col span={24}>
+              <Form.Item
+                label="Keterangan"
+                name="keterangan"
+              >
+                <Input.TextArea 
+                  placeholder="Enter additional remarks"
+                  rows={4}
+                  disabled={isView}
+                />
+              </Form.Item>
+            </Col>
+          </Row>
         </Section>
 
         {/* Action Buttons */}
@@ -411,7 +402,7 @@ export const ActivityForm = ({
             <Button 
               type="text" 
               disabled={loading} 
-              onClick={() => navigate(-1)}
+              onClick={onCancel ? onCancel : () => navigate(-1)}
             >
               Cancel
             </Button>

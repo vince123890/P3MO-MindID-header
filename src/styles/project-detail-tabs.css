@@ -1,0 +1,46 @@
+/* Custom styling for Project Detail Page Tabs */
+
+/* Style for active tabs in Data Visualization section */
+.project-detail-visualization-tabs .ant-tabs-tab.ant-tabs-tab-active {
+  background-color: #19315a !important;
+  border-color: #19315a !important;
+}
+
+.project-detail-visualization-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+}
+
+/* Hover effect for tabs */
+.project-detail-visualization-tabs .ant-tabs-tab:hover {
+  background-color: #2a4a7a !important;
+  color: #ffffff !important;
+}
+
+.project-detail-visualization-tabs .ant-tabs-tab:hover .ant-tabs-tab-btn {
+  color: #ffffff !important;
+}
+
+/* Border styling for bordered-card tabs */
+.project-detail-visualization-tabs.ant-tabs-card > .ant-tabs-nav .ant-tabs-tab-active {
+  background-color: #19315a !important;
+  border-color: #19315a !important;
+}
+
+/* Ensure text color is white for active tab */
+.project-detail-visualization-tabs.ant-tabs-card > .ant-tabs-nav .ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: #ffffff !important;
+}
+
+/* Current Activity Table Column Header Backgrounds */
+.ant-table-thead > tr > th.aktivitas-bulan-berjalan-header,
+.ant-table-thead > tr > th.status-berjalan-header {
+  background-color: #D3DBE9 !important;
+  color: #000000 !important;
+}
+
+.ant-table-thead > tr > th.aktivitas-bulan-selanjutnya-header,
+.ant-table-thead > tr > th.status-selanjutnya-header {
+  background-color: #E8ECF3 !important;
+  color: #000000 !important;
+}

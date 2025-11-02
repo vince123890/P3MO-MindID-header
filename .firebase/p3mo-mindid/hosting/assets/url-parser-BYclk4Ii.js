@@ -1,0 +1,2 @@
+import"./@react-router-BOJM2k20.js";try{let e=typeof window<"u"?window:typeof global<"u"?global:typeof globalThis<"u"?globalThis:typeof self<"u"?self:{},n=new e.Error().stack;n&&(e._sentryDebugIds=e._sentryDebugIds||{},e._sentryDebugIds[n]="9e156855-3503-4e71-a3ba-83594b66e98e",e._sentryDebugIdIdentifier="sentry-dbid-9e156855-3503-4e71-a3ba-83594b66e98e")}catch{}const o=(e,n)=>e.replace(/:(\w+)/g,(t,r)=>{if(n[r]!==void 0)return encodeURIComponent(n[r].toString());throw new Error(`Missing parameter: ${r}`)});export{o as u};
+//# sourceMappingURL=url-parser-BYclk4Ii.js.map

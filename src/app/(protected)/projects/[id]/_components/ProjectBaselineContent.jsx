@@ -9,9 +9,10 @@ import {
   Col, 
   Dropdown, 
   Typography,
-  Card,
   Upload,
-  message
+  Modal,
+  message,
+  Descriptions
 } from "antd";
 import { 
   EditOutlined, 
@@ -26,10 +27,12 @@ import { Section } from "admiral";
 const { TextArea } = Input;
 const { Text } = Typography;
 
-const ProjectBaselineContent = ({ project }) => {
+const ProjectBaselineContent = ({ project, readOnly = false }) => {
   const [form] = Form.useForm();
-  const [selectedBaseline, setSelectedBaseline] = useState("baseline-3");
+  const [selectedBaseline, setSelectedBaseline] = useState("baseline-1");
   const [isEditing, setIsEditing] = useState(false);
+  const [uploadModalVisible, setUploadModalVisible] = useState(false);
+  const [currentFileType, setCurrentFileType] = useState("");
 
   // Sample data for existing baselines
   const baselineData = {
@@ -122,7 +125,27 @@ const ProjectBaselineContent = ({ project }) => {
   };
 
   const handleFileAction = (action, fileType) => {
-    message.info(`${action} ${fileType}`);
+    if (action === "Upload") {
+      setCurrentFileType(fileType);
+      setUploadModalVisible(true);
+    } else {
+      message.info(`${action} ${fileType}`);
+    }
+  };
+
+  const handleUploadModalOk = () => {
+    message.success(`File uploaded successfully for ${currentFileType}`);
+    setUploadModalVisible(false);
+    setCurrentFileType("");
+  };
+
+  const handleUploadModalCancel = () => {
+    setUploadModalVisible(false);
+    setCurrentFileType("");
+  };
+
+  const handleDownloadTemplate = () => {
+    message.info(`Downloading template for ${currentFileType}`);
   };
 
   const dropdownItems = [
@@ -136,229 +159,205 @@ const ProjectBaselineContent = ({ project }) => {
     }
   ];
 
-  const createDropdownItems = [
-    {
-      key: 'baseline-3',
-      label: 'Baseline 3',
-    }
-  ];
-
   return (
-    <Section loading={false}>
+    <Section loading={false} bodyStyle={{ padding: 0 }} bordered={false}>
       <Space direction="vertical" size="large" style={{ width: "100%" }}>
         {/* Header with Baseline Selection and Actions */}
-        <Row justify="space-between" align="middle">
-          <Col>
-            <Space size="middle">
+        <Section>
+          <Row justify="space-between" align="middle">
+            <Col>
               <Text strong style={{ fontSize: "16px" }}>
                 Current: {selectedBaseline === "baseline-1" ? "Baseline 1" : 
                          selectedBaseline === "baseline-2" ? "Baseline 2" : "Baseline 3"}
               </Text>
-              {selectedBaseline === "baseline-2" && (
-                <Button
-                  icon={<EditOutlined />}
-                  onClick={handleEdit}
-                  disabled={isEditing}
+            </Col>
+            <Col>
+              <Space>
+                {!readOnly && selectedBaseline === "baseline-2" && (
+                  <Button
+                    icon={<EditOutlined />}
+                    onClick={handleEdit}
+                    disabled={isEditing}
+                  >
+                    Edit
+                  </Button>
+                )}
+                <Dropdown
+                  menu={{
+                    items: dropdownItems,
+                    onClick: ({ key }) => handleBaselineChange(key)
+                  }}
+                  trigger={['click']}
                 >
-                  Edit
-                </Button>
-              )}
-            </Space>
-          </Col>
-          <Col>
-            <Space>
-              <Dropdown
-                menu={{
-                  items: dropdownItems,
-                  onClick: ({ key }) => handleBaselineChange(key)
-                }}
-                trigger={['click']}
-              >
-                <Button>
-                  Select Baseline <DownOutlined />
-                </Button>
-              </Dropdown>
-              
-              <Dropdown
-                menu={{
-                  items: createDropdownItems,
-                  onClick: ({ key }) => handleCreate()
-                }}
-                trigger={['click']}
-              >
-                <Button type="primary" icon={<PlusOutlined />}>
-                  Create <DownOutlined />
-                </Button>
-              </Dropdown>
-            </Space>
-          </Col>
-        </Row>
+                  <Button>
+                    Select Baseline <DownOutlined />
+                  </Button>
+                </Dropdown>
+                
+                {!readOnly && (
+                  <Button type="primary" icon={<PlusOutlined />} onClick={handleCreate}>
+                    Add Baseline 3
+                  </Button>
+                )}
+              </Space>
+            </Col>
+          </Row>
+        </Section>
 
-        {/* Main Form */}
-        <Card>
-          <Form
-            form={form}
-            layout="vertical"
-            initialValues={currentData}
-            disabled={!isEditing && selectedBaseline !== "baseline-3"}
-          >
-            <Row gutter={[24, 16]}>
-              {/* Baseline Number */}
-              <Col xs={24}>
-                <Form.Item
-                  label="Baseline Number"
-                  name="baseline_number"
-                  rules={[{ required: true, message: "Please input baseline number!" }]}
-                >
-                  <InputNumber 
-                    min={1} 
-                    max={10} 
-                    placeholder="3"
-                    style={{ width: "100%" }}
-                  />
-                </Form.Item>
-              </Col>
+        {/* Main Content */}
+        {(isEditing || selectedBaseline === "baseline-3") ? (
+          <Section>
+            <Form
+              form={form}
+              layout="vertical"
+              initialValues={currentData}
+            >
+              <Row gutter={[24, 16]}>
+                {/* Baseline Number */}
+                <Col xs={24}>
+                  <Form.Item
+                    label="Baseline Number"
+                    name="baseline_number"
+                    rules={[{ required: true, message: "Please input baseline number!" }]}
+                  >
+                    <InputNumber 
+                      min={1} 
+                      max={10} 
+                      placeholder="3"
+                      style={{ width: "100%" }}
+                    />
+                  </Form.Item>
+                </Col>
 
-              {/* Project Schedule Plan */}
-              <Col xs={24}>
-                <Form.Item label="Project Schedule Plan">
-                  <div style={{ 
-                    display: "flex", 
-                    alignItems: "center", 
-                    gap: "12px",
-                    flexWrap: "wrap"
-                  }}>
-                    {/* File Link */}
+                {/* Project Schedule Plan */}
+                <Col xs={24}>
+                  <Form.Item label="Project Schedule Plan">
                     <div style={{ 
-                      flex: 1,
-                      minWidth: "200px",
-                      padding: "8px 12px", 
-                      border: "1px solid #d9d9d9", 
-                      borderRadius: "6px",
-                      backgroundColor: "#fafafa",
-                      display: "flex",
-                      alignItems: "center"
+                      display: "flex", 
+                      alignItems: "center", 
+                      gap: "12px",
+                      flexWrap: "wrap"
                     }}>
-                      {currentData.project_schedule_plan ? (
-                        <a 
-                          href={`/files/${currentData.project_schedule_plan}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          style={{ 
-                            color: "#1890ff", 
-                            textDecoration: "underline",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "6px"
-                          }}
-                          onClick={(e) => {
-                            e.preventDefault();
-                            handleFileAction("View/Download", currentData.project_schedule_plan);
-                          }}
-                        >
-                          <EyeOutlined />
-                          {currentData.project_schedule_plan}
-                        </a>
-                      ) : (
-                        <span style={{ color: "#999" }}>No file uploaded</span>
-                      )}
+                      {/* File Link */}
+                      <div style={{ 
+                        flex: 1,
+                        minWidth: "200px",
+                        padding: "8px 12px", 
+                        border: "1px solid #d9d9d9", 
+                        borderRadius: "6px",
+                        backgroundColor: "#fafafa",
+                        display: "flex",
+                        alignItems: "center"
+                      }}>
+                        {currentData.project_schedule_plan ? (
+                          <a 
+                            href={`/files/${currentData.project_schedule_plan}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{ 
+                              color: "#1890ff", 
+                              textDecoration: "underline",
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "6px"
+                            }}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleFileAction("View/Download", currentData.project_schedule_plan);
+                            }}
+                          >
+                            <EyeOutlined />
+                            {currentData.project_schedule_plan}
+                          </a>
+                        ) : (
+                          <span style={{ color: "#999" }}>No file uploaded</span>
+                        )}
+                      </div>
+                      
+                      {/* Action Buttons - Inline */}
+                      <Button
+                        icon={<UploadOutlined />}
+                        onClick={() => handleFileAction("Upload", "Project Schedule Plan")}
+                        style={{ height: "40px" }}
+                      >
+                        Upload
+                      </Button>
                     </div>
-                    
-                    {/* Action Buttons - Inline */}
-                    <Button
-                      icon={<UploadOutlined />}
-                      onClick={() => handleFileAction("Upload", "Project Schedule Plan")}
-                    >
-                      Upload
-                    </Button>
-                    <Button
-                      icon={<DownloadOutlined />}
-                      onClick={() => handleFileAction("Download Template", "Project Schedule Plan")}
-                    >
-                      Download
-                    </Button>
-                  </div>
-                </Form.Item>
-              </Col>
+                  </Form.Item>
+                </Col>
 
-              {/* Project Cost Timeline Plan */}
-              <Col xs={24}>
-                <Form.Item label="Project Cost Timeline Plan">
-                  <div style={{ 
-                    display: "flex", 
-                    alignItems: "center", 
-                    gap: "12px",
-                    flexWrap: "wrap"
-                  }}>
-                    {/* File Link */}
+                {/* Project Cost Timeline Plan */}
+                <Col xs={24}>
+                  <Form.Item label="Project Cost Timeline Plan">
                     <div style={{ 
-                      flex: 1,
-                      minWidth: "200px",
-                      padding: "8px 12px", 
-                      border: "1px solid #d9d9d9", 
-                      borderRadius: "6px",
-                      backgroundColor: "#fafafa",
-                      display: "flex",
-                      alignItems: "center"
+                      display: "flex", 
+                      alignItems: "center", 
+                      gap: "12px",
+                      flexWrap: "wrap"
                     }}>
-                      {currentData.project_cost_timeline ? (
-                        <a 
-                          href={`/files/${currentData.project_cost_timeline}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          style={{ 
-                            color: "#1890ff", 
-                            textDecoration: "underline",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "6px"
-                          }}
-                          onClick={(e) => {
-                            e.preventDefault();
-                            handleFileAction("View/Download", currentData.project_cost_timeline);
-                          }}
-                        >
-                          <EyeOutlined />
-                          {currentData.project_cost_timeline}
-                        </a>
-                      ) : (
-                        <span style={{ color: "#999" }}>No file uploaded</span>
-                      )}
+                      {/* File Link */}
+                      <div style={{ 
+                        flex: 1,
+                        minWidth: "200px",
+                        padding: "8px 12px", 
+                        border: "1px solid #d9d9d9", 
+                        borderRadius: "6px",
+                        backgroundColor: "#fafafa",
+                        display: "flex",
+                        alignItems: "center"
+                      }}>
+                        {currentData.project_cost_timeline ? (
+                          <a 
+                            href={`/files/${currentData.project_cost_timeline}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{ 
+                              color: "#1890ff", 
+                              textDecoration: "underline",
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "6px"
+                            }}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleFileAction("View/Download", currentData.project_cost_timeline);
+                            }}
+                          >
+                            <EyeOutlined />
+                            {currentData.project_cost_timeline}
+                          </a>
+                        ) : (
+                          <span style={{ color: "#999" }}>No file uploaded</span>
+                        )}
+                      </div>
+                      
+                      {/* Action Buttons - Inline */}
+                      <Button
+                        icon={<UploadOutlined />}
+                        onClick={() => handleFileAction("Upload", "Project Cost Timeline Plan")}
+                        style={{ height: "40px" }}
+                      >
+                        Upload
+                      </Button>
                     </div>
-                    
-                    {/* Action Buttons - Inline */}
-                    <Button
-                      icon={<UploadOutlined />}
-                      onClick={() => handleFileAction("Upload", "Project Cost Timeline Plan")}
-                    >
-                      Upload
-                    </Button>
-                    <Button
-                      icon={<DownloadOutlined />}
-                      onClick={() => handleFileAction("Download Template", "Project Cost Timeline Plan")}
-                    >
-                      Download
-                    </Button>
-                  </div>
-                </Form.Item>
-              </Col>
+                  </Form.Item>
+                </Col>
 
-              {/* Reason for Change */}
-              <Col xs={24}>
-                <Form.Item
-                  label="Reason for Change"
-                  name="reason_for_change"
-                >
-                  <TextArea 
-                    rows={4} 
-                    placeholder="Enter reason for this baseline change"
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
+                {/* Reason for Change */}
+                <Col xs={24}>
+                  <Form.Item
+                    label="Reason for Change"
+                    name="reason_for_change"
+                  >
+                    <TextArea 
+                      rows={4} 
+                      placeholder="Enter reason for this baseline change"
+                    />
+                  </Form.Item>
+                </Col>
+              </Row>
 
-            {/* Action Buttons */}
-            {(isEditing || selectedBaseline === "baseline-3") && (
+              {/* Action Buttons */}
               <Row justify="end" style={{ marginTop: "24px" }}>
                 <Space>
                   <Button onClick={handleCancel}>
@@ -369,9 +368,128 @@ const ProjectBaselineContent = ({ project }) => {
                   </Button>
                 </Space>
               </Row>
-            )}
-          </Form>
-        </Card>
+            </Form>
+          </Section>
+        ) : (
+          <Section title="Project Baseline Information">
+            <Descriptions
+              bordered
+              layout="horizontal"
+              labelStyle={{ width: '25%' }}
+              contentStyle={{ width: '25%' }}
+              column={2}
+              items={[
+                {
+                  key: "baseline_number",
+                  label: "Baseline Number",
+                  children: <Text strong>{currentData.baseline_number ?? "-"}</Text>,
+                },
+                {
+                  key: "latest_modified",
+                  label: "Latest Modified",
+                  children: <Text strong>{currentData.latest_modified ?? "-"}</Text>,
+                },
+                {
+                  key: "project_schedule_plan",
+                  label: "Project Schedule Plan",
+                  children: currentData.project_schedule_plan ? (
+                    <a 
+                      href={`/files/${currentData.project_schedule_plan}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ 
+                        color: "#1890ff", 
+                        textDecoration: "underline",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "6px"
+                      }}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleFileAction("View/Download", currentData.project_schedule_plan);
+                      }}
+                    >
+                      <EyeOutlined />
+                      <Text strong>{currentData.project_schedule_plan}</Text>
+                    </a>
+                  ) : (
+                    <Text strong>-</Text>
+                  ),
+                },
+                {
+                  key: "project_cost_timeline",
+                  label: "Project Cost Timeline Plan",
+                  children: currentData.project_cost_timeline ? (
+                    <a 
+                      href={`/files/${currentData.project_cost_timeline}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ 
+                        color: "#1890ff", 
+                        textDecoration: "underline",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "6px"
+                      }}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleFileAction("View/Download", currentData.project_cost_timeline);
+                      }}
+                    >
+                      <EyeOutlined />
+                      <Text strong>{currentData.project_cost_timeline}</Text>
+                    </a>
+                  ) : (
+                    <Text strong>-</Text>
+                  ),
+                },
+                {
+                  key: "reason_for_change",
+                  label: "Reason for Change",
+                  children: <Text strong>{currentData.reason_for_change ?? "-"}</Text>,
+                  span: 2,
+                },
+              ]}
+            />
+          </Section>
+        )}
+
+        {/* Upload Modal */}
+        <Modal
+          title={`Upload ${currentFileType}`}
+          open={uploadModalVisible}
+          onOk={handleUploadModalOk}
+          onCancel={handleUploadModalCancel}
+          footer={[
+            <Button key="download-template" icon={<DownloadOutlined />} onClick={handleDownloadTemplate}>
+              Download Template
+            </Button>,
+            <Button key="cancel" onClick={handleUploadModalCancel}>
+              Cancel
+            </Button>,
+            <Button key="upload" type="primary" onClick={handleUploadModalOk}>
+              Upload
+            </Button>,
+          ]}
+        >
+          <Space direction="vertical" style={{ width: '100%' }}>
+            <Text>Upload file for {currentFileType}</Text>
+            <Upload.Dragger
+              name="file"
+              multiple={false}
+              beforeUpload={() => false}
+              onChange={(info) => {
+                console.log('File info:', info);
+              }}
+            >
+              <p className="ant-upload-drag-icon">
+                <UploadOutlined />
+              </p>
+              <p className="ant-upload-text">Click or drag file to this area to upload</p>
+              <p className="ant-upload-hint">Support for single file upload.</p>
+            </Upload.Dragger>
+          </Space>
+        </Modal>
       </Space>
     </Section>
   );

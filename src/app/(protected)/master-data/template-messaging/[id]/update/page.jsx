@@ -28,18 +28,19 @@ export const Component = () => {
       path: "/master-data/template-messaging",
     },
     {
-      label: data?.data?.nama_template ?? "-",
+      label: `Template Details: ${data?.data?.nama_template ?? "-"}`,
       path: generatePath("/master-data/template-messaging/:id", { id: params.id }),
     },
     {
-      label: "Edit Template",
+      label: `Update Template: ${data?.data?.nama_template}`,
       path: "#",
     },
   ];
 
   const initialValues = {
     nama_template: data?.data?.nama_template,
-    perusahaan: data?.data?.perusahaan,
+    category: data?.data?.category,
+    trigger: data?.data?.trigger,
     body: data?.data?.body,
     status: data?.data?.status,
   };

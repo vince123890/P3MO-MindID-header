@@ -24,15 +24,15 @@ export const Component = () => {
       path: "/master-data",
     },
     {
-      label: "Issue/Resiko",
+      label: "Issue",
       path: "/master-data/issue-risks",
     },
     {
-      label: data?.data?.kode_issue_risk ?? "-",
+      label: `Issue Details: ${data?.data?.kode_issue_risk ?? "-"} - ${data?.data?.tipe_issue_risk ?? "-"}`,
       path: generatePath("/master-data/issue-risks/:id", { id: params.id }),
     },
     {
-      label: "Update",
+      label: `Update Issue: ${data?.data?.kode_issue_risk ?? "-"} - ${data?.data?.tipe_issue_risk ?? "-"}`,
       path: "#",
     },
   ];
@@ -45,7 +45,7 @@ export const Component = () => {
 
   return (
     <Page
-      title={`Update Issue/Risk: ${data?.data?.kode_issue_risk} - ${data?.data?.tipe_issue_risk}`}
+      title={`Update Issue: ${data?.data?.kode_issue_risk} - ${data?.data?.tipe_issue_risk}`}
       breadcrumbs={breadcrumb}
       noStyle
       goBack={() => navigate("/master-data/issue-risks")}

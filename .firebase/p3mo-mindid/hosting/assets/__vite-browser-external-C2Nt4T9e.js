@@ -1,0 +1,2 @@
+try{let e=typeof window<"u"?window:typeof global<"u"?global:typeof globalThis<"u"?globalThis:typeof self<"u"?self:{},t=new e.Error().stack;t&&(e._sentryDebugIds=e._sentryDebugIds||{},e._sentryDebugIds[t]="2103ab70-e49d-4352-88df-4bb5441013c0",e._sentryDebugIdIdentifier="sentry-dbid-2103ab70-e49d-4352-88df-4bb5441013c0")}catch{}const n={},d=Object.freeze(Object.defineProperty({__proto__:null,default:n},Symbol.toStringTag,{value:"Module"}));export{d as _};
+//# sourceMappingURL=__vite-browser-external-C2Nt4T9e.js.map

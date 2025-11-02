@@ -1,5 +1,5 @@
-import { Button, Flex, message, Tag } from "antd";
-import { DeleteOutlined, EditOutlined, EyeOutlined, PlusCircleOutlined } from "@ant-design/icons";
+import { Button, Flex, message, Tag, Modal } from "antd";
+import { DeleteOutlined, EditOutlined, EyeOutlined, PlusOutlined } from "@ant-design/icons";
 import { Link } from "react-router";
 import { Page, DataTable } from "admiral";
 import dayjs from "dayjs";
@@ -51,15 +51,6 @@ export const Component = () => {
       },
     },
     {
-      dataIndex: "created_at",
-      title: "Created At",
-      key: "created_at",
-      sorter: true,
-      render: (_, record) => {
-        return formatDate(record.created_at);
-      },
-    },
-    {
       dataIndex: "Action",
       title: "Action",
       key: "Action",
@@ -77,7 +68,16 @@ export const Component = () => {
               type="link"
               icon={<DeleteOutlined style={{ color: "red" }} />}
               onClick={() => {
-                message.success("Perusahaan successfully deleted");
+                Modal.confirm({
+                  title: 'Confirm Delete',
+                  content: `Are you sure you want to delete ${record.nama_perusahaan}?`,
+                  okText: 'Delete',
+                  cancelText: 'Cancel',
+                  okType: 'danger',
+                  onOk() {
+                    message.success("Perusahaan successfully deleted");
+                  },
+                });
               }}
             />
           </Flex>
@@ -103,7 +103,7 @@ export const Component = () => {
       breadcrumbs={breadcrumbs}
       topActions={
         <Link to={"/master-data/perusahaans/create"}>
-          <Button type="primary" icon={<PlusCircleOutlined />}>Tambah Perusahaan</Button>
+          <Button type="primary" icon={<PlusOutlined />}>Tambah Perusahaan</Button>
         </Link>
       }
       noStyle
@@ -145,9 +145,18 @@ export const Component = () => {
           {
             key: "delete",
             label: "Delete",
-            onClick: (_values, cb) => {
-              message.success("Selected perusahaan successfully deleted");
-              cb.reset();
+            onClick: (values, cb) => {
+              Modal.confirm({
+                title: 'Confirm Delete',
+                content: `Are you sure you want to delete ${values.length} selected perusahaan?`,
+                okText: 'Delete',
+                cancelText: 'Cancel',
+                okType: 'danger',
+                onOk() {
+                  message.success("Selected perusahaan successfully deleted");
+                  cb.reset();
+                },
+              });
             },
             danger: true,
             icon: <DeleteOutlined />,

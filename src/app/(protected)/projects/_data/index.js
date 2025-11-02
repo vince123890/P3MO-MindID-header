@@ -10,6 +10,8 @@ export const allProjects = {
         amendment_number: "1",
         baseline: "Baseline 2",
         status: "Active",
+        status_indicator: "On Track",
+        days_remaining_till_cod: 245,
         sync_status: "Synced",
         last_sync_date: "2025-01-09T15:30:00.000Z",
         currency: "IDR",
@@ -21,6 +23,7 @@ export const allProjects = {
         technology_licensor: "Green Energy Solutions Ltd",
         raw_material_suppliers: "PT Solar Panel Indonesia, PT Wind Turbine Components, PT Battery Technology",
         offtaker: "PT National Energy Grid",
+        sasaran: "A",
         sasaran_penjelasan: "Develop renewable energy plant to support sustainable mining operations with focus on reducing carbon footprint and energy costs.",
         keterangan: "Project has received preliminary approval from board. Waiting for final environmental clearance. Target implementation start: Q2 2025.",
         dokumen_pendukung: [
@@ -51,6 +54,8 @@ export const allProjects = {
         amendment_number: "2",
         baseline: "Baseline 1",
         status: "Active",
+        status_indicator: "At Risk",
+        days_remaining_till_cod: 120,
         sync_status: "Synced",
         last_sync_date: "2025-01-08T10:15:00.000Z",
         currency: "IDR",
@@ -62,6 +67,7 @@ export const allProjects = {
         technology_licensor: "TechMining Solutions Inc",
         raw_material_suppliers: "PT Hardware Indonesia, PT Software Development",
         offtaker: "PT Aneka Tambang Tbk (Internal)",
+        sasaran: "D",
         sasaran_penjelasan: "Implement digital transformation and automation systems to improve mining operational efficiency and reduce manual processes.",
         keterangan: "Project in final planning phase. Vendor selection completed. Budget approved by management.",
         dokumen_pendukung: [
@@ -87,6 +93,8 @@ export const allProjects = {
         amendment_number: "3",
         baseline: "Baseline 3",
         status: "Pending",
+        status_indicator: "Off Track",
+        days_remaining_till_cod: 45,
         sync_status: "Not Synced",
         last_sync_date: "2025-01-07T16:45:00.000Z",
         currency: "IDR",
@@ -98,6 +106,7 @@ export const allProjects = {
         technology_licensor: "EcoWaste Technologies",
         raw_material_suppliers: "PT Recycling Materials, PT Waste Processing Indonesia",
         offtaker: "PT Local Waste Management",
+        sasaran: "E",
         sasaran_penjelasan: "Develop comprehensive waste management and recycling facility to support environmental sustainability initiatives.",
         keterangan: "Awaiting environmental permits. Initial site survey completed. Technical team formation in progress.",
         dokumen_pendukung: [
@@ -118,6 +127,8 @@ export const allProjects = {
         amendment_number: "4",
         baseline: "Baseline 2",
         status: "Active",
+        status_indicator: "On Track",
+        days_remaining_till_cod: 180,
         sync_status: "Synced",
         last_sync_date: "2025-01-10T08:30:00.000Z",
         currency: "IDR",
@@ -129,6 +140,7 @@ export const allProjects = {
         technology_licensor: "AquaTech Solutions",
         raw_material_suppliers: "PT Water Treatment Chemicals, PT Filtration Systems Indonesia",
         offtaker: "PT Regional Water Authority",
+        sasaran: "D",
         sasaran_penjelasan: "Implement advanced water treatment and conservation systems to ensure sustainable water usage in mining operations.",
         keterangan: "Project implementation started. First phase completed successfully. Second phase procurement in progress.",
         dokumen_pendukung: [
@@ -159,6 +171,8 @@ export const allProjects = {
         amendment_number: "5",
         baseline: "Baseline 1",
         status: "Active",
+        status_indicator: "On Track",
+        days_remaining_till_cod: 320,
         sync_status: "Synced",
         last_sync_date: "2025-01-09T14:20:00.000Z",
         currency: "IDR",
@@ -170,6 +184,7 @@ export const allProjects = {
         technology_licensor: "SafeMining Technologies",
         raw_material_suppliers: "PT Safety Equipment Indonesia, PT Training Materials",
         offtaker: "PT Aneka Tambang Tbk (Internal)",
+        sasaran: "E",
         sasaran_penjelasan: "Enhance mining safety through advanced equipment procurement and comprehensive training programs for all personnel.",
         keterangan: "Training program developed successfully. Equipment procurement 80% complete. First batch of training scheduled.",
         dokumen_pendukung: [
@@ -242,6 +257,34 @@ export const feasibilityProjects = {
     meta: {
       total_page: 1,
       total: 3,
+      page: 1,
+      per_page: 10,
+    },
+  },
+  version: "1.0.0",
+};
+
+export const activeProjects = {
+  status_code: 200,
+  data: {
+    items: allProjects.data.items.filter(project => project.status === "Active"),
+    meta: {
+      total_page: 1,
+      total: allProjects.data.items.filter(project => project.status === "Active").length,
+      page: 1,
+      per_page: 10,
+    },
+  },
+  version: "1.0.0",
+};
+
+export const pendingProjects = {
+  status_code: 200,
+  data: {
+    items: allProjects.data.items.filter(project => project.status === "Pending"),
+    meta: {
+      total_page: 1,
+      total: allProjects.data.items.filter(project => project.status === "Pending").length,
       page: 1,
       per_page: 10,
     },

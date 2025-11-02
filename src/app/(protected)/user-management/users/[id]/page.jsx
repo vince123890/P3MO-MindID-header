@@ -1,8 +1,9 @@
 import React from "react";
-import { Tag, Descriptions, Typography, Space } from "antd";
-import { useParams, useNavigate } from "react-router";
+import { Tag, Descriptions, Typography, Space, Button, Flex, message, Modal, Table } from "antd";
+import { useParams, useNavigate, Link } from "react-router";
+import { generatePath } from "react-router";
 import { Page, Section } from "admiral";
-import { detailUser } from "../../_data";
+import { detailUser, userLoginHistory } from "@protected/user-management/_data";
 
 const UserDetailPage = () => {
   const { id } = useParams();
@@ -14,34 +15,6 @@ const UserDetailPage = () => {
     const color = status === "Active" ? "#52c41a" : "#ff4d4f";
     const backgroundColor = status === "Active" ? "#f6ffed" : "#fff2f0";
     return <Tag style={{ color, backgroundColor, border: 'none' }}>{status}</Tag>;
-  };
-
-  const renderRoleTag = (role) => {
-    let color;
-    let backgroundColor;
-    switch (role) {
-      case "Administrator":
-        color = "#cf1322";
-        backgroundColor = "#fff2f0";
-        break;
-      case "PMO Admin":
-      case "PMO Mind ID":
-        color = "#d46b08";
-        backgroundColor = "#fff7e6";
-        break;
-      case "Direktur Mind ID":
-        color = "#d4380d";
-        backgroundColor = "#fff2e8";
-        break;
-      case "Tim Proyek":
-        color = "#1677ff";
-        backgroundColor = "#f0f5ff";
-        break;
-      default:
-        color = "#8c8c8c";
-        backgroundColor = "#fafafa";
-    }
-    return <Tag style={{ color, backgroundColor, border: 'none' }}>{role}</Tag>;
   };
 
   const breadcrumbs = [
@@ -66,24 +39,9 @@ const UserDetailPage = () => {
       children: <Typography.Text strong>{user.nip || "-"}</Typography.Text>,
     },
     {
-      key: "nik",
-      label: "NIK",
-      children: <Typography.Text strong>{user.nik || "-"}</Typography.Text>,
-    },
-    {
       key: "nama_user",
       label: "Nama User",
       children: <Typography.Text strong>{user.nama_user || "-"}</Typography.Text>,
-    },
-    {
-      key: "email",
-      label: "Email",
-      children: <Typography.Text strong>{user.email || "-"}</Typography.Text>,
-    },
-    {
-      key: "role",
-      label: "Role",
-      children: user.role ? renderRoleTag(user.role) : "-",
     },
     {
       key: "username",
@@ -91,9 +49,34 @@ const UserDetailPage = () => {
       children: <Typography.Text strong>{user.username || "-"}</Typography.Text>,
     },
     {
+      key: "email",
+      label: "Email",
+      children: <Typography.Text strong>{user.email || "-"}</Typography.Text>,
+    },
+    {
       key: "perusahaan",
       label: "Perusahaan",
       children: <Typography.Text strong>{user.perusahaan || "-"}</Typography.Text>,
+    },
+    {
+      key: "role",
+      label: "Role",
+      children: <Typography.Text strong>{user.role || "-"}</Typography.Text>,
+    },
+    {
+      key: "jabatan",
+      label: "Jabatan",
+      children: <Typography.Text strong>{user.jabatan || "-"}</Typography.Text>,
+    },
+    {
+      key: "fungsi",
+      label: "Fungsi",
+      children: <Typography.Text strong>{user.fungsi || "-"}</Typography.Text>,
+    },
+    {
+      key: "no_hp",
+      label: "No HP",
+      children: <Typography.Text strong>{user.no_hp || "-"}</Typography.Text>,
     },
     {
       key: "status",
@@ -112,12 +95,61 @@ const UserDetailPage = () => {
     },
   ];
 
+  const loginHistoryColumns = [
+    {
+      title: "Updated Date",
+      dataIndex: "updated_date",
+      key: "updated_date",
+    },
+    {
+      title: "Activity",
+      dataIndex: "activity",
+      key: "activity",
+    },
+  ];
+
+  const loginHistory = userLoginHistory(userId)?.data?.items || [];
+
+  const handleDelete = () => {
+    Modal.confirm({
+      title: "Konfirmasi Hapus",
+      content: "Apakah Anda yakin ingin menghapus data user ini?",
+      okText: "Delete",
+      cancelText: "Cancel",
+      okType: "danger",
+      onOk: () => {
+        message.success("User successfully deleted");
+        navigate("/user-management/users");
+      },
+    });
+  };
+
   return (
     <Page
       title={`Detail User: ${user.nama_user || ""}`}
       breadcrumbs={breadcrumbs}
       goBack={() => navigate("/user-management/users")}
       noStyle
+      topActions={
+        <Flex gap={10}>
+          <Button
+            htmlType="button"
+            onClick={handleDelete}
+            danger
+          >
+            Delete
+          </Button>
+          <Link
+            to={generatePath("/user-management/users/:id/update", {
+              id: id,
+            })}
+          >
+            <Button htmlType="button" type="primary">
+              Edit
+            </Button>
+          </Link>
+        </Flex>
+      }
     >
       <Section>
         <Space style={{ width: "100%" }} direction="vertical" size="middle">
@@ -132,6 +164,14 @@ const UserDetailPage = () => {
                 xl: 2,
                 xxl: 2,
               }}
+            />
+          </Section>
+          <Section title="History Login">
+            <Table
+              columns={loginHistoryColumns}
+              dataSource={loginHistory}
+              rowKey="id"
+              pagination={false}
             />
           </Section>
         </Space>

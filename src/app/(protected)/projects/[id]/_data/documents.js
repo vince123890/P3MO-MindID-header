@@ -4,7 +4,7 @@ const documentData = {
     items: [
       {
         id: 1,
-        stage: "Commissioning",
+        stage: "FEL 2",
         document: "Project Specification Document",
         type: "Project Docs.",
         chapter: "Engineering",
@@ -27,7 +27,7 @@ const documentData = {
       },
       {
         id: 2,
-        stage: "Construction",
+        stage: "FEL 3",
         document: "Construction Safety Manual",
         type: "Contract",
         chapter: "Engineering",
@@ -73,7 +73,7 @@ const documentData = {
       },
       {
         id: 4,
-        stage: "Operate & Optimize",
+        stage: "FID",
         document: "Operations Manual",
         type: "Commercial",
         chapter: "Engineering",
@@ -181,7 +181,7 @@ const documentData = {
       },
       {
         id: 9,
-        stage: "Operate & Optimize",
+        stage: "Operate Optimize",
         document: "Performance Monitoring Report",
         type: "Commercial",
         chapter: "Operations",

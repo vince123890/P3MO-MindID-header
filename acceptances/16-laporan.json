@@ -1,6 +1,6 @@
 {
   "module_name": "Laporan",
-  "updated_at": "2025-10-21T21:35:30.000Z",
+  "updated_at": "2025-10-23T07:38:00.000Z",
   "data": [
     {
       "code": "<b>LP01</b>",
@@ -14,15 +14,15 @@
               "note": "Required field"
             },
             {
-              "text": "<b>Periode Laporan*</b>:\n- Date Range Picker\n- Format: DD/MM/YYYY\n- Placeholder: Tanggal Mulai - Tanggal Selesai",
+              "text": "<b>Periode Laporan*</b>:\n- Dropdown Select\n- Options: Month-Year format (Oktober 2025, September 2025, dst)\n- Menampilkan 12 bulan terakhir termasuk bulan saat ini",
               "note": "Required field"
             },
             {
-              "text": "<b>Generate Laporan Button</b>:\n- Primary button with FileText icon\n- Loading state saat generating\n- Text: 'Generate Laporan' / 'Generating...'",
+              "text": "<b>Generate Laporan Button</b>:\n- Primary button with FileText icon\n- Loading state saat generating\n- Text: 'Generate Laporan' / 'Generating...'\n- Size: Default (sama seperti Compose Message button)",
               "note": ""
             },
             {
-              "text": "<b>Reset Button</b>:\n- Secondary button\n- Clear semua form fields dan preview",
+              "text": "<b>Reset Button</b>:\n- Secondary button\n- Clear semua form fields dan preview\n- Size: Default (sama seperti Compose Message button)",
               "note": ""
             }
           ]
@@ -126,7 +126,7 @@
           "info": "<b>Behavior</b>",
           "detail": [
             {
-              "text": "<b>Form Validation</b>:\n- Required validation untuk Project selection\n- Required validation untuk Date range\n- Error messages dalam Bahasa Indonesia"
+              "text": "<b>Form Validation</b>:\n- Required validation untuk Project selection\n- Required validation untuk Periode Laporan (Month-Year dropdown)\n- Error messages dalam Bahasa Indonesia"
             },
             {
               "text": "<b>State Management</b>:\n- Loading state during generation\n- Preview state management\n- Form reset functionality"

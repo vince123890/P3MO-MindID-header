@@ -1,10 +1,10 @@
 import { Page, Section } from "admiral";
-import { Space, Button, Descriptions, Flex, message, Tag } from "antd";
+import { Button, Descriptions, Flex, Tag } from "antd";
 import { generatePath, Link, useNavigate } from "react-router";
 import { Typography } from "antd";
 import { useParams } from "react-router";
 
-import { formatDate } from "@/utils/date-format";
+import { formatDate, formatToMonthYear } from "@/utils/date-format";
 import { useGetData } from "@/app/_hooks/use-get-data";
 import { kursDetail } from "../_data";
 
@@ -23,7 +23,7 @@ export const Component = () => {
       path: "/master-data/kurs",
     },
     {
-      label: data?.data?.nilai_kurs || "",
+      label: `Kurs Details: USD 1 = IDR ${data?.data?.nilai_kurs || ""}`,
       path: "#",
     },
   ];
@@ -36,9 +36,9 @@ export const Component = () => {
     },
     {
       key: "tanggal",
-      label: "Tanggal",
+      label: "Bulan Tahun",
       children: (
-        <Typography.Text strong>{formatDate(data?.data?.tanggal) ?? "-"}</Typography.Text>
+        <Typography.Text strong>{formatToMonthYear(data?.data?.tanggal) ?? "-"}</Typography.Text>
       ),
     },
     {
@@ -69,27 +69,15 @@ export const Component = () => {
   return (
     <Page
       topActions={
-        <Flex gap={10}>
-          <Button
-            htmlType="button"
-            onClick={() => {
-              message.success("Kurs successfully deleted");
-              navigate("/master-data/kurs");
-            }}
-            danger
-          >
-            Delete
+        <Link
+          to={generatePath("/master-data/kurs/:id/update", {
+            id: params.id,
+          })}
+        >
+          <Button htmlType="button" type="primary">
+            Edit
           </Button>
-          <Link
-            to={generatePath("/master-data/kurs/:id/update", {
-              id: params.id,
-            })}
-          >
-            <Button htmlType="button" type="primary">
-              Edit
-            </Button>
-          </Link>
-        </Flex>
+        </Link>
       }
       title={`Kurs Details: USD 1 = IDR ${data?.data?.nilai_kurs || ""}`}
       breadcrumbs={breadcrumbs}

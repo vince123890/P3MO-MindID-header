@@ -13,11 +13,7 @@
               "note": ""
             },
             {
-              "text": "<b>Filter</b>:\n- Status\n- Tanggal",
-              "note": ""
-            },
-            {
-              "text": "<b>Sorting ASC,DESC</b>:\n- Nilai Kurs\n- Tanggal\n- Status\n- Created At",
+              "text": "<b>Sorting ASC,DESC</b>:\n- Nilai Kurs\n- Tanggal\n- Status",
               "note": "Default sorting by created_at"
             }
           ]
@@ -29,13 +25,10 @@
               "text": "<b>Nilai Kurs</b>\n- Display format: USD 1 = IDR [nilai]\n- Hyperlink to detail"
             },
             {
-              "text": "<b>Tanggal</b>\n- Formatted date"
+              "text": "<b>Bulan Tahun</b>\n- Month-year format (e.g., Januari 2025, Februari 2025)"
             },
             {
               "text": "<b>Status</b>\n- Tag with color (Active: green, Inactive: red)"
-            },
-            {
-              "text": "<b>Created At</b>\n- Formatted date"
             }
           ]
         },
@@ -49,11 +42,8 @@
               "text": "Default sorting based on most recent data"
             },
             {
-              "text": "<b>Action</b>: Detail, Edit, Delete"
-            },
-            {
-              "text": "<b>Bulk Action</b>: Delete",
-              "note": "Multiple Data Check"
+              "text": "<b>Action</b>: Edit only",
+              "note": "Only Edit button available in Action column"
             }
           ]
         }
@@ -71,7 +61,7 @@
               "note": ""
             },
             {
-              "text": "<b>Tanggal</b>:\n- Read Only\n- Formatted date",
+              "text": "<b>Bulan Tahun</b>:\n- Read Only\n- Month-year format (e.g., Januari 2025, Februari 2025)",
               "note": ""
             },
             {
@@ -79,12 +69,21 @@
               "note": ""
             },
             {
-              "text": "<b>Created At</b>:\n- Read Only\n- Formatted date",
+              "text": "<b>Created At</b>:\n- Read Only\n- Formatted date (DD/MM/YYYY)",
               "note": ""
             },
             {
-              "text": "<b>Updated At</b>:\n- Read Only\n- Formatted date",
+              "text": "<b>Updated At</b>:\n- Read Only\n- Formatted date (DD/MM/YYYY)",
               "note": ""
+            }
+          ]
+        },
+        {
+          "info": "<b>Breadcrumb</b>",
+          "detail": [
+            {
+              "text": "<b>Breadcrumb path</b>: Master Data > Kurs > Kurs Details: USD 1 = IDR [nilai]",
+              "note": "Breadcrumb matches page title"
             }
           ]
         },
@@ -95,7 +94,8 @@
               "text": "<b>Role</b>: Admin"
             },
             {
-              "text": "<b>Action</b>: Edit, Delete"
+              "text": "<b>Action</b>: Edit only",
+              "note": "Only Edit button available"
             },
             {
               "text": "Go back to list page"
@@ -116,8 +116,21 @@
               "note": ""
             },
             {
-              "text": "<b>Tanggal*</b>:\n- Date Picker\n- Required",
+              "text": "<b>Bulan Tahun*</b>:\n- Date Picker (Month and Year selector)\n- Required\n- Format: Month Year (e.g., January 2025)",
               "note": ""
+            },
+            {
+              "text": "<b>Status*</b>:\n- Switch Button\n- Required\n- Default: Active\n- Options: Active (ON), Inactive (OFF)",
+              "note": ""
+            }
+          ]
+        },
+        {
+          "info": "<b>Breadcrumb</b>",
+          "detail": [
+            {
+              "text": "<b>Breadcrumb path</b>: Master Data > Kurs > Tambah Kurs",
+              "note": "Updated from 'Create Kurs' to 'Tambah Kurs'"
             }
           ]
         },
@@ -125,10 +138,14 @@
           "info": "<b>Behavior</b>",
           "detail": [
             {
+              "text": "<b>Page Title</b>: 'Tambah Kurs'",
+              "note": "Updated from 'Add Kurs' to 'Tambah Kurs'"
+            },
+            {
               "text": "<b>Cancel</b>:\n Reset and Back to list kurs"
             },
             {
-              "text": "<b>Submit</b>\n Save and Display data in the kurs list with Status automatically set to Active"
+              "text": "<b>Submit</b>\n Save and Display data in the kurs list with Status based on switch button selection"
             }
           ]
         }
@@ -146,18 +163,31 @@
               "note": ""
             },
             {
-              "text": "<b>Tanggal*</b>:\n- Date Picker\n- Required\n- Pre-filled with current data",
+              "text": "<b>Bulan Tahun*</b>:\n- Date Picker (Month and Year selector)\n- Required\n- Format: Month Year (e.g., January 2025)\n- Pre-filled with current data",
               "note": ""
             },
             {
-              "text": "<b>Status*</b>:\n- Select Field\n- Required\n- Options: Active, Inactive\n- Pre-filled with current data",
+              "text": "<b>Status*</b>:\n- Switch Button\n- Required\n- Options: Active (ON), Inactive (OFF)\n- Pre-filled with current data",
               "note": ""
+            }
+          ]
+        },
+        {
+          "info": "<b>Breadcrumb</b>",
+          "detail": [
+            {
+              "text": "<b>Breadcrumb path</b>: Master Data > Kurs > Kurs Details: USD 1 = IDR [nilai] > Update Kurs: USD 1 = IDR [nilai]",
+              "note": "Breadcrumb matches previous step and current page title"
             }
           ]
         },
         {
           "info": "<b>Behavior</b>",
           "detail": [
+            {
+              "text": "<b>Page Title</b>: 'Update Kurs: USD 1 = IDR [nilai]'",
+              "note": "Breadcrumb matches page title"
+            },
             {
               "text": "<b>Cancel</b>:\n Reset and Back to list kurs"
             },

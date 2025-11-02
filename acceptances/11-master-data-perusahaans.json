@@ -17,7 +17,7 @@
               "note": ""
             },
             {
-              "text": "<b>Sorting ASC,DESC</b>:\n- Nama Perusahaan\n- Email\n- No Telepon\n- Status\n- Created At",
+              "text": "<b>Sorting ASC,DESC</b>:\n- Nama Perusahaan\n- Email\n- No Telepon\n- Status",
               "note": "Default sorting by created_at"
             }
           ]
@@ -36,9 +36,6 @@
             },
             {
               "text": "<b>Status</b>\n- Tag with color (Active: green, Inactive: red)"
-            },
-            {
-              "text": "<b>Created At</b>\n- Formatted date"
             }
           ]
         },
@@ -139,7 +136,7 @@
               "note": ""
             },
             {
-              "text": "<b>Status*</b>:\n- Select Field\n- Required\n- Options: Active, Inactive",
+              "text": "<b>Status*</b>:\n- Switch Button\n- Required\n- Default: Active (checked)\n- Options: Active (checked), Inactive (unchecked)",
               "note": ""
             }
           ]
@@ -181,7 +178,7 @@
               "note": ""
             },
             {
-              "text": "<b>Status*</b>:\n- Select Field\n- Required\n- Options: Active, Inactive\n- Pre-filled with current data",
+              "text": "<b>Status*</b>:\n- Switch Button\n- Required\n- Options: Active (checked), Inactive (unchecked)\n- Pre-filled with current data",
               "note": ""
             }
           ]

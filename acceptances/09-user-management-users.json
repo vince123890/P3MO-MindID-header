@@ -25,7 +25,7 @@
               "text": "<b>Nama User</b>\n- Read Only"
             },
             {
-              "text": "<b>Role</b>\n- Read Only\n- Displayed as tag with color"
+              "text": "<b>Role</b>\n- Read Only\n- Displayed as plain text"
             },
             {
               "text": "<b>Email</b>\n- Read Only"
@@ -51,7 +51,10 @@
               "text": "Default sorting based on most recent data"
             },
             {
-              "text": "<b>Action</b>: Detail"
+              "text": "Default pagination: 20 rows per page"
+            },
+            {
+              "text": "<b>Action</b>: Detail, Edit, Active/Inactive Toggle"
             }
           ]
         }
@@ -59,37 +62,209 @@
     },
     {
       "code": "<b>UM02</b>",
+      "feature": "<b>Create User</b>",
+      "acceptances": [
+        {
+          "info": "<b>Section User Information</b>",
+          "detail": [
+            {
+              "text": "<b>NIP*</b>:\n- Text Field\n- Required",
+              "note": ""
+            },
+            {
+              "text": "<b>Nama User*</b>:\n- Text Field\n- Required",
+              "note": ""
+            },
+            {
+              "text": "<b>Username*</b>:\n- Text Field\n- Required",
+              "note": ""
+            },
+            {
+              "text": "<b>Email*</b>:\n- Text Field\n- Required\n- Email format validation",
+              "note": ""
+            },
+            {
+              "text": "<b>Perusahaan*</b>:\n- Select Dropdown\n- Required",
+              "note": ""
+            },
+            {
+              "text": "<b>Role*</b>:\n- Select Dropdown\n- Required",
+              "note": ""
+            },
+            {
+              "text": "<b>Jabatan*</b>:\n- Text Field\n- Required",
+              "note": ""
+            },
+            {
+              "text": "<b>Fungsi*</b>:\n- Text Field\n- Required",
+              "note": ""
+            },
+            {
+              "text": "<b>No HP*</b>:\n- Text Field\n- Required",
+              "note": ""
+            },
+            {
+              "text": "<b>Status</b>:\n- Switch Button\n- Default: Active (ON)",
+              "note": ""
+            }
+          ]
+        },
+        {
+          "info": "<b>Form Layout</b>",
+          "detail": [
+            {
+              "text": "Row 1: NIP, Nama User"
+            },
+            {
+              "text": "Row 2: Username, Email"
+            },
+            {
+              "text": "Row 3: Perusahaan, Role"
+            },
+            {
+              "text": "Row 4: Jabatan, Fungsi"
+            },
+            {
+              "text": "Row 5: No HP, Status"
+            }
+          ]
+        },
+        {
+          "info": "<b>Behavior</b>",
+          "detail": [
+            {
+              "text": "<b>Cancel</b>:\n- Reset form and back to list page"
+            },
+            {
+              "text": "<b>Submit</b>:\n- Save data and display in user list"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "<b>UM03</b>",
+      "feature": "<b>Edit User</b>",
+      "acceptances": [
+        {
+          "info": "<b>Section User Information</b>",
+          "detail": [
+            {
+              "text": "<b>NIP*</b>:\n- Text Field\n- Pre-filled with current data\n- Required",
+              "note": ""
+            },
+            {
+              "text": "<b>Nama User*</b>:\n- Text Field\n- Pre-filled with current data\n- Required",
+              "note": ""
+            },
+            {
+              "text": "<b>Username*</b>:\n- Text Field\n- Pre-filled with current data\n- Required",
+              "note": ""
+            },
+            {
+              "text": "<b>Email*</b>:\n- Text Field\n- Pre-filled with current data\n- Required\n- Email format validation",
+              "note": ""
+            },
+            {
+              "text": "<b>Perusahaan*</b>:\n- Select Dropdown\n- Pre-filled with current data\n- Required",
+              "note": ""
+            },
+            {
+              "text": "<b>Role*</b>:\n- Select Dropdown\n- Pre-filled with current data\n- Required",
+              "note": ""
+            },
+            {
+              "text": "<b>Jabatan*</b>:\n- Text Field\n- Pre-filled with current data\n- Required",
+              "note": ""
+            },
+            {
+              "text": "<b>Fungsi*</b>:\n- Text Field\n- Pre-filled with current data\n- Required",
+              "note": ""
+            },
+            {
+              "text": "<b>No HP*</b>:\n- Text Field\n- Pre-filled with current data\n- Required",
+              "note": ""
+            },
+            {
+              "text": "<b>Status</b>:\n- Switch Button\n- Pre-filled with current data",
+              "note": ""
+            }
+          ]
+        },
+        {
+          "info": "<b>Form Layout</b>",
+          "detail": [
+            {
+              "text": "Row 1: NIP, Nama User"
+            },
+            {
+              "text": "Row 2: Username, Email"
+            },
+            {
+              "text": "Row 3: Perusahaan, Role"
+            },
+            {
+              "text": "Row 4: Jabatan, Fungsi"
+            },
+            {
+              "text": "Row 5: No HP, Status"
+            }
+          ]
+        },
+        {
+          "info": "<b>Behavior</b>",
+          "detail": [
+            {
+              "text": "<b>Cancel</b>:\n- Reset form and back to list page"
+            },
+            {
+              "text": "<b>Save Changes</b>:\n- Update data and display in user list"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "<b>UM04</b>",
       "feature": "<b>Detail User</b>",
       "acceptances": [
         {
-          "info": "<b>Fields</b>",
+          "info": "<b>Section User Information</b>",
           "detail": [
             {
-              "text": "<b>NIP</b>:\n- Read Only\n- Text Field",
+              "text": "<b>NIP</b>:\n- Read Only",
               "note": ""
             },
             {
-              "text": "<b>NIK</b>:\n- Read Only\n- Text Field",
+              "text": "<b>Nama User</b>:\n- Read Only",
               "note": ""
             },
             {
-              "text": "<b>Nama User</b>:\n- Read Only\n- Text Field",
+              "text": "<b>Username</b>:\n- Read Only",
               "note": ""
             },
             {
-              "text": "<b>Email</b>:\n- Read Only\n- Text Field",
+              "text": "<b>Email</b>:\n- Read Only",
               "note": ""
             },
             {
-              "text": "<b>Role</b>:\n- Read Only\n- Displayed as tag with color",
+              "text": "<b>Perusahaan</b>:\n- Read Only",
               "note": ""
             },
             {
-              "text": "<b>Username</b>:\n- Read Only\n- Text Field",
+              "text": "<b>Role</b>:\n- Read Only\n- Displayed as plain text",
               "note": ""
             },
             {
-              "text": "<b>Perusahaan</b>:\n- Read Only\n- Text Field",
+              "text": "<b>Jabatan</b>:\n- Read Only",
+              "note": ""
+            },
+            {
+              "text": "<b>Fungsi</b>:\n- Read Only",
+              "note": ""
+            },
+            {
+              "text": "<b>No HP</b>:\n- Read Only",
               "note": ""
             },
             {
@@ -107,14 +282,32 @@
           ]
         },
         {
+          "info": "<b>Section History Login</b>",
+          "detail": [
+            {
+              "text": "<b>Updated Date</b>:\n- Read Only\n- Format: DD/MM/YYYY HH:mm:ss"
+            },
+            {
+              "text": "<b>Activity</b>:\n- Read Only\n- Values: Login, Logout"
+            }
+          ]
+        },
+        {
           "info": "<b>Behavior</b>",
           "detail": [
             {
               "text": "<b>Back button</b>:\n- Returns to Daftar User list page"
+            },
+            {
+              "text": "<b>Edit button</b>:\n- Navigate to Edit User page"
+            },
+            {
+              "text": "<b>Delete button</b>:\n- Show confirmation dialog\n- Delete user and return to list page"
             }
           ]
         }
       ]
     }
-  ]
+  ],
+  "updated_at": "2024-10-31T02:27:07.000Z"
 }

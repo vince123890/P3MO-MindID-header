@@ -1,4 +1,4 @@
-import { Button, Col, Form, Input, Row, Select } from "antd";
+import { Button, Col, Form, Input, Row, Switch } from "antd";
 import { Section } from "admiral";
 import { Flex } from "antd";
 import { useNavigate } from "react-router";
@@ -78,11 +78,14 @@ export const FormPerusahaan = ({ formProps, error, loading, isEdit }) => {
                     message: "Status is required",
                   },
                 ]}
+                valuePropName="checked"
+                normalize={(value) => value ? "Active" : "Inactive"}
+                getValueProps={(value) => ({ checked: value === "Active" })}
               >
-                <Select placeholder="Select status">
-                  <Select.Option value="Active">Active</Select.Option>
-                  <Select.Option value="Inactive">Inactive</Select.Option>
-                </Select>
+                <Switch 
+                  checkedChildren="Active" 
+                  unCheckedChildren="Inactive"
+                />
               </Form.Item>
             </Col>
             <Col span={24}>

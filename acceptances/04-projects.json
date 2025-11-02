@@ -1,5 +1,5 @@
 {
-  "module_name": "Projects",
+  "module_name": "PIMS",
   "data": [
     {
       "code": "<b>PJ01</b>",
@@ -9,8 +9,8 @@
           "info": "<b>Fields</b>",
           "detail": [
             {
-              "text": "<b>Search</b>:\n- Project Code\n- Business Initiative Name\n- Company",
-              "note": ""
+              "text": "<b>Search</b>:\n- Project Code\n- Business Initiative Name\n- Company\n- Autocomplete suggestions appear after typing 1 character\n- Shows matched project codes with company info\n- Shows matched business initiative names with project code",
+              "note": "Enhanced search with real-time suggestions"
             },
             {
               "text": "<b>Filter</b>:\n- Company\n- Status\n- Division\n- Created Date",
@@ -162,9 +162,6 @@
           "detail": [
             {
               "text": "<b>Document Name</b>:\n- Read Only with File icon"
-            },
-            {
-              "text": "<b>Size</b>:\n- Read Only"
             },
             {
               "text": "<b>Upload Date</b>:\n- Read Only DateTime format"
@@ -936,25 +933,19 @@
               "text": "<b>Fase</b>\n- Tag with color coding\n- Sortable\n- Colors: Perencanaan (blue), Pengembangan (green), In HPO (orange), FID (purple)"
             },
             {
-              "text": "<b>Aktivitas Bulan Sebelumnya</b>\n- Text display with ellipsis\n- Sortable"
-            },
-            {
-              "text": "<b>Status Sebelumnya</b>\n- Tag with color coding\n- Sortable\n- Colors: Not Started (default), In Progress (blue), Completed (green), On Hold (orange), Cancelled (red)"
-            },
-            {
               "text": "<b>Aktivitas Bulan Berjalan</b>\n- Text display with ellipsis\n- Sortable"
             },
             {
               "text": "<b>Status Berjalan</b>\n- Tag with color coding\n- Sortable\n- Colors: Not Started (default), In Progress (blue), Completed (green), On Hold (orange), Cancelled (red)"
             },
             {
-              "text": "<b>PIC</b>\n- Text display\n- Sortable"
+              "text": "<b>Aktivitas Bulan Selanjutnya</b>\n- Text display with ellipsis\n- Sortable"
             },
             {
-              "text": "<b>Milestone</b>\n- Tag showing Yes/No\n- Colors: Yes (gold), No (default)\n- Sortable"
+              "text": "<b>Status Selanjutnya</b>\n- Tag with color coding\n- Sortable\n- Colors: Not Started (default), In Progress (blue), Completed (green), On Hold (orange), Cancelled (red)"
             },
             {
-              "text": "<b>Tanggal Aktivitas</b>\n- Date format (DD/MM/YYYY)\n- Sortable"
+              "text": "<b>Critical Task</b>\n- Tag showing Yes/No\n- Colors: Yes (green), No (red)\n- Sortable"
             }
           ]
         },
@@ -984,22 +975,86 @@
           ]
         },
         {
-          "info": "<b>Modal Form Fields</b>",
+          "info": "<b>Modal Form Fields - Basic Information</b>",
           "detail": [
             {
-              "text": "<b>Activity Information Section</b>:\n- Bulan Pelaporan (date range picker, required)\n- Fase (dropdown: Perencanaan, Pengembangan, In HPO, FID, required)\n- Aktivitas (text area, required)\n- PIC Aktivitas (dropdown: employee names, required)",
+              "text": "<b>Task ID*</b>:\n- Dropdown select\n- Options: TASK-001 to TASK-010\n- Required\n- Disabled when editing",
               "note": ""
             },
             {
-              "text": "<b>Progress Information Section</b>:\n- Aktivitas Bulan Sebelumnya (text area)\n- Status Bulan Sebelumnya (dropdown: Not Started, In Progress, Completed, On Hold, Cancelled)\n- Aktivitas Bulan Berjalan (text area, required)\n- Status Bulan Berjalan (dropdown: Not Started, In Progress, Completed, On Hold, Cancelled, required)",
+              "text": "<b>Fase*</b>:\n- Dropdown select\n- Options: Perencanaan, Pengembangan, In HPO, FID\n- Required",
               "note": ""
             },
             {
-              "text": "<b>Documentation Section</b>:\n- Foto (multiple image upload)\n- Keterangan Foto (text area)\n- Milestone (checkbox)\n- Tanggal Aktivitas (date, required)",
+              "text": "<b>Bulan Pelaporan*</b>:\n- Month and Year picker (DatePicker with picker=\"month\")\n- Format: MMMM YYYY (e.g., September 2025)\n- Required",
+              "note": "Changed from date range to month/year picker"
+            }
+          ]
+        },
+        {
+          "info": "<b>Modal Form Fields - Activity Progress</b>",
+          "detail": [
+            {
+              "text": "<b>Aktivitas Bulan Berjalan*</b>:\n- Text area\n- Required\n- Placeholder: Enter current month activity description",
+              "note": "Previously labeled as 'Aktivitas Bulan Sebelumnya'"
+            },
+            {
+              "text": "<b>Status Berjalan*</b>:\n- Dropdown select\n- Options: Not Started, In Progress, Completed, On Hold, Cancelled\n- Required",
+              "note": "Previously labeled as 'Status Bulan Sebelumnya'"
+            },
+            {
+              "text": "<b>Aktivitas Bulan Selanjutnya*</b>:\n- Text area\n- Required\n- Placeholder: Enter next month activity description",
+              "note": "Previously labeled as 'Aktivitas Bulan Berjalan'"
+            },
+            {
+              "text": "<b>Status Selanjutnya*</b>:\n- Dropdown select\n- Options: Not Started, In Progress, Completed, On Hold, Cancelled\n- Required",
+              "note": "Previously labeled as 'Status Bulan Berjalan'"
+            }
+          ]
+        },
+        {
+          "info": "<b>Modal Form Fields - Activity Details</b>",
+          "detail": [
+            {
+              "text": "<b>PIC Aktivitas*</b>:\n- Dropdown select\n- Options: John Doe, Jane Smith, Mike Johnson, Alice Brown, Bob Wilson, Carol Davis\n- Required",
               "note": ""
             },
             {
-              "text": "<b>Additional Information Section</b>:\n- Latest Modified (date)\n- Keterangan (text area)",
+              "text": "<b>Tanggal Aktivitas*</b>:\n- Date picker\n- Required\n- Default: current date",
+              "note": ""
+            },
+            {
+              "text": "<b>Aktivitas*</b>:\n- Text area\n- Required\n- Rows: 4\n- Placeholder: Enter detailed activity description",
+              "note": ""
+            },
+            {
+              "text": "<b>Critical Task</b>:\n- Checkbox\n- Label: \"Mark as critical task\"\n- Optional (default: unchecked)",
+              "note": "Previously labeled as 'Milestone' and 'Mark as milestone'"
+            },
+            {
+              "text": "<b>Latest Modified*</b>:\n- Date picker\n- Required",
+              "note": ""
+            }
+          ]
+        },
+        {
+          "info": "<b>Modal Form Fields - Photo Documentation</b>",
+          "detail": [
+            {
+              "text": "<b>Foto</b>:\n- Multiple image upload\n- Accepts: image/*\n- Optional\n- Shows uploaded file names",
+              "note": ""
+            },
+            {
+              "text": "<b>Keterangan Foto</b>:\n- Text area\n- Optional\n- Rows: 3\n- Placeholder: Enter photo description",
+              "note": ""
+            }
+          ]
+        },
+        {
+          "info": "<b>Modal Form Fields - Remarks</b>",
+          "detail": [
+            {
+              "text": "<b>Keterangan</b>:\n- Text area\n- Optional\n- Rows: 4\n- Placeholder: Enter additional remarks",
               "note": ""
             }
           ]
@@ -1026,23 +1081,6 @@
           ]
         },
         {
-          "info": "<b>File Upload Features</b>",
-          "detail": [
-            {
-              "text": "<b>Multiple Photo Upload</b>:\n- Support for multiple image files\n- Accepts: image/* formats\n- Shows uploaded file names\n- Remove individual photos option",
-              "note": ""
-            },
-            {
-              "text": "<b>Photo Description</b>:\n- Text area for photo descriptions\n- Linked to uploaded photos",
-              "note": ""
-            },
-            {
-              "text": "<b>Date Range Picker</b>:\n- For Bulan Pelaporan field\n- Select start and end dates\n- Format: DD/MM/YYYY - DD/MM/YYYY",
-              "note": ""
-            }
-          ]
-        },
-        {
           "info": "<b>Behavior</b>",
           "detail": [
             {
@@ -1061,22 +1099,25 @@
               "text": "Form validation for required fields in create/edit modes"
             },
             {
-              "text": "Task ID auto-generation with TASK-XXX format"
+              "text": "Task ID selection from dropdown (TASK-001 to TASK-010)"
             },
             {
               "text": "Color-coded tags for Fase and Status fields in list view"
             },
             {
-              "text": "Date formatting for Tanggal Aktivitas display (DD/MM/YYYY)"
+              "text": "Month and year picker for Bulan Pelaporan (format: MMMM YYYY)"
             },
             {
               "text": "Multiple photo upload support with descriptions"
             },
             {
-              "text": "Milestone checkbox for important activities"
+              "text": "Critical Task checkbox for important activities (replacing Milestone)"
             },
             {
-              "text": "Progress tracking between previous month and current month"
+              "text": "Progress tracking: Current month (Bulan Berjalan) and Next month (Bulan Selanjutnya)"
+            },
+            {
+              "text": "Form sections organized: Basic Information, Activity Progress, Activity Details, Photo Documentation, Remarks"
             }
           ]
         }
@@ -1183,6 +1224,184 @@
             },
             {
               "text": "<b>User Feedback</b>:\n- Success message for approval\n- Error message for rejection\n- Clear visual status indicators",
+              "note": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "<b>PJ10</b>",
+      "feature": "<b>Project Profile - Add Amendment 3</b>",
+      "acceptances": [
+        {
+          "info": "<b>Fields Section Amendment 3 Form</b>",
+          "detail": [
+            {
+              "text": "<b>Project Name</b>:\n- Text Field\n- Enabled (default field like Project Sponsor)\n- Required",
+              "note": "Changed from disabled to enabled"
+            },
+            {
+              "text": "<b>Company</b>:\n- Text Field\n- Disabled (auto-filled)\n- No mandatory asterisk",
+              "note": "Removed mandatory requirement"
+            },
+            {
+              "text": "<b>PMO In Charge</b>:\n- Select Dropdown\n- Options: Company names (not user names)\n- Required",
+              "note": "Changed from user names to company options"
+            },
+            {
+              "text": "<b>Fase Proyek</b>:\n- Select Dropdown\n- Disabled with default value \"Persiapan\"\n- No mandatory asterisk",
+              "note": "Disabled with preset value, removed mandatory requirement"
+            },
+            {
+              "text": "<b>Kurs</b>:\n- Text Field\n- Disabled (auto-filled)\n- No mandatory asterisk",
+              "note": "Removed mandatory requirement"
+            }
+          ]
+        },
+        {
+          "info": "<b>PMO In Charge Options</b>",
+          "detail": [
+            {
+              "text": "<b>Company Options</b>:\n- PT Aneka Tambang Tbk\n- PT Bukit Asam Tbk\n- PT Freeport Indonesia\n- PT Indonesia Asahan Aluminium (Inalum)\n- PT Timah Tbk\n- PT Vale Indonesia",
+              "note": "Updated to show company names instead of user names"
+            }
+          ]
+        },
+        {
+          "info": "<b>Auto-fill Values</b>",
+          "detail": [
+            {
+              "text": "<b>Company</b>:\n- Auto-filled with \"PT. Antam\"",
+              "note": ""
+            },
+            {
+              "text": "<b>Project Name</b>:\n- Auto-filled with \"Nickel Processing Plant\"",
+              "note": ""
+            },
+            {
+              "text": "<b>Fase Proyek</b>:\n- Auto-filled with \"Persiapan\"",
+              "note": ""
+            },
+            {
+              "text": "<b>Kurs</b>:\n- Auto-filled with \"USD 1 = IDR15320 (2023-09-20)\"",
+              "note": ""
+            }
+          ]
+        },
+        {
+          "info": "<b>Form Validation</b>",
+          "detail": [
+            {
+              "text": "<b>Required Fields</b>:\n- Amendment Number (required)\n- Project Name (required)\n- PMO In Charge (required)\n- Other fields as per original requirements",
+              "note": "Company, Fase Proyek, and Kurs are no longer mandatory"
+            },
+            {
+              "text": "<b>Disabled Fields</b>:\n- Company (disabled, auto-filled)\n- Fase Proyek (disabled, auto-filled with \"Persiapan\")\n- Kurs (disabled, auto-filled)",
+              "note": ""
+            }
+          ]
+        },
+        {
+          "info": "<b>Behavior</b>",
+          "detail": [
+            {
+              "text": "<b>Add Amendment 3 Button</b>:\n- Opens Amendment 3 form with auto-filled values\n- Sets amendment number to 3",
+              "note": ""
+            },
+            {
+              "text": "<b>Field State Management</b>:\n- Project Name: enabled for editing\n- PMO In Charge: company selection dropdown\n- Fase Proyek: disabled with \"Persiapan\" value\n- Company, Kurs: disabled but auto-filled",
+              "note": ""
+            },
+            {
+              "text": "<b>Save Functionality</b>:\n- Validates only required fields\n- Saves Amendment 3 data with pre-filled values",
+              "note": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "<b>PJ11</b>",
+      "feature": "<b>History Performance</b>",
+      "acceptances": [
+        {
+          "info": "<b>Fields Section History Performance</b>",
+          "detail": [
+            {
+              "text": "<b>Last Updated</b>:\n- Date and Time format (DD/MM/YYYY HH:mm)\n- Shows when performance data was last updated",
+              "note": ""
+            },
+            {
+              "text": "<b>Project Schedule Actual</b>:\n- File name display\n- Shows uploaded schedule actual file name",
+              "note": ""
+            },
+            {
+              "text": "<b>Project Cost Actual</b>:\n- File name display\n- Shows uploaded cost actual file name",
+              "note": ""
+            },
+            {
+              "text": "<b>Total Labour</b>:\n- Number display\n- Shows total labour count at time of update",
+              "note": ""
+            }
+          ]
+        },
+        {
+          "info": "<b>Table Structure</b>",
+          "detail": [
+            {
+              "text": "<b>Table Title</b>:\n- \"History Performance\"\n- Positioned below Project Photos section",
+              "note": ""
+            },
+            {
+              "text": "<b>Table Columns</b>:\n- Last Updated (DateTime format)\n- Project Schedule Actual (File name)\n- Project Cost Actual (File name)\n- Total Labour (Number)",
+              "note": ""
+            },
+            {
+              "text": "<b>Table Data</b>:\n- Historical performance records\n- Sorted by most recent first\n- Shows chronological progression of performance data",
+              "note": ""
+            }
+          ]
+        },
+        {
+          "info": "<b>Table Features</b>",
+          "detail": [
+            {
+              "text": "<b>Pagination</b>:\n- Page size: 5 rows per page\n- Show size changer\n- Display total count format: \"X-Y of Z items\"",
+              "note": ""
+            },
+            {
+              "text": "<b>Sample Data</b>:\n- Multiple historical records with different dates\n- Varying total labour counts\n- Consistent file naming convention",
+              "note": ""
+            }
+          ]
+        },
+        {
+          "info": "<b>Positioning</b>",
+          "detail": [
+            {
+              "text": "<b>Location</b>:\n- Below Project Photos section\n- Within Project Performance tab\n- Before Upload Modal section",
+              "note": ""
+            },
+            {
+              "text": "<b>Section Styling</b>:\n- Consistent with other sections\n- Section title with proper spacing\n- Table with standard styling",
+              "note": ""
+            }
+          ]
+        },
+        {
+          "info": "<b>Behavior</b>",
+          "detail": [
+            {
+              "text": "<b>Read Only Display</b>:\n- Historical data shown in table format\n- No editing capabilities\n- For reference and tracking purposes",
+              "note": ""
+            },
+            {
+              "text": "<b>Data Sorting</b>:\n- Chronological order (newest first)\n- Based on Last Updated timestamp\n- Automatic ordering",
+              "note": ""
+            },
+            {
+              "text": "<b>Empty State Handling</b>:\n- Shows empty table when no history available\n- Proper message display\n- Maintains table structure",
               "note": ""
             }
           ]

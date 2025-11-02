@@ -11,7 +11,7 @@ export const Component = () => {
 
   return (
     <Page
-      title="Generate Laporan Bulanan"
+      title="Laporan"
       breadcrumbs={breadcrumbs}
       noStyle
     >

@@ -1,4 +1,4 @@
-import { Button, Col, Form, Input, Row, Select, Space, Typography, Tabs } from "antd";
+import { Button, Col, Form, Input, Row, Select, Space, Typography, Tabs, Switch } from "antd";
 import { Section } from "admiral";
 import { Flex } from "antd";
 import { useNavigate } from "react-router";
@@ -8,6 +8,39 @@ import { EyeOutlined, EditOutlined } from "@ant-design/icons";
 import { useFormErrorHandling } from "@/app/_hooks/form/use-form-error-handling";
 import { allPerusahaans } from "../../perusahaans/_data";
 
+// Category and Trigger options
+const categoryOptions = [
+  {
+    label: "Communication & Announcements",
+    value: "Communication & Announcements",
+  },
+  {
+    label: "Notifications & Reminders",
+    value: "Notifications & Reminders",
+  },
+  {
+    label: "System & Security Alerts",
+    value: "System & Security Alerts",
+  },
+];
+
+const triggerOptions = {
+  "Communication & Announcements": [
+    { label: "Registration Completed", value: "Registration Completed" },
+    { label: "Event Created", value: "Event Created" },
+  ],
+  "Notifications & Reminders": [
+    { label: "Project Status", value: "Project Status" },
+    { label: "Meeting Scheduled (X hours before start)", value: "Meeting Scheduled (X hours before start)" },
+    { label: "Due Date Approaching", value: "Due Date Approaching" },
+    { label: "Significant Decline Curve", value: "Significant Decline Curve" },
+  ],
+  "System & Security Alerts": [
+    { label: "Scheduled System Maintenance", value: "Scheduled System Maintenance" },
+    { label: "Login from New Device", value: "Login from New Device" },
+  ],
+};
+
 const { TextArea } = Input;
 
 export const FormTemplateMessaging = ({ formProps, error, loading, isEdit }) => {
@@ -15,6 +48,7 @@ export const FormTemplateMessaging = ({ formProps, error, loading, isEdit }) => 
   const navigate = useNavigate();
   const [bodyContent, setBodyContent] = useState("");
   const [activePreviewTab, setActivePreviewTab] = useState("edit");
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   useFormErrorHandling(error, ({ key, message }) =>
     form.setFields([{ name: key, errors: [message] }]),
@@ -25,6 +59,12 @@ export const FormTemplateMessaging = ({ formProps, error, loading, isEdit }) => 
     label: item.nama_perusahaan,
     value: item.nama_perusahaan,
   }));
+
+  // Handle category change
+  const handleCategoryChange = (value) => {
+    setSelectedCategory(value);
+    form.setFieldsValue({ trigger: undefined }); // Reset trigger when category changes
+  };
 
   // Handle body content changes
   const handleBodyChange = (e) => {
@@ -153,43 +193,55 @@ export const FormTemplateMessaging = ({ formProps, error, loading, isEdit }) => 
               </Col>
               <Col span={12}>
                 <Form.Item
-                  label="Perusahaan"
-                  name="perusahaan"
+                  label="Category"
+                  name="category"
                   rules={[
                     {
                       required: true,
-                      message: "Perusahaan is required",
+                      message: "Category is required",
                     },
                   ]}
                 >
-                  <Select placeholder="Select company" showSearch>
-                    {perusahaanOptions.map((option) => (
-                      <Select.Option key={option.value} value={option.value}>
-                        {option.label}
-                      </Select.Option>
-                    ))}
-                  </Select>
+                  <Select 
+                    placeholder="Select category" 
+                    onChange={handleCategoryChange}
+                    options={categoryOptions}
+                  />
                 </Form.Item>
               </Col>
-              {isEdit && (
-                <Col span={12}>
-                  <Form.Item
-                    label="Status"
-                    name="status"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Status is required",
-                      },
-                    ]}
-                  >
-                    <Select placeholder="Select status">
-                      <Select.Option value="Active">Active</Select.Option>
-                      <Select.Option value="Inactive">Inactive</Select.Option>
-                    </Select>
-                  </Form.Item>
-                </Col>
-              )}
+              <Col span={12}>
+                <Form.Item
+                  label="Trigger"
+                  name="trigger"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Trigger is required",
+                    },
+                  ]}
+                >
+                  <Select 
+                    placeholder="Select trigger" 
+                    disabled={!selectedCategory}
+                    options={selectedCategory ? triggerOptions[selectedCategory] : []}
+                  />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item
+                  label="Status"
+                  name="status"
+                  valuePropName="checked"
+                  getValueFromEvent={(checked) => checked ? "Active" : "Inactive"}
+                  getValueProps={(value) => ({ checked: value === "Active" })}
+                >
+                  <Switch 
+                    checkedChildren="Active" 
+                    unCheckedChildren="Inactive"
+                    defaultChecked={true}
+                  />
+                </Form.Item>
+              </Col>
             </Row>
           </Section>
 

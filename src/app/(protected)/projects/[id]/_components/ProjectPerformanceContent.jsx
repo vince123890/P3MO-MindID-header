@@ -15,7 +15,8 @@ import {
   DatePicker,
   Image,
   Popconfirm,
-  Tag
+  Tag,
+  Descriptions
 } from "antd";
 import {
   EditOutlined,
@@ -24,7 +25,8 @@ import {
   EyeOutlined,
   PlusOutlined,
   DeleteOutlined,
-  CameraOutlined
+  CameraOutlined,
+  ArrowLeftOutlined
 } from "@ant-design/icons";
 import { Section } from "admiral";
 import dayjs from "dayjs";
@@ -32,27 +34,29 @@ import dayjs from "dayjs";
 const { TextArea } = Input;
 const { Text } = Typography;
 
-const ProjectPerformanceContent = ({ project }) => {
+const ProjectPerformanceContent = ({ project, readOnly = false }) => {
   const [form] = Form.useForm();
   const [photoForm] = Form.useForm();
   const [isEditing, setIsEditing] = useState(false);
-  const [isPhotoModalVisible, setIsPhotoModalVisible] = useState(false);
-  const [isPhotoDetailModalVisible, setIsPhotoDetailModalVisible] = useState(false);
+  const [isAddingPhoto, setIsAddingPhoto] = useState(false);
+  const [isViewingPhoto, setIsViewingPhoto] = useState(false);
   const [editingPhoto, setEditingPhoto] = useState(null);
   const [viewingPhoto, setViewingPhoto] = useState(null);
+  const [uploadModalVisible, setUploadModalVisible] = useState(false);
+  const [currentFileType, setCurrentFileType] = useState("");
   const [photos, setPhotos] = useState([
     {
       id: 1,
       foto_proyek: "project_photo_1.jpg",
       tanggal_proyek: "2025-01-15",
-      keterangan_foto: "Progress pembangunan pondasi utama gedung",
+      keterangan_foto: <span style={{ color: "#0F1E3A" }}>Progress pembangunan pondasi utama gedung</span>,
       preview_url: "https://via.placeholder.com/300x200/1890ff/ffffff?text=Project+Photo+1"
     },
     {
       id: 2,
       foto_proyek: "project_photo_2.jpg",
       tanggal_proyek: "2025-01-20",
-      keterangan_foto: "Instalasi struktur baja lantai 2",
+      keterangan_foto: <span style={{ color: "#0F1E3A" }}>Instalasi struktur baja lantai 2</span>,
       preview_url: "https://via.placeholder.com/300x200/52c41a/ffffff?text=Project+Photo+2"
     }
   ]);
@@ -61,6 +65,7 @@ const ProjectPerformanceContent = ({ project }) => {
   const [performanceData, setPerformanceData] = useState({
     project_schedule_actual: "schedule_actual_2025.xlsx",
     project_cost_actual: "cost_actual_2025.xlsx",
+    total_labour: "250",
     last_updated: "2025-01-20"
   });
 
@@ -90,14 +95,34 @@ const ProjectPerformanceContent = ({ project }) => {
   };
 
   const handleFileAction = (action, fileType) => {
-    message.info(`${action} ${fileType}`);
+    if (action === "Upload") {
+      setCurrentFileType(fileType);
+      setUploadModalVisible(true);
+    } else {
+      message.info(`${action} ${fileType}`);
+    }
+  };
+
+  const handleUploadModalOk = () => {
+    message.success(`File uploaded successfully for ${currentFileType}`);
+    setUploadModalVisible(false);
+    setCurrentFileType("");
+  };
+
+  const handleUploadModalCancel = () => {
+    setUploadModalVisible(false);
+    setCurrentFileType("");
+  };
+
+  const handleDownloadTemplate = () => {
+    message.info(`Downloading template for ${currentFileType}`);
   };
 
   // Photo Management Functions
   const handleAddPhoto = () => {
     setEditingPhoto(null);
     photoForm.resetFields();
-    setIsPhotoModalVisible(true);
+    setIsAddingPhoto(true);
   };
 
   const handleEditPhoto = (photo) => {
@@ -107,12 +132,17 @@ const ProjectPerformanceContent = ({ project }) => {
       tanggal_proyek: dayjs(photo.tanggal_proyek),
       keterangan_foto: photo.keterangan_foto
     });
-    setIsPhotoModalVisible(true);
+    setIsAddingPhoto(true);
   };
 
   const handleViewPhoto = (photo) => {
     setViewingPhoto(photo);
-    setIsPhotoDetailModalVisible(true);
+    setIsViewingPhoto(true);
+  };
+
+  const handleClosePhotoDetail = () => {
+    setViewingPhoto(null);
+    setIsViewingPhoto(false);
   };
 
   const handleDeletePhoto = (photoId) => {
@@ -125,32 +155,65 @@ const ProjectPerformanceContent = ({ project }) => {
       const values = await photoForm.validateFields();
       
       if (editingPhoto) {
-        // Update existing photo
-        setPhotos(photos.map(photo => 
-          photo.id === editingPhoto.id 
-            ? {
-                ...photo,
-                foto_proyek: values.foto_proyek,
-                tanggal_proyek: values.tanggal_proyek.format('YYYY-MM-DD'),
-                keterangan_foto: values.keterangan_foto
-              }
-            : photo
-        ));
-        message.success("Photo updated successfully!");
+        // Handle multiple photos in edit mode
+        const uploadedFiles = values.foto_proyek?.fileList || [];
+        
+        if (uploadedFiles.length > 0) {
+          // Remove the original photo and add new ones
+          const otherPhotos = photos.filter(photo => photo.id !== editingPhoto.id);
+          const newPhotos = uploadedFiles.map((file, index) => ({
+            id: Math.max(...photos.map(p => p.id), 0) + index + 1,
+            foto_proyek: file.name,
+            tanggal_proyek: values.tanggal_proyek.format('YYYY-MM-DD'),
+            keterangan_foto: values.keterangan_foto,
+            preview_url: file.originFileObj ? URL.createObjectURL(file.originFileObj) : `https://via.placeholder.com/300x200/1890ff/ffffff?text=Project+Photo+${Math.max(...photos.map(p => p.id), 0) + index + 1}`
+          }));
+          
+          setPhotos([...otherPhotos, ...newPhotos]);
+          message.success(`${newPhotos.length} photos updated successfully!`);
+        } else {
+          // Update existing photo with new details (no new files uploaded)
+          setPhotos(photos.map(photo => 
+            photo.id === editingPhoto.id 
+              ? {
+                  ...photo,
+                  tanggal_proyek: values.tanggal_proyek.format('YYYY-MM-DD'),
+                  keterangan_foto: values.keterangan_foto
+                }
+              : photo
+          ));
+          message.success("Photo updated successfully!");
+        }
       } else {
-        // Add new photo
-        const newPhoto = {
-          id: Math.max(...photos.map(p => p.id), 0) + 1,
-          foto_proyek: values.foto_proyek,
-          tanggal_proyek: values.tanggal_proyek.format('YYYY-MM-DD'),
-          keterangan_foto: values.keterangan_foto,
-          preview_url: `https://via.placeholder.com/300x200/1890ff/ffffff?text=Project+Photo+${Math.max(...photos.map(p => p.id), 0) + 1}`
-        };
-        setPhotos([...photos, newPhoto]);
-        message.success("Photo added successfully!");
+        // Add multiple photos
+        const uploadedFiles = values.foto_proyek?.fileList || [];
+        
+        if (uploadedFiles.length > 0) {
+          const newPhotos = uploadedFiles.map((file, index) => ({
+            id: Math.max(...photos.map(p => p.id), 0) + index + 1,
+            foto_proyek: file.name,
+            tanggal_proyek: values.tanggal_proyek.format('YYYY-MM-DD'),
+            keterangan_foto: values.keterangan_foto,
+            preview_url: file.originFileObj ? URL.createObjectURL(file.originFileObj) : `https://via.placeholder.com/300x200/1890ff/ffffff?text=Project+Photo+${Math.max(...photos.map(p => p.id), 0) + index + 1}`
+          }));
+          
+          setPhotos([...photos, ...newPhotos]);
+          message.success(`${newPhotos.length} photos added successfully!`);
+        } else {
+          // Fallback for single photo upload (if using input field)
+          const newPhoto = {
+            id: Math.max(...photos.map(p => p.id), 0) + 1,
+            foto_proyek: values.foto_proyek || 'photo.jpg',
+            tanggal_proyek: values.tanggal_proyek.format('YYYY-MM-DD'),
+            keterangan_foto: values.keterangan_foto,
+            preview_url: `https://via.placeholder.com/300x200/1890ff/ffffff?text=Project+Photo+${Math.max(...photos.map(p => p.id), 0) + 1}`
+          };
+          setPhotos([...photos, newPhoto]);
+          message.success("Photo added successfully!");
+        }
       }
       
-      setIsPhotoModalVisible(false);
+      setIsAddingPhoto(false);
       photoForm.resetFields();
       setEditingPhoto(null);
     } catch (error) {
@@ -158,8 +221,8 @@ const ProjectPerformanceContent = ({ project }) => {
     }
   };
 
-  const handlePhotoModalCancel = () => {
-    setIsPhotoModalVisible(false);
+  const handlePhotoFormCancel = () => {
+    setIsAddingPhoto(false);
     photoForm.resetFields();
     setEditingPhoto(null);
   };
@@ -167,19 +230,22 @@ const ProjectPerformanceContent = ({ project }) => {
   // Photo table columns
   const photoColumns = [
     {
-      title: "Foto Proyek",
-      dataIndex: "foto_proyek",
-      key: "foto_proyek",
+      title: "Keterangan Foto",
+      dataIndex: "keterangan_foto",
+      key: "keterangan_foto",
       render: (text, record) => (
-        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-          <Image
-            width={40}
-            height={40}
-            src={record.preview_url}
-            style={{ borderRadius: "4px", objectFit: "cover" }}
-          />
-          <Text>{text}</Text>
-        </div>
+        <Text 
+          ellipsis={{ tooltip: text }} 
+          style={{ 
+            maxWidth: 300,
+            color: "#0958d9",
+            textDecoration: "underline",
+            cursor: "pointer"
+          }}
+          onClick={() => handleViewPhoto(record)}
+        >
+          {text}
+        </Text>
       ),
     },
     {
@@ -188,38 +254,19 @@ const ProjectPerformanceContent = ({ project }) => {
       key: "tanggal_proyek",
       render: (text) => dayjs(text).format('DD/MM/YYYY'),
     },
-    {
-      title: "Keterangan Foto",
-      dataIndex: "keterangan_foto",
-      key: "keterangan_foto",
-      render: (text) => (
-        <Text ellipsis={{ tooltip: text }} style={{ maxWidth: 200 }}>
-          {text}
-        </Text>
-      ),
-    },
-    {
+    ...(!readOnly ? [{
       title: "Action",
       key: "action",
-      width: 150,
+      width: 100,
       render: (_, record) => (
         <Space size="small">
           <Button
-            type="link"
-            icon={<EyeOutlined />}
-            onClick={() => handleViewPhoto(record)}
-            size="small"
-          >
-            View
-          </Button>
-          <Button
-            type="link"
-            icon={<EditOutlined />}
+            type="text"
+            icon={<EditOutlined style={{ color: "#0F1E3A" }} />}
             onClick={() => handleEditPhoto(record)}
             size="small"
-          >
-            Edit
-          </Button>
+            style={{ padding: "4px" }}
+          />
           <Popconfirm
             title="Are you sure to delete this photo?"
             onConfirm={() => handleDeletePhoto(record.id)}
@@ -227,42 +274,34 @@ const ProjectPerformanceContent = ({ project }) => {
             cancelText="No"
           >
             <Button
-              type="link"
-              danger
-              icon={<DeleteOutlined />}
+              type="text"
+              icon={<DeleteOutlined style={{ color: "#ff4d4f" }} />}
               size="small"
-            >
-              Delete
-            </Button>
+              style={{ padding: "4px" }}
+            />
           </Popconfirm>
         </Space>
       ),
-    },
+    }] : []),
   ];
 
   return (
-    <Section loading={false}>
+    <Section loading={false} bodyStyle={{ padding: 0 }} bordered={false}>
       <Space direction="vertical" size="large" style={{ width: "100%" }}>
-        {/* Header with Edit Button */}
-        <Row justify="space-between" align="middle">
-          <Col>
-            <Text strong style={{ fontSize: "16px" }}>
-              Project Performance Tracking
-            </Text>
-          </Col>
-          <Col>
-            <Button
-              icon={<EditOutlined />}
-              onClick={handleEdit}
-              disabled={isEditing}
-            >
-              Edit
-            </Button>
-          </Col>
-        </Row>
+        {/* Header */}
+        <Section>
+          <Row justify="space-between" align="middle">
+            <Col>
+              <Text strong style={{ fontSize: "16px" }}>
+                Project Performance Tracking
+              </Text>
+            </Col>
+          </Row>
+        </Section>
 
-        {/* Performance Data Form */}
-        <Card title="Performance Data">
+        {/* Performance Data */}
+        {isEditing ? (
+          <Section>
           <Form
             form={form}
             layout="vertical"
@@ -271,7 +310,7 @@ const ProjectPerformanceContent = ({ project }) => {
           >
             <Row gutter={[24, 16]}>
               {/* Project Schedule Actual */}
-              <Col xs={24}>
+              <Col xs={24} md={12}>
                 <Form.Item label="Project Schedule Actual">
                   <div style={{ 
                     display: "flex", 
@@ -320,21 +359,16 @@ const ProjectPerformanceContent = ({ project }) => {
                       icon={<UploadOutlined />}
                       onClick={() => handleFileAction("Upload", "Project Schedule Actual")}
                       disabled={!isEditing}
+                      style={{ height: "40px" }}
                     >
                       Upload
-                    </Button>
-                    <Button
-                      icon={<DownloadOutlined />}
-                      onClick={() => handleFileAction("Download Template", "Project Schedule Actual")}
-                    >
-                      Download
                     </Button>
                   </div>
                 </Form.Item>
               </Col>
 
               {/* Project Cost Actual */}
-              <Col xs={24}>
+              <Col xs={24} md={12}>
                 <Form.Item label="Project Cost Actual">
                   <div style={{ 
                     display: "flex", 
@@ -383,22 +417,31 @@ const ProjectPerformanceContent = ({ project }) => {
                       icon={<UploadOutlined />}
                       onClick={() => handleFileAction("Upload", "Project Cost Actual")}
                       disabled={!isEditing}
+                      style={{ height: "40px" }}
                     >
                       Upload
-                    </Button>
-                    <Button
-                      icon={<DownloadOutlined />}
-                      onClick={() => handleFileAction("Download Template", "Project Cost Actual")}
-                    >
-                      Download
                     </Button>
                   </div>
                 </Form.Item>
               </Col>
+
+              {/* Total Labour */}
+              <Col xs={24} md={12}>
+                <Form.Item 
+                  label="Total Labour"
+                  name="total_labour"
+                  rules={[{ required: false }]}
+                >
+                  <Input 
+                    placeholder="Enter total labour count"
+                    type="number"
+                    min={0}
+                  />
+                </Form.Item>
+              </Col>
             </Row>
 
-            {/* Action Buttons */}
-            {isEditing && (
+              {/* Action Buttons */}
               <Row justify="end" style={{ marginTop: "24px" }}>
                 <Space>
                   <Button onClick={handleCancel}>
@@ -409,127 +452,472 @@ const ProjectPerformanceContent = ({ project }) => {
                   </Button>
                 </Space>
               </Row>
-            )}
-          </Form>
-        </Card>
+            </Form>
+          </Section>
+        ) : (
+          <Section>
+            <Space direction="vertical" size="middle" style={{ width: "100%" }}>
+              <Row justify="space-between" align="middle">
+                <Col>
+                  <Text strong style={{ fontSize: "16px" }}>
+                    Performance Data
+                  </Text>
+                </Col>
+                {!readOnly && (
+                  <Col>
+                    <Button
+                      icon={<EditOutlined />}
+                      onClick={handleEdit}
+                    >
+                      Edit
+                    </Button>
+                  </Col>
+                )}
+              </Row>
+              
+              <Descriptions
+              bordered
+              layout="horizontal"
+              labelStyle={{ width: '25%' }}
+              contentStyle={{ width: '25%' }}
+              column={2}
+              items={[
+                {
+                  key: "project_schedule_actual",
+                  label: "Project Schedule Actual",
+                  children: performanceData.project_schedule_actual ? (
+                    <a 
+                      href={`/files/${performanceData.project_schedule_actual}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ 
+                        color: "#1890ff", 
+                        textDecoration: "underline",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "6px"
+                      }}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleFileAction("View/Download", performanceData.project_schedule_actual);
+                      }}
+                    >
+                      <EyeOutlined />
+                      <Text strong>{performanceData.project_schedule_actual}</Text>
+                    </a>
+                  ) : (
+                    <Text strong>-</Text>
+                  ),
+                },
+                {
+                  key: "project_cost_actual",
+                  label: "Project Cost Actual",
+                  children: performanceData.project_cost_actual ? (
+                    <a 
+                      href={`/files/${performanceData.project_cost_actual}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ 
+                        color: "#1890ff", 
+                        textDecoration: "underline",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "6px"
+                      }}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleFileAction("View/Download", performanceData.project_cost_actual);
+                      }}
+                    >
+                      <EyeOutlined />
+                      <Text strong>{performanceData.project_cost_actual}</Text>
+                    </a>
+                  ) : (
+                    <Text strong>-</Text>
+                  ),
+                },
+                {
+                  key: "total_labour",
+                  label: "Total Labour",
+                  children: <Text strong>{performanceData.total_labour ?? "-"}</Text>,
+                },
+                {
+                  key: "last_updated",
+                  label: "Last Updated",
+                  children: <Text strong>{performanceData.last_updated ?? "-"}</Text>,
+                },
+              ]}
+              />
+            </Space>
+          </Section>
+        )}
 
         {/* Project Photos Section */}
-        <Card
-          title="Project Photos"
-          extra={
-            <Button
-              type="primary"
-              icon={<PlusOutlined />}
-              onClick={handleAddPhoto}
-            >
-              Add Photo
-            </Button>
-          }
-        >
-          <Table
-            columns={photoColumns}
-            dataSource={photos}
-            rowKey="id"
-            pagination={{
-              pageSize: 5,
-              showSizeChanger: true,
-              showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
-            }}
-          />
-        </Card>
-
-        {/* Add/Edit Photo Modal */}
-        <Modal
-          title={editingPhoto ? "Edit Photo" : "Add Photo"}
-          open={isPhotoModalVisible}
-          onOk={handlePhotoModalSave}
-          onCancel={handlePhotoModalCancel}
-          width={600}
-        >
-          <Form
-            form={photoForm}
-            layout="vertical"
-          >
-            <Form.Item
-              label="Foto Proyek"
-              name="foto_proyek"
-              rules={[{ required: true, message: "Please input photo name!" }]}
-            >
-              <Input 
-                placeholder="Enter photo filename"
-                addonBefore={<CameraOutlined />}
-              />
-            </Form.Item>
-
-            <Form.Item
-              label="Tanggal Proyek"
-              name="tanggal_proyek"
-              rules={[{ required: true, message: "Please select project date!" }]}
-            >
-              <DatePicker 
-                style={{ width: "100%" }}
-                format="DD/MM/YYYY"
-                placeholder="Select project date"
-              />
-            </Form.Item>
-
-            <Form.Item
-              label="Keterangan Foto"
-              name="keterangan_foto"
-              rules={[{ required: true, message: "Please input photo description!" }]}
-            >
-              <TextArea 
-                rows={4}
-                placeholder="Enter photo description"
-              />
-            </Form.Item>
-          </Form>
-        </Modal>
-
-        {/* Photo Detail Modal */}
-        <Modal
-          title="Photo Detail"
-          open={isPhotoDetailModalVisible}
-          onCancel={() => setIsPhotoDetailModalVisible(false)}
-          footer={[
-            <Button key="close" onClick={() => setIsPhotoDetailModalVisible(false)}>
-              Close
-            </Button>
-          ]}
-          width={700}
-        >
-          {viewingPhoto && (
-            <Space direction="vertical" size="large" style={{ width: "100%" }}>
-              <div style={{ textAlign: "center" }}>
-                <Image
-                  src={viewingPhoto.preview_url}
-                  style={{ maxWidth: "100%", maxHeight: "400px", borderRadius: "8px" }}
-                />
-              </div>
-              
-              <Row gutter={[16, 16]}>
-                <Col span={24}>
-                  <Text strong>Filename: </Text>
-                  <Tag color="blue">{viewingPhoto.foto_proyek}</Tag>
+        <Section>
+          <Space direction="vertical" size="middle" style={{ width: "100%" }}>
+            {!isViewingPhoto && !isAddingPhoto && (
+              <Row justify="space-between" align="middle">
+                <Col>
+                  <Text strong style={{ fontSize: "16px" }}>
+                    Project Photos
+                  </Text>
                 </Col>
-                <Col span={24}>
-                  <Text strong>Project Date: </Text>
-                  <Tag color="green">{dayjs(viewingPhoto.tanggal_proyek).format('DD/MM/YYYY')}</Tag>
-                </Col>
-                <Col span={24}>
-                  <Text strong>Description:</Text>
-                  <div style={{ 
-                    marginTop: "8px", 
-                    padding: "12px", 
-                    backgroundColor: "#fafafa", 
-                    borderRadius: "6px" 
-                  }}>
-                    {viewingPhoto.keterangan_foto}
-                  </div>
-                </Col>
+                {!readOnly && (
+                  <Col>
+                    <Button
+                      type="primary"
+                      icon={<PlusOutlined />}
+                      onClick={handleAddPhoto}
+                    >
+                      Add Photo
+                    </Button>
+                  </Col>
+                )}
               </Row>
-            </Space>
-          )}
+            )}
+            
+            {isViewingPhoto ? (
+              <Space direction="vertical" size="middle" style={{ width: "100%" }}>
+                {/* Header with Back Button */}
+                <Row align="middle" gutter={12}>
+                  <Col>
+                    <Button 
+                      type="text" 
+                      icon={<ArrowLeftOutlined />} 
+                      onClick={handleClosePhotoDetail}
+                      style={{ padding: "4px 8px" }}
+                    />
+                  </Col>
+                  <Col>
+                    <Text strong style={{ fontSize: "16px" }}>
+                      Photo Details
+                    </Text>
+                  </Col>
+                </Row>
+
+                {/* Multiple Photos Grid */}
+                <div>
+                  <Text strong style={{ display: "block", marginBottom: "8px" }}>
+                    Foto Proyek
+                  </Text>
+                  <Row gutter={[16, 16]}>
+                    <Col>
+                      <div style={{ 
+                        width: "104px",
+                        height: "104px",
+                        position: "relative",
+                        borderRadius: "8px",
+                        overflow: "hidden",
+                        border: "2px solid #1890ff"
+                      }}>
+                        <Image
+                          src={viewingPhoto.preview_url}
+                          style={{ 
+                            width: "100%", 
+                            height: "100%", 
+                            objectFit: "cover"
+                          }}
+                        />
+                      </div>
+                    </Col>
+                    <Col>
+                      <div style={{ 
+                        width: "104px",
+                        height: "104px",
+                        position: "relative",
+                        borderRadius: "8px",
+                        overflow: "hidden"
+                      }}>
+                        <Image
+                          src="https://via.placeholder.com/300x200/52c41a/ffffff?text=Additional+Photo+1"
+                          style={{ 
+                            width: "100%", 
+                            height: "100%", 
+                            objectFit: "cover"
+                          }}
+                        />
+                      </div>
+                    </Col>
+                    <Col>
+                      <div style={{ 
+                        width: "104px",
+                        height: "104px",
+                        position: "relative",
+                        borderRadius: "8px",
+                        overflow: "hidden"
+                      }}>
+                        <Image
+                          src="https://via.placeholder.com/300x200/fa8c16/ffffff?text=Additional+Photo+2"
+                          style={{ 
+                            width: "100%", 
+                            height: "100%", 
+                            objectFit: "cover"
+                          }}
+                        />
+                      </div>
+                    </Col>
+                  </Row>
+                </div>
+                
+                {/* Photo Details */}
+                <Descriptions
+                  bordered
+                  layout="horizontal"
+                  labelStyle={{ width: '25%' }}
+                  contentStyle={{ width: '25%' }}
+                  column={2}
+                  items={[
+                    {
+                      key: "tanggal_proyek",
+                      label: "Tanggal Proyek",
+                      children: (
+                        <Typography.Text strong>{dayjs(viewingPhoto.tanggal_proyek).format('DD/MM/YYYY')}</Typography.Text>
+                      ),
+                    },
+                    {
+                      key: "keterangan_foto",
+                      label: "Keterangan Foto",
+                      children: (
+                        <Typography.Text strong>{viewingPhoto.keterangan_foto}</Typography.Text>
+                      ),
+                    },
+                  ]}
+                />
+              </Space>
+            ) : isAddingPhoto ? (
+              <Space direction="vertical" size="middle" style={{ width: "100%" }}>
+                {/* Header with Back Button */}
+                <Row align="middle" gutter={12}>
+                  <Col>
+                    <Button 
+                      type="text" 
+                      icon={<ArrowLeftOutlined />} 
+                      onClick={handlePhotoFormCancel}
+                      style={{ padding: "4px 8px" }}
+                    />
+                  </Col>
+                  <Col>
+                    <Text strong style={{ fontSize: "16px" }}>
+                      {editingPhoto ? "Edit Photo" : "Add New Photo"}
+                    </Text>
+                  </Col>
+                </Row>
+
+                <Form
+                  form={photoForm}
+                  layout="vertical"
+                >
+                  <Row gutter={[24, 16]}>
+                  <Col xs={24}>
+                    <Form.Item
+                      label="Foto Proyek"
+                      name="foto_proyek"
+                      rules={[{ required: true, message: "Please upload at least one photo!" }]}
+                    >
+                      <Upload
+                        multiple
+                        listType="picture-card"
+                        beforeUpload={() => false}
+                        onChange={(info) => {
+                          console.log('Photos info:', info);
+                        }}
+                        defaultFileList={editingPhoto ? [
+                          {
+                            uid: editingPhoto.id,
+                            name: editingPhoto.foto_proyek,
+                            status: 'done',
+                            url: editingPhoto.preview_url,
+                          },
+                          {
+                            uid: `dummy-1-${editingPhoto.id}`,
+                            name: 'additional_photo_1.jpg',
+                            status: 'done',
+                            url: 'https://via.placeholder.com/300x200/52c41a/ffffff?text=Additional+Photo+1',
+                          },
+                          {
+                            uid: `dummy-2-${editingPhoto.id}`,
+                            name: 'additional_photo_2.jpg',
+                            status: 'done',
+                            url: 'https://via.placeholder.com/300x200/fa8c16/ffffff?text=Additional+Photo+2',
+                          }
+                        ] : []}
+                      >
+                        <div>
+                          <PlusOutlined />
+                          <div style={{ marginTop: 8 }}>Upload</div>
+                        </div>
+                      </Upload>
+                    </Form.Item>
+                  </Col>
+
+                  <Col xs={24} md={12}>
+                    <Form.Item
+                      label="Tanggal Proyek"
+                      name="tanggal_proyek"
+                      rules={[{ required: true, message: "Please select project date!" }]}
+                    >
+                      <DatePicker 
+                        style={{ width: "100%" }}
+                        format="DD/MM/YYYY"
+                        placeholder="Select project date"
+                      />
+                    </Form.Item>
+                  </Col>
+
+                  <Col xs={24}>
+                    <Form.Item
+                      label="Keterangan Foto"
+                      name="keterangan_foto"
+                      rules={[{ required: true, message: "Please input photo description!" }]}
+                    >
+                      <TextArea 
+                        rows={4}
+                        placeholder="Enter photo description (will be applied to all uploaded photos)"
+                      />
+                    </Form.Item>
+                  </Col>
+                  </Row>
+
+                  <Row justify="end" style={{ marginTop: "24px" }}>
+                    <Space>
+                      <Button onClick={handlePhotoFormCancel}>
+                        Cancel
+                      </Button>
+                      <Button type="primary" onClick={handlePhotoModalSave}>
+                        {editingPhoto ? "Save Changes" : "Save"}
+                      </Button>
+                    </Space>
+                  </Row>
+                </Form>
+              </Space>
+            ) : (
+              <Table
+                columns={photoColumns}
+                dataSource={photos}
+                rowKey="id"
+                pagination={{
+                  pageSize: 5,
+                  showSizeChanger: true,
+                  showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+                }}
+              />
+            )}
+          </Space>
+        </Section>
+
+        {/* History Performance Section */}
+        <Section>
+          <Space direction="vertical" size="middle" style={{ width: "100%" }}>
+            <Row justify="space-between" align="middle">
+              <Col>
+                <Text strong style={{ fontSize: "16px" }}>
+                  History Performance
+                </Text>
+              </Col>
+            </Row>
+            
+            <Table
+              columns={[
+                {
+                  title: "Last Updated",
+                  dataIndex: "last_updated",
+                  key: "last_updated",
+                  render: (text) => dayjs(text).format('DD/MM/YYYY HH:mm'),
+                },
+                {
+                  title: "Project Schedule Actual",
+                  dataIndex: "project_schedule_actual",
+                  key: "project_schedule_actual",
+                  render: (text) => text || "-",
+                },
+                {
+                  title: "Project Cost Actual",
+                  dataIndex: "project_cost_actual",
+                  key: "project_cost_actual",
+                  render: (text) => text || "-",
+                },
+                {
+                  title: "Total Labour",
+                  dataIndex: "total_labour",
+                  key: "total_labour",
+                  render: (text) => text || "-",
+                },
+              ]}
+              dataSource={[
+                {
+                  key: "1",
+                  last_updated: "2025-01-20T14:30:00.000Z",
+                  project_schedule_actual: "schedule_actual_2025_v1.xlsx",
+                  project_cost_actual: "cost_actual_2025_v1.xlsx",
+                  total_labour: "250"
+                },
+                {
+                  key: "2",
+                  last_updated: "2025-01-15T10:15:00.000Z",
+                  project_schedule_actual: "schedule_actual_2025_v1.xlsx",
+                  project_cost_actual: "cost_actual_2025_v1.xlsx",
+                  total_labour: "235"
+                },
+                {
+                  key: "3",
+                  last_updated: "2025-01-10T09:45:00.000Z",
+                  project_schedule_actual: "schedule_actual_2025_v1.xlsx",
+                  project_cost_actual: "cost_actual_2025_v1.xlsx",
+                  total_labour: "220"
+                },
+                {
+                  key: "4",
+                  last_updated: "2025-01-05T16:20:00.000Z",
+                  project_schedule_actual: "schedule_actual_2025_v1.xlsx",
+                  project_cost_actual: "cost_actual_2025_v1.xlsx",
+                  total_labour: "200"
+                }
+              ]}
+              rowKey="key"
+              pagination={{
+                pageSize: 5,
+                showSizeChanger: true,
+                showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+              }}
+            />
+          </Space>
+        </Section>
+
+        {/* Upload Modal */}
+        <Modal
+          title={`Upload ${currentFileType}`}
+          open={uploadModalVisible}
+          onOk={handleUploadModalOk}
+          onCancel={handleUploadModalCancel}
+          footer={[
+            <Button key="download-template" icon={<DownloadOutlined />} onClick={handleDownloadTemplate}>
+              Download Template
+            </Button>,
+            <Button key="cancel" onClick={handleUploadModalCancel}>
+              Cancel
+            </Button>,
+            <Button key="upload" type="primary" onClick={handleUploadModalOk}>
+              Upload
+            </Button>,
+          ]}
+        >
+          <Space direction="vertical" style={{ width: '100%' }}>
+            <Text>Upload file for {currentFileType}</Text>
+            <Upload.Dragger
+              name="file"
+              multiple={false}
+              beforeUpload={() => false}
+              onChange={(info) => {
+                console.log('File info:', info);
+              }}
+            >
+              <p className="ant-upload-drag-icon">
+                <UploadOutlined />
+              </p>
+              <p className="ant-upload-text">Click or drag file to this area to upload</p>
+              <p className="ant-upload-hint">Support for single file upload.</p>
+            </Upload.Dragger>
+          </Space>
         </Modal>
       </Space>
     </Section>

@@ -1,0 +1,2275 @@
+This file is a merged representation of a subset of the codebase, containing specifically included files, combined into a single document by Repomix.
+
+<file_summary>
+This section contains a summary of this file.
+
+<purpose>
+This file contains a packed representation of a subset of the repository's contents that is considered the most important context.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+</purpose>
+
+<file_format>
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Repository files (if enabled)
+5. Multiple file entries, each consisting of:
+  - File path as an attribute
+  - Full contents of the file
+</file_format>
+
+<usage_guidelines>
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+</usage_guidelines>
+
+<notes>
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Only files matching these patterns are included: src/app/(protected)/user-management/**
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+- Files are sorted by Git change count (files with more changes are at the bottom)
+</notes>
+
+</file_summary>
+
+<directory_structure>
+src/
+  app/
+    (protected)/
+      user-management/
+        _data/
+          index.js
+        roles/
+          _components/
+            Form.jsx
+          [id]/
+            update/
+              page.jsx
+            page.jsx
+          create/
+            page.jsx
+          page.jsx
+        users/
+          _components/
+            Form.jsx
+          [id]/
+            update/
+              page.jsx
+            page.jsx
+          create/
+            page.jsx
+          page.jsx
+</directory_structure>
+
+<files>
+This section contains the contents of the repository's files.
+
+<file path="src/app/(protected)/user-management/roles/_components/Form.jsx">
+import React from "react";
+import { Form, Input, Switch, Button, Checkbox, Row, Col, Flex } from "antd";
+import { Section } from "admiral";
+import { useNavigate } from "react-router";
+
+const RoleForm = ({ initialValues, onSubmit, loading, isEdit }) => {
+  const navigate = useNavigate();
+  const [form] = Form.useForm();
+
+  // Sample menu data for permissions
+  const menuPermissions = [
+    { key: 'dashboard', label: 'Dashboard' },
+    { key: 'user-management', label: 'User Management' },
+    { key: 'master-data', label: 'Master Data' },
+    { key: 'projects', label: 'Projects' },
+    { key: 'messaging', label: 'Messaging' },
+    { key: 'laporan', label: 'Laporan' },
+  ];
+
+  const handleSubmit = (values) => {
+    onSubmit(values);
+  };
+
+  const handleCancel = () => {
+    navigate("/user-management/roles");
+  };
+
+  return (
+    <Form
+      form={form}
+      layout="vertical"
+      initialValues={initialValues}
+      onFinish={handleSubmit}
+    >
+      <Section>
+        <Section title="Role Information">
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item
+                label="Nama Role"
+                name="nama_role"
+                rules={[
+                  { required: true, message: "Nama role harus diisi!" },
+                  { whitespace: true, message: "Nama role tidak boleh kosong!" },
+                ]}
+              >
+                <Input placeholder="Masukkan nama role" />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                label="Status"
+                name="status"
+                valuePropName="checked"
+              >
+                <Switch checkedChildren="Active" unCheckedChildren="Inactive" />
+              </Form.Item>
+            </Col>
+          </Row>
+        </Section>
+
+        <Section title="Permission" style={{ marginTop: 24 }}>
+          <Row gutter={[16, 16]}>
+            {menuPermissions.map((menu) => (
+              <Col span={24} key={menu.key}>
+                <div style={{ 
+                  border: '1px solid #d9d9d9', 
+                  borderRadius: '6px', 
+                  padding: '12px',
+                  backgroundColor: '#fafafa'
+                }}>
+                  <div style={{ fontWeight: 'bold', marginBottom: '8px' }}>
+                    {menu.label}
+                  </div>
+                  <Row gutter={16}>
+                    <Col span={4}>
+                      <Form.Item 
+                        name={['permissions', menu.key, 'create']} 
+                        valuePropName="checked"
+                        style={{ marginBottom: 0 }}
+                      >
+                        <Checkbox>Create</Checkbox>
+                      </Form.Item>
+                    </Col>
+                    <Col span={4}>
+                      <Form.Item 
+                        name={['permissions', menu.key, 'list']} 
+                        valuePropName="checked"
+                        style={{ marginBottom: 0 }}
+                      >
+                        <Checkbox>List</Checkbox>
+                      </Form.Item>
+                    </Col>
+                    <Col span={4}>
+                      <Form.Item 
+                        name={['permissions', menu.key, 'detail']} 
+                        valuePropName="checked"
+                        style={{ marginBottom: 0 }}
+                      >
+                        <Checkbox>Detail</Checkbox>
+                      </Form.Item>
+                    </Col>
+                    <Col span={4}>
+                      <Form.Item 
+                        name={['permissions', menu.key, 'edit']} 
+                        valuePropName="checked"
+                        style={{ marginBottom: 0 }}
+                      >
+                        <Checkbox>Edit</Checkbox>
+                      </Form.Item>
+                    </Col>
+                    <Col span={4}>
+                      <Form.Item 
+                        name={['permissions', menu.key, 'delete']} 
+                        valuePropName="checked"
+                        style={{ marginBottom: 0 }}
+                      >
+                        <Checkbox>Delete</Checkbox>
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                </div>
+              </Col>
+            ))}
+          </Row>
+        </Section>
+      </Section>
+
+      <Flex justify="flex-end" gap={16} style={{ marginTop: 24 }}>
+        <Button type="text" disabled={loading} onClick={handleCancel}>
+          Cancel
+        </Button>
+        <Button type="primary" htmlType="submit" loading={loading}>
+          {isEdit ? "Save Changes" : "Submit"}
+        </Button>
+      </Flex>
+    </Form>
+  );
+};
+
+export default RoleForm;
+</file>
+
+<file path="src/app/(protected)/user-management/roles/[id]/update/page.jsx">
+import { Page } from "admiral";
+import { message } from "antd";
+import { generatePath, useNavigate } from "react-router";
+import { useParams } from "react-router";
+
+import { useGetData } from "@/app/_hooks/use-get-data";
+import RoleForm from "../../_components/Form";
+import { detailRole } from "../../../_data";
+
+export const Component = () => {
+  const navigate = useNavigate();
+  const params = useParams();
+  const { data, loading } = useGetData(detailRole(params.id));
+
+  const handleOnFinish = () => {
+    navigate("/user-management/roles");
+    message.success("Role successfully updated");
+  };
+
+  const breadcrumb = [
+    {
+      label: "User Management",
+      path: "/user-management",
+    },
+    {
+      label: "Daftar Role",
+      path: "/user-management/roles",
+    },
+    {
+      label: "Edit Role",
+      path: "#",
+    },
+  ];
+
+  if (loading) {
+    return (
+      <Page
+        title="Loading..."
+        breadcrumbs={breadcrumb}
+        noStyle
+        goBack={() => navigate("/user-management/roles")}
+      >
+        <div>Loading...</div>
+      </Page>
+    );
+  }
+
+  const initialValues = {
+    nama_role: data?.data?.nama_role,
+    status: data?.data?.status === "Active",
+    permissions: data?.data?.permissions || {},
+  };
+
+  return (
+    <Page
+      title={`Update Role: ${data?.data?.nama_role ?? "-"}`}
+      breadcrumbs={breadcrumb}
+      noStyle
+      goBack={() => navigate("/user-management/roles")}
+    >
+      <RoleForm
+        isEdit
+        key={data?.data?.id}
+        initialValues={initialValues}
+        onSubmit={handleOnFinish}
+        loading={loading}
+      />
+    </Page>
+  );
+};
+
+export default Component;
+</file>
+
+<file path="src/app/(protected)/user-management/roles/[id]/page.jsx">
+import React from "react";
+import { Page, Section } from "admiral";
+import { Button, Tag, Row, Col, Space, Typography, Descriptions } from "antd";
+import { useNavigate, useParams } from "react-router";
+import { CheckOutlined } from "@ant-design/icons";
+import { useGetData } from "@/app/_hooks/use-get-data";
+import { detailRole } from "../../_data";
+
+const RoleDetailPage = () => {
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const { data, loading } = useGetData(detailRole(id));
+
+  const renderStatusTag = (status) => {
+    if (!status || status === "-") {
+      return <span>-</span>;
+    }
+    const color = status === "Active" ? "#52c41a" : "#ff4d4f";
+    const backgroundColor = status === "Active" ? "#f6ffed" : "#fff2f0";
+    return <Tag style={{ color, backgroundColor, border: 'none' }}>{status}</Tag>;
+  };
+
+  const breadcrumbs = [
+    {
+      label: "User Management",
+      path: "/user-management",
+    },
+    {
+      label: "Daftar Role",
+      path: "/user-management/roles",
+    },
+    {
+      label: `Role Details: ${data?.data?.nama_role ?? "-"}`,
+      path: `/user-management/roles/${id}`,
+    },
+  ];
+
+  if (loading) {
+    return (
+      <Page
+        title="Role Details"
+        breadcrumbs={breadcrumbs}
+        loading={true}
+      />
+    );
+  }
+
+  if (!data?.data) {
+    return (
+      <Page
+        title="Role Details"
+        breadcrumbs={breadcrumbs}
+      >
+        <Section>
+          <p>Role tidak ditemukan</p>
+        </Section>
+      </Page>
+    );
+  }
+
+  const role = data.data;
+
+  // Sample menu data for permissions - matching the form structure
+  const menuPermissions = [
+    { key: 'dashboard', label: 'Dashboard' },
+    { key: 'user-management', label: 'User Management' },
+    { key: 'master-data', label: 'Master Data' },
+    { key: 'projects', label: 'Projects' },
+    { key: 'messaging', label: 'Messaging' },
+    { key: 'laporan', label: 'Laporan' },
+  ];
+
+  const items = [
+    {
+      key: "nama_role",
+      label: "Nama Role",
+      children: <Typography.Text strong>{role.nama_role || "-"}</Typography.Text>,
+    },
+    {
+      key: "status",
+      label: "Status",
+      children: role.status ? renderStatusTag(role.status) : "-",
+    },
+    {
+      key: "created_at",
+      label: "Created At",
+      children: <Typography.Text strong>{role.created_at || "-"}</Typography.Text>,
+    },
+    {
+      key: "updated_at",
+      label: "Updated At",
+      children: <Typography.Text strong>{role.updated_at || "-"}</Typography.Text>,
+    },
+  ];
+
+  return (
+    <Page
+      title={`Role Details: ${role.nama_role}`}
+      breadcrumbs={breadcrumbs}
+      noStyle
+      goBack={() => navigate("/user-management/roles")}
+      topActions={
+        <Button 
+          type="primary" 
+          onClick={() => navigate(`/user-management/roles/${id}/update`)}
+        >
+          Edit
+        </Button>
+      }
+    >
+      <Section loading={loading}>
+        <Space direction="vertical" size="middle" style={{ width: "100%" }}>
+          <Section title="Role Information">
+            <Descriptions
+              bordered
+              layout="horizontal"
+              items={items}
+              column={{
+                md: 1,
+                lg: 2,
+                xl: 2,
+                xxl: 2,
+              }}
+            />
+          </Section>
+
+          <Section title="Permission">
+            <Row gutter={[16, 16]}>
+              {menuPermissions.map((menu) => (
+                <Col span={24} key={menu.key}>
+                  <div style={{ 
+                    border: '1px solid #d9d9d9', 
+                    borderRadius: '6px', 
+                    padding: '12px',
+                    backgroundColor: '#fafafa'
+                  }}>
+                    <div style={{ fontWeight: 'bold', marginBottom: '8px' }}>
+                      {menu.label}
+                    </div>
+                    <Row gutter={16}>
+                      <Col span={4}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <div style={{ 
+                            width: '16px', 
+                            height: '16px', 
+                            border: '1.5px solid #d9d9d9', 
+                            borderRadius: '2px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            backgroundColor: role.permissions?.[menu.key]?.create ? '#f5f5f5' : '#fff'
+                          }}>
+                            {role.permissions?.[menu.key]?.create && (
+                              <CheckOutlined style={{ color: '#bfbfbf', fontSize: '12px' }} />
+                            )}
+                          </div>
+                          <span style={{ color: '#8c8c8c' }}>Create</span>
+                        </div>
+                      </Col>
+                      <Col span={4}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <div style={{ 
+                            width: '16px', 
+                            height: '16px', 
+                            border: '1.5px solid #d9d9d9', 
+                            borderRadius: '2px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            backgroundColor: role.permissions?.[menu.key]?.list ? '#f5f5f5' : '#fff'
+                          }}>
+                            {role.permissions?.[menu.key]?.list && (
+                              <CheckOutlined style={{ color: '#bfbfbf', fontSize: '12px' }} />
+                            )}
+                          </div>
+                          <span style={{ color: '#8c8c8c' }}>List</span>
+                        </div>
+                      </Col>
+                      <Col span={4}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <div style={{ 
+                            width: '16px', 
+                            height: '16px', 
+                            border: '1.5px solid #d9d9d9', 
+                            borderRadius: '2px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            backgroundColor: role.permissions?.[menu.key]?.detail ? '#f5f5f5' : '#fff'
+                          }}>
+                            {role.permissions?.[menu.key]?.detail && (
+                              <CheckOutlined style={{ color: '#bfbfbf', fontSize: '12px' }} />
+                            )}
+                          </div>
+                          <span style={{ color: '#8c8c8c' }}>Detail</span>
+                        </div>
+                      </Col>
+                      <Col span={4}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <div style={{ 
+                            width: '16px', 
+                            height: '16px', 
+                            border: '1.5px solid #d9d9d9', 
+                            borderRadius: '2px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            backgroundColor: role.permissions?.[menu.key]?.edit ? '#f5f5f5' : '#fff'
+                          }}>
+                            {role.permissions?.[menu.key]?.edit && (
+                              <CheckOutlined style={{ color: '#bfbfbf', fontSize: '12px' }} />
+                            )}
+                          </div>
+                          <span style={{ color: '#8c8c8c' }}>Edit</span>
+                        </div>
+                      </Col>
+                      <Col span={4}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <div style={{ 
+                            width: '16px', 
+                            height: '16px', 
+                            border: '1.5px solid #d9d9d9', 
+                            borderRadius: '2px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            backgroundColor: role.permissions?.[menu.key]?.delete ? '#f5f5f5' : '#fff'
+                          }}>
+                            {role.permissions?.[menu.key]?.delete && (
+                              <CheckOutlined style={{ color: '#bfbfbf', fontSize: '12px' }} />
+                            )}
+                          </div>
+                          <span style={{ color: '#8c8c8c' }}>Delete</span>
+                        </div>
+                      </Col>
+                    </Row>
+                  </div>
+                </Col>
+              ))}
+            </Row>
+          </Section>
+        </Space>
+      </Section>
+    </Page>
+  );
+};
+
+export default RoleDetailPage;
+</file>
+
+<file path="src/app/(protected)/user-management/roles/create/page.jsx">
+import React, { useState } from "react";
+import { message } from "antd";
+import { Page, Section } from "admiral";
+import { useNavigate } from "react-router";
+import RoleForm from "../_components/Form";
+import { listRoles } from "../../_data";
+
+const CreateRolePage = () => {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (values) => {
+    setLoading(true);
+    
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Create new role object
+      const newRole = {
+        id: listRoles.data.items.length + 1,
+        nama_role: values.nama_role,
+        status: values.status ? "Active" : "Inactive",
+        created_at: new Date().toLocaleDateString('id-ID'),
+        updated_at: new Date().toLocaleDateString('id-ID'),
+      };
+      
+      // In a real application, this would be an API call
+      listRoles.data.items.push(newRole);
+      
+      message.success("Role berhasil dibuat");
+      navigate("/user-management/roles");
+    } catch (error) {
+      message.error("Gagal membuat role");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const breadcrumbs = [
+    {
+      label: "User Management",
+      path: "/user-management/roles",
+    },
+    {
+      label: "Daftar Role",
+      path: "/user-management/roles",
+    },
+    {
+      label: "Tambah Role",
+      path: "/user-management/roles/create",
+    },
+  ];
+
+  return (
+    <Page
+      title="Tambah Role"
+      breadcrumbs={breadcrumbs}
+      noStyle
+      goBack={() => navigate("/user-management/roles")}
+    >
+      <RoleForm 
+        onSubmit={handleSubmit} 
+        loading={loading}
+      />
+    </Page>
+  );
+};
+
+export default CreateRolePage;
+</file>
+
+<file path="src/app/(protected)/user-management/roles/page.jsx">
+import React, { useState } from "react";
+import {
+  Tag,
+  Button,
+  message,
+} from "antd";
+import { Link, useNavigate } from "react-router";
+import { SearchOutlined, PlusOutlined, EditOutlined } from "@ant-design/icons";
+import { Page, DataTable } from "admiral";
+import { listRoles } from "../_data";
+import { useFilter } from "@/app/_hooks/datatable/use-filter";
+import { makeSource } from "@/utils/data-table";
+import { useGetData } from "@/app/_hooks/use-get-data";
+
+const RolesPage = () => {
+  const { handleChange, filters } = useFilter();
+  const rolesData = useGetData(listRoles);
+  const [roles, setRoles] = useState(listRoles.data.items);
+  const navigate = useNavigate();
+
+  const renderStatusTag = (status) => {
+    if (!status || status === "-") {
+      return <span>-</span>;
+    }
+    const color = status === "Active" ? "#52c41a" : "#ff4d4f";
+    const backgroundColor = status === "Active" ? "#f6ffed" : "#fff2f0";
+    return <Tag style={{ color, backgroundColor, border: 'none' }}>{status}</Tag>;
+  };
+
+  const renderActionButtons = (record) => {
+    return (
+      <Button 
+        type="text" 
+        icon={<EditOutlined />} 
+        onClick={() => {
+          // Navigate to edit page
+          navigate(`/user-management/roles/${record.id}/update`);
+        }}
+      />
+    );
+  };
+
+  const filterComponents = [
+    {
+      label: "Status",
+      name: "status",
+      type: "Select",
+      placeholder: "Select status",
+      defaultValue: filters.status,
+      options: [
+        {
+          label: "Active",
+          value: "Active",
+        },
+        {
+          label: "Inactive",
+          value: "Inactive",
+        },
+      ],
+    },
+  ];
+
+  const columns = [
+    {
+      title: "Nama Role",
+      dataIndex: "nama_role",
+      key: "nama_role",
+      sorter: true,
+      render: (text, record) => (
+        <Link to={`/user-management/roles/${record.id}`} style={{ color: '#1677ff' }}>
+          <u>{text}</u>
+        </Link>
+      ),
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
+      render: (text) => renderStatusTag(text),
+      sorter: true,
+    },
+    {
+      title: "Created At",
+      dataIndex: "created_at",
+      key: "created_at",
+      sorter: true,
+    },
+    {
+      title: "Action",
+      key: "action",
+      render: (_, record) => renderActionButtons(record),
+    },
+  ];
+
+  const breadcrumbs = [
+    {
+      label: "User Management",
+      path: "/user-management/roles",
+    },
+    {
+      label: "Daftar Role",
+      path: "/user-management/roles",
+    },
+  ];
+
+  return (
+    <Page
+      title="Daftar Role"
+      breadcrumbs={breadcrumbs}
+      noStyle
+      topActions={
+        <Link to="/user-management/roles/create">
+          <Button 
+            type="primary" 
+            icon={<PlusOutlined />}
+          >
+            Tambah Role
+          </Button>
+        </Link>
+      }
+    >
+      <DataTable
+        search={filters.search}
+        searchPlaceholder="Search..."
+        searchIcon={<SearchOutlined />}
+        rowKey="id"
+        columns={columns}
+        source={makeSource({ data: { items: roles } })}
+        onChange={handleChange}
+        loading={rolesData.loading}
+        filterComponents={filterComponents}
+        showRowSelection={false}
+      />
+    </Page>
+  );
+};
+
+export default RolesPage;
+</file>
+
+<file path="src/app/(protected)/user-management/users/_components/Form.jsx">
+import { Button, Col, Form, Input, Row, Select, Switch } from "antd";
+import { Section } from "admiral";
+import { Flex } from "antd";
+import { useNavigate } from "react-router";
+import { useEffect } from "react";
+
+import { useFormErrorHandling } from "@/app/_hooks/form/use-form-error-handling";
+
+const roleOptions = [
+  {
+    label: "Administrator",
+    value: "Administrator",
+  },
+  {
+    label: "PMO Admin",
+    value: "PMO Admin",
+  },
+  {
+    label: "PMO MIND ID",
+    value: "PMO MIND ID",
+  },
+  {
+    label: "Direktur MIND ID",
+    value: "Direktur MIND ID",
+  },
+  {
+    label: "Tim Proyek",
+    value: "Tim Proyek",
+  },
+];
+
+const perusahaanOptions = [
+  {
+    label: "PT Aneka Tambang Tbk",
+    value: "PT Aneka Tambang Tbk",
+  },
+  {
+    label: "PT Bukit Asam Tbk",
+    value: "PT Bukit Asam Tbk",
+  },
+  {
+    label: "PT Freeport Indonesia",
+    value: "PT Freeport Indonesia",
+  },
+  {
+    label: "PT Indonesia Asahan Aluminium",
+    value: "PT Indonesia Asahan Aluminium",
+  },
+  {
+    label: "PT Timah Tbk",
+    value: "PT Timah Tbk",
+  },
+  {
+    label: "PT MIND ID",
+    value: "PT MIND ID",
+  },
+];
+
+export const FormUser = ({ formProps, error, loading, isEdit }) => {
+  const [form] = Form.useForm();
+  const navigate = useNavigate();
+
+  useFormErrorHandling(error, ({ key, message }) =>
+    form.setFields([{ name: key, errors: [message] }]),
+  );
+
+  // Set form values when initialValues are provided
+  useEffect(() => {
+    if (formProps?.initialValues) {
+      form.setFieldsValue(formProps.initialValues);
+    }
+  }, [formProps?.initialValues, form]);
+
+  return (
+    <Form {...formProps} form={form} layout="vertical">
+      <Section>
+        <Section title="User Information">
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item
+                label="NIP"
+                name="nip"
+                rules={[
+                  {
+                    required: true,
+                    message: "NIP is required",
+                  },
+                ]}
+              >
+                <Input placeholder="Enter NIP" />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                label="Nama User"
+                name="nama_user"
+                rules={[
+                  {
+                    required: true,
+                    message: "Nama User is required",
+                  },
+                ]}
+              >
+                <Input placeholder="Enter nama user" />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                label="Username"
+                name="username"
+                rules={[
+                  {
+                    required: true,
+                    message: "Username is required",
+                  },
+                ]}
+              >
+                <Input placeholder="Enter username" />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                label="Email"
+                name="email"
+                rules={[
+                  {
+                    required: true,
+                    message: "Email is required",
+                  },
+                  {
+                    type: "email",
+                    message: "Please enter a valid email",
+                  },
+                ]}
+              >
+                <Input placeholder="Enter email" />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                label="Perusahaan"
+                name="perusahaan"
+                rules={[
+                  {
+                    required: true,
+                    message: "Perusahaan is required",
+                  },
+                ]}
+              >
+                <Select placeholder="Select perusahaan" options={perusahaanOptions} />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                label="Role"
+                name="role"
+                rules={[
+                  {
+                    required: true,
+                    message: "Role is required",
+                  },
+                ]}
+              >
+                <Select placeholder="Select role" options={roleOptions} />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                label="Jabatan"
+                name="jabatan"
+                rules={[
+                  {
+                    required: true,
+                    message: "Jabatan is required",
+                  },
+                ]}
+              >
+                <Input placeholder="Enter jabatan" />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                label="Fungsi"
+                name="fungsi"
+                rules={[
+                  {
+                    required: true,
+                    message: "Fungsi is required",
+                  },
+                ]}
+              >
+                <Input placeholder="Enter fungsi" />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                label="No HP"
+                name="no_hp"
+                rules={[
+                  {
+                    required: true,
+                    message: "No HP is required",
+                  },
+                ]}
+              >
+                <Input placeholder="Enter no HP" />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                label="Status"
+                name="status"
+                valuePropName="checked"
+                initialValue={true}
+              >
+                <Switch checkedChildren="Active" unCheckedChildren="Inactive" />
+              </Form.Item>
+            </Col>
+          </Row>
+        </Section>
+      </Section>
+
+      <Flex justify="flex-end" gap={16} style={{ marginTop: 24 }}>
+        <Button type="text" disabled={loading} onClick={() => navigate("/user-management/users")}>
+          Cancel
+        </Button>
+        <Button type="primary" htmlType="submit" loading={loading}>
+          {isEdit ? "Save Changes" : "Submit"}
+        </Button>
+      </Flex>
+    </Form>
+  );
+};
+</file>
+
+<file path="src/app/(protected)/user-management/users/[id]/update/page.jsx">
+import { message } from "antd";
+import { Page } from "admiral";
+import { useParams, useNavigate } from "react-router";
+import { useEffect, useState } from "react";
+
+import { FormUser } from "@protected/user-management/users/_components/Form";
+import { detailUser } from "@protected/user-management/_data";
+
+export const Component = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [initialValues, setInitialValues] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  const breadcrumb = [
+    {
+      label: "User Management",
+      path: "/user-management/users",
+    },
+    {
+      label: "Daftar User",
+      path: "/user-management/users",
+    },
+    {
+      label: "Edit User",
+      path: "#",
+    },
+  ];
+
+  useEffect(() => {
+    const userId = String(id || "");
+    const userData = detailUser(userId)?.data || {};
+    
+    // Set initial values for the form
+    const formValues = {
+      nip: userData.nip || "",
+      nama_user: userData.nama_user || "",
+      username: userData.username || "",
+      email: userData.email || "",
+      perusahaan: userData.perusahaan || "",
+      role: userData.role || "",
+      jabatan: userData.jabatan || "",
+      fungsi: userData.fungsi || "",
+      no_hp: userData.no_hp || "",
+      status: userData.status === "Active" ? true : false,
+    };
+    
+    setInitialValues(formValues);
+    setLoading(false);
+  }, [id]);
+
+  const handleOnFinish = (values) => {
+    // Simulate updating user
+    console.log("Updating user:", values);
+    message.success("User successfully updated");
+    navigate("/user-management/users");
+  };
+
+  return (
+    <Page
+      title="Edit User"
+      breadcrumbs={breadcrumb}
+      noStyle
+      goBack={() => navigate("/user-management/users")}
+    >
+      <FormUser 
+        formProps={{ 
+          onFinish: handleOnFinish,
+          initialValues: initialValues
+        }} 
+        error={null} 
+        loading={loading} 
+        isEdit={true} 
+      />
+    </Page>
+  );
+};
+
+export default Component;
+</file>
+
+<file path="src/app/(protected)/user-management/users/create/page.jsx">
+import { message } from "antd";
+import { Page } from "admiral";
+import { useNavigate } from "react-router";
+
+import { FormUser } from "@protected/user-management/users/_components/Form";
+
+export const Component = () => {
+  const navigate = useNavigate();
+  const breadcrumb = [
+    {
+      label: "User Management",
+      path: "/user-management/users",
+    },
+    {
+      label: "Daftar User",
+      path: "/user-management/users",
+    },
+    {
+      label: "Tambah User",
+      path: "#",
+    },
+  ];
+
+  const handleOnFinish = (values) => {
+    // Simulate creating user
+    console.log("Creating user:", values);
+    message.success("User successfully created");
+    navigate("/user-management/users");
+  };
+
+  return (
+    <Page
+      title="Tambah User"
+      breadcrumbs={breadcrumb}
+      noStyle
+      goBack={() => navigate("/user-management/users")}
+    >
+      <FormUser formProps={{ onFinish: handleOnFinish }} error={null} loading={false} isEdit={false} />
+    </Page>
+  );
+};
+
+export default Component;
+</file>
+
+<file path="src/app/(protected)/user-management/_data/index.js">
+const listUsers = {
+  status_code: 200,
+  data: {
+    items: [
+      {
+        id: 1,
+        nip: "19850101201001001",
+        nama_user: "Ahmad Wijaya",
+        username: "ahmad.wijaya",
+        role: "Administrator",
+        email: "ahmad.wijaya@antam.com",
+        perusahaan: "PT Aneka Tambang Tbk",
+        jabatan: "Kepala Divisi IT",
+        fungsi: "Information Technology",
+        no_hp: "081234567890",
+        status: "Active",
+        created_at: "15/01/2023",
+        updated_at: "20/06/2023"
+      },
+      {
+        id: 2,
+        nip: "19870523201002002",
+        nama_user: "Siti Rahayu",
+        username: "siti.rahayu",
+        role: "PMO Admin",
+        email: "siti.rahayu@bukitasam.co.id",
+        perusahaan: "PT Bukit Asam Tbk",
+        jabatan: "Manager PMO",
+        fungsi: "Project Management",
+        no_hp: "081234567891",
+        status: "Active",
+        created_at: "10/02/2023",
+        updated_at: "15/06/2023"
+      },
+      {
+        id: 3,
+        nip: "19820715201003003",
+        nama_user: "Budi Santoso",
+        username: "budi.santoso",
+        role: "Direktur MIND ID",
+        email: "budi.santoso@freeport.com",
+        perusahaan: "PT Freeport Indonesia",
+        jabatan: "Direktur Utama",
+        fungsi: "Executive Management",
+        no_hp: "081234567892",
+        status: "Inactive",
+        created_at: "05/03/2023",
+        updated_at: "10/07/2023"
+      },
+      {
+        id: 4,
+        nip: "19900328201004004",
+        nama_user: "Diana Kusuma",
+        username: "diana.kusuma",
+        role: "PMO MIND ID",
+        email: "diana.kusuma@inalum.id",
+        perusahaan: "PT Indonesia Asahan Aluminium",
+        jabatan: "PMO Specialist",
+        fungsi: "Project Management",
+        no_hp: "081234567893",
+        status: "Active",
+        created_at: "12/04/2023",
+        updated_at: "22/07/2023"
+      },
+      {
+        id: 5,
+        nip: "19881104201005005",
+        nama_user: "Eko Prasetyo",
+        username: "eko.prasetyo",
+        role: "Tim Proyek",
+        email: "eko.prasetyo@timah.com",
+        perusahaan: "PT Timah Tbk",
+        jabatan: "Project Coordinator",
+        fungsi: "Project Execution",
+        no_hp: "081234567894",
+        status: "Active",
+        created_at: "20/05/2023", 
+        updated_at: "25/07/2023"
+      },
+      {
+        id: 6,
+        nip: "19920515202006006",
+        nama_user: "Rina Susanti",
+        username: "rina.susanti",
+        role: "PMO MIND ID",
+        email: "rina.susanti@mindid.co.id",
+        perusahaan: "PT MIND ID",
+        jabatan: "Senior PMO",
+        fungsi: "Project Management",
+        no_hp: "081234567895",
+        status: "-",
+        created_at: "01/08/2023", 
+        updated_at: "01/08/2023"
+      },
+      {
+        id: 7,
+        nip: "19900820202007007",
+        nama_user: "Andi Wijaya",
+        username: "andi.wijaya",
+        role: "Tim Proyek",
+        email: "andi.wijaya@ptba.co.id",
+        perusahaan: "PT Bukit Asam Tbk",
+        jabatan: "Project Member",
+        fungsi: "Project Execution",
+        no_hp: "081234567896",
+        status: "-",
+        created_at: "15/08/2023", 
+        updated_at: "15/08/2023"
+      },
+      {
+        id: 8,
+        nip: "19910612201008008",
+        nama_user: "Fitri Handayani",
+        username: "fitri.handayani",
+        role: "PMO Admin",
+        email: "fitri.handayani@antam.com",
+        perusahaan: "PT Aneka Tambang Tbk",
+        jabatan: "PMO Officer",
+        fungsi: "Project Management",
+        no_hp: "081234567897",
+        status: "Active",
+        created_at: "22/08/2023",
+        updated_at: "05/09/2023"
+      },
+      {
+        id: 9,
+        nip: "19840925201009009",
+        nama_user: "Hendra Gunawan",
+        username: "hendra.gunawan",
+        role: "Tim Proyek",
+        email: "hendra.gunawan@freeport.com",
+        perusahaan: "PT Freeport Indonesia",
+        jabatan: "Technical Lead",
+        fungsi: "Project Execution",
+        no_hp: "081234567898",
+        status: "Active",
+        created_at: "10/09/2023",
+        updated_at: "18/09/2023"
+      },
+      {
+        id: 10,
+        nip: "19930417201010010",
+        nama_user: "Indah Permata",
+        username: "indah.permata",
+        role: "PMO MIND ID",
+        email: "indah.permata@mindid.co.id",
+        perusahaan: "PT MIND ID",
+        jabatan: "PMO Analyst",
+        fungsi: "Project Management",
+        no_hp: "081234567899",
+        status: "Active",
+        created_at: "25/09/2023",
+        updated_at: "03/10/2023"
+      },
+      {
+        id: 11,
+        nip: "19860308201011011",
+        nama_user: "Joko Susilo",
+        username: "joko.susilo",
+        role: "Tim Proyek",
+        email: "joko.susilo@inalum.id",
+        perusahaan: "PT Indonesia Asahan Aluminium",
+        jabatan: "Project Engineer",
+        fungsi: "Project Execution",
+        no_hp: "081234567900",
+        status: "Active",
+        created_at: "12/10/2023",
+        updated_at: "20/10/2023"
+      },
+      {
+        id: 12,
+        nip: "19940710201012012",
+        nama_user: "Kartika Sari",
+        username: "kartika.sari",
+        role: "Administrator",
+        email: "kartika.sari@bukitasam.co.id",
+        perusahaan: "PT Bukit Asam Tbk",
+        jabatan: "System Administrator",
+        fungsi: "Information Technology",
+        no_hp: "081234567901",
+        status: "Active",
+        created_at: "28/10/2023",
+        updated_at: "05/11/2023"
+      },
+      {
+        id: 13,
+        nip: "19880522201013013",
+        nama_user: "Lukman Hakim",
+        username: "lukman.hakim",
+        role: "Direktur MIND ID",
+        email: "lukman.hakim@mindid.co.id",
+        perusahaan: "PT MIND ID",
+        jabatan: "Direktur Operasional",
+        fungsi: "Executive Management",
+        no_hp: "081234567902",
+        status: "Active",
+        created_at: "15/11/2023",
+        updated_at: "22/11/2023"
+      },
+      {
+        id: 14,
+        nip: "19920915201014014",
+        nama_user: "Maya Anggraini",
+        username: "maya.anggraini",
+        role: "PMO Admin",
+        email: "maya.anggraini@timah.com",
+        perusahaan: "PT Timah Tbk",
+        jabatan: "Senior PMO",
+        fungsi: "Project Management",
+        no_hp: "081234567903",
+        status: "Active",
+        created_at: "01/12/2023",
+        updated_at: "10/12/2023"
+      },
+      {
+        id: 15,
+        nip: "19850203201015015",
+        nama_user: "Nugroho Wibowo",
+        username: "nugroho.wibowo",
+        role: "Tim Proyek",
+        email: "nugroho.wibowo@antam.com",
+        perusahaan: "PT Aneka Tambang Tbk",
+        jabatan: "Project Analyst",
+        fungsi: "Project Execution",
+        no_hp: "081234567904",
+        status: "Active",
+        created_at: "18/12/2023",
+        updated_at: "27/12/2023"
+      },
+      {
+        id: 16,
+        nip: "19910428201016016",
+        nama_user: "Olivia Putri",
+        username: "olivia.putri",
+        role: "PMO MIND ID",
+        email: "olivia.putri@freeport.com",
+        perusahaan: "PT Freeport Indonesia",
+        jabatan: "PMO Coordinator",
+        fungsi: "Project Management",
+        no_hp: "081234567905",
+        status: "-",
+        created_at: "05/01/2024",
+        updated_at: "15/01/2024"
+      },
+      {
+        id: 17,
+        nip: "19870816201017017",
+        nama_user: "Prasetyo Adi",
+        username: "prasetyo.adi",
+        role: "Tim Proyek",
+        email: "prasetyo.adi@bukitasam.co.id",
+        perusahaan: "PT Bukit Asam Tbk",
+        jabatan: "Project Supervisor",
+        fungsi: "Project Execution",
+        no_hp: "081234567906",
+        status: "Inactive",
+        created_at: "22/01/2024",
+        updated_at: "30/01/2024"
+      },
+      {
+        id: 18,
+        nip: "19931107201018018",
+        nama_user: "Qori Amalia",
+        username: "qori.amalia",
+        role: "PMO Admin",
+        email: "qori.amalia@inalum.id",
+        perusahaan: "PT Indonesia Asahan Aluminium",
+        jabatan: "PMO Assistant",
+        fungsi: "Project Management",
+        no_hp: "081234567907",
+        status: "-",
+        created_at: "08/02/2024",
+        updated_at: "18/02/2024"
+      },
+      {
+        id: 19,
+        nip: "19890320201019019",
+        nama_user: "Rudi Hermawan",
+        username: "rudi.hermawan",
+        role: "Administrator",
+        email: "rudi.hermawan@mindid.co.id",
+        perusahaan: "PT MIND ID",
+        jabatan: "IT Manager",
+        fungsi: "Information Technology",
+        no_hp: "081234567908",
+        status: "Active",
+        created_at: "25/02/2024",
+        updated_at: "05/03/2024"
+      },
+      {
+        id: 20,
+        nip: "19950612201020020",
+        nama_user: "Sinta Dewi",
+        username: "sinta.dewi",
+        role: "Tim Proyek",
+        email: "sinta.dewi@timah.com",
+        perusahaan: "PT Timah Tbk",
+        jabatan: "Junior Project Officer",
+        fungsi: "Project Execution",
+        no_hp: "081234567909",
+        status: "-",
+        created_at: "12/03/2024",
+        updated_at: "20/03/2024"
+      }
+    ],
+    meta: {
+      total_page: 1,
+      total: 20,
+      page: 1,
+      per_page: 20,
+    },
+    version: "1.0.0",
+  },
+};
+
+const detailUser = (id) => {
+  const user = listUsers.data.items.find((item) => item.id === Number(id));
+  
+  if (user) {
+    return {
+      status_code: 200,
+      data: user,
+      version: "1.0.0",
+    };
+  }
+
+  return {
+    status_code: 404,
+    message: "User not found",
+    version: "1.0.0",
+  };
+};
+
+const listRoles = {
+  status_code: 200,
+  data: {
+    items: [
+      {
+        id: 1,
+        nama_role: "Administrator",
+        status: "Active",
+        created_at: "15/01/2023",
+        updated_at: "20/06/2023",
+        permissions: {
+          dashboard: { create: true, list: true, detail: true, edit: true, delete: true },
+          "user-management": { create: true, list: true, detail: true, edit: true, delete: true },
+          "master-data": { create: true, list: true, detail: true, edit: true, delete: true },
+          projects: { create: true, list: true, detail: true, edit: true, delete: true },
+          messaging: { create: true, list: true, detail: true, edit: true, delete: true },
+          laporan: { create: true, list: true, detail: true, edit: true, delete: true }
+        }
+      },
+      {
+        id: 2,
+        nama_role: "PMO Admin",
+        status: "Active",
+        created_at: "10/02/2023",
+        updated_at: "15/06/2023",
+        permissions: {
+          dashboard: { create: false, list: true, detail: true, edit: false, delete: false },
+          "user-management": { create: true, list: true, detail: true, edit: true, delete: false },
+          "master-data": { create: true, list: true, detail: true, edit: true, delete: true },
+          projects: { create: true, list: true, detail: true, edit: true, delete: true },
+          messaging: { create: true, list: true, detail: true, edit: true, delete: true },
+          laporan: { create: true, list: true, detail: true, edit: false, delete: false }
+        }
+      },
+      {
+        id: 3,
+        nama_role: "PMO Mind ID",
+        status: "Active",
+        created_at: "05/03/2023",
+        updated_at: "10/07/2023",
+        permissions: {
+          dashboard: { create: false, list: true, detail: true, edit: false, delete: false },
+          "user-management": { create: false, list: true, detail: true, edit: false, delete: false },
+          "master-data": { create: true, list: true, detail: true, edit: true, delete: false },
+          projects: { create: true, list: true, detail: true, edit: true, delete: true },
+          messaging: { create: true, list: true, detail: true, edit: true, delete: true },
+          laporan: { create: true, list: true, detail: true, edit: true, delete: false }
+        }
+      },
+      {
+        id: 4,
+        nama_role: "Direktur Mind ID",
+        status: "Inactive",
+        created_at: "12/04/2023",
+        updated_at: "22/07/2023",
+        permissions: {
+          dashboard: { create: false, list: true, detail: true, edit: false, delete: false },
+          "user-management": { create: false, list: true, detail: false, edit: false, delete: false },
+          "master-data": { create: false, list: true, detail: false, edit: false, delete: false },
+          projects: { create: false, list: true, detail: true, edit: false, delete: false },
+          messaging: { create: false, list: true, detail: false, edit: false, delete: false },
+          laporan: { create: true, list: true, detail: true, edit: false, delete: false }
+        }
+      },
+      {
+        id: 5,
+        nama_role: "Tim Proyek",
+        status: "Active",
+        created_at: "20/05/2023",
+        updated_at: "25/07/2023",
+        permissions: {
+          dashboard: { create: false, list: true, detail: true, edit: false, delete: false },
+          "user-management": { create: false, list: false, detail: false, edit: false, delete: false },
+          "master-data": { create: false, list: true, detail: true, edit: false, delete: false },
+          projects: { create: true, list: true, detail: true, edit: true, delete: false },
+          messaging: { create: true, list: true, detail: true, edit: true, delete: false },
+          laporan: { create: false, list: true, detail: true, edit: false, delete: false }
+        }
+      },
+      {
+        id: 6,
+        nama_role: "Viewer",
+        status: "Active",
+        created_at: "01/08/2023",
+        updated_at: "01/08/2023",
+        permissions: {
+          dashboard: { create: false, list: true, detail: true, edit: false, delete: false },
+          "user-management": { create: false, list: false, detail: false, edit: false, delete: false },
+          "master-data": { create: false, list: true, detail: true, edit: false, delete: false },
+          projects: { create: false, list: true, detail: true, edit: false, delete: false },
+          messaging: { create: false, list: true, detail: false, edit: false, delete: false },
+          laporan: { create: false, list: true, detail: true, edit: false, delete: false }
+        }
+      },
+      {
+        id: 7,
+        nama_role: "Project Manager",
+        status: "Active",
+        created_at: "15/08/2023",
+        updated_at: "20/08/2023",
+        permissions: {
+          dashboard: { create: false, list: true, detail: true, edit: false, delete: false },
+          "user-management": { create: false, list: true, detail: true, edit: false, delete: false },
+          "master-data": { create: false, list: true, detail: true, edit: false, delete: false },
+          projects: { create: true, list: true, detail: true, edit: true, delete: true },
+          messaging: { create: true, list: true, detail: true, edit: true, delete: false },
+          laporan: { create: true, list: true, detail: true, edit: false, delete: false }
+        }
+      },
+      {
+        id: 8,
+        nama_role: "Finance Admin",
+        status: "Active",
+        created_at: "22/08/2023",
+        updated_at: "05/09/2023",
+        permissions: {
+          dashboard: { create: false, list: true, detail: true, edit: false, delete: false },
+          "user-management": { create: false, list: false, detail: false, edit: false, delete: false },
+          "master-data": { create: true, list: true, detail: true, edit: true, delete: false },
+          projects: { create: false, list: true, detail: true, edit: false, delete: false },
+          messaging: { create: false, list: true, detail: true, edit: false, delete: false },
+          laporan: { create: true, list: true, detail: true, edit: true, delete: false }
+        }
+      },
+      {
+        id: 9,
+        nama_role: "Technical Lead",
+        status: "Active",
+        created_at: "10/09/2023",
+        updated_at: "18/09/2023",
+        permissions: {
+          dashboard: { create: false, list: true, detail: true, edit: false, delete: false },
+          "user-management": { create: false, list: false, detail: false, edit: false, delete: false },
+          "master-data": { create: false, list: true, detail: true, edit: false, delete: false },
+          projects: { create: true, list: true, detail: true, edit: true, delete: false },
+          messaging: { create: true, list: true, detail: true, edit: true, delete: false },
+          laporan: { create: false, list: true, detail: true, edit: false, delete: false }
+        }
+      },
+      {
+        id: 10,
+        nama_role: "Data Analyst",
+        status: "Active",
+        created_at: "25/09/2023",
+        updated_at: "03/10/2023",
+        permissions: {
+          dashboard: { create: false, list: true, detail: true, edit: false, delete: false },
+          "user-management": { create: false, list: false, detail: false, edit: false, delete: false },
+          "master-data": { create: false, list: true, detail: true, edit: false, delete: false },
+          projects: { create: false, list: true, detail: true, edit: false, delete: false },
+          messaging: { create: false, list: true, detail: false, edit: false, delete: false },
+          laporan: { create: true, list: true, detail: true, edit: true, delete: false }
+        }
+      },
+      {
+        id: 11,
+        nama_role: "Quality Assurance",
+        status: "Active",
+        created_at: "12/10/2023",
+        updated_at: "20/10/2023",
+        permissions: {
+          dashboard: { create: false, list: true, detail: true, edit: false, delete: false },
+          "user-management": { create: false, list: false, detail: false, edit: false, delete: false },
+          "master-data": { create: false, list: true, detail: true, edit: false, delete: false },
+          projects: { create: false, list: true, detail: true, edit: true, delete: false },
+          messaging: { create: true, list: true, detail: true, edit: true, delete: false },
+          laporan: { create: true, list: true, detail: true, edit: false, delete: false }
+        }
+      },
+      {
+        id: 12,
+        nama_role: "Business Analyst",
+        status: "Active",
+        created_at: "28/10/2023",
+        updated_at: "05/11/2023",
+        permissions: {
+          dashboard: { create: false, list: true, detail: true, edit: false, delete: false },
+          "user-management": { create: false, list: false, detail: false, edit: false, delete: false },
+          "master-data": { create: false, list: true, detail: true, edit: false, delete: false },
+          projects: { create: false, list: true, detail: true, edit: true, delete: false },
+          messaging: { create: true, list: true, detail: true, edit: true, delete: false },
+          laporan: { create: true, list: true, detail: true, edit: true, delete: false }
+        }
+      },
+      {
+        id: 13,
+        nama_role: "HR Manager",
+        status: "Active",
+        created_at: "15/11/2023",
+        updated_at: "22/11/2023",
+        permissions: {
+          dashboard: { create: false, list: true, detail: true, edit: false, delete: false },
+          "user-management": { create: true, list: true, detail: true, edit: true, delete: false },
+          "master-data": { create: false, list: true, detail: true, edit: false, delete: false },
+          projects: { create: false, list: true, detail: true, edit: false, delete: false },
+          messaging: { create: true, list: true, detail: true, edit: true, delete: false },
+          laporan: { create: true, list: true, detail: true, edit: false, delete: false }
+        }
+      },
+      {
+        id: 14,
+        nama_role: "Risk Manager",
+        status: "Active",
+        created_at: "01/12/2023",
+        updated_at: "10/12/2023",
+        permissions: {
+          dashboard: { create: false, list: true, detail: true, edit: false, delete: false },
+          "user-management": { create: false, list: false, detail: false, edit: false, delete: false },
+          "master-data": { create: true, list: true, detail: true, edit: true, delete: false },
+          projects: { create: false, list: true, detail: true, edit: true, delete: false },
+          messaging: { create: true, list: true, detail: true, edit: true, delete: false },
+          laporan: { create: true, list: true, detail: true, edit: true, delete: false }
+        }
+      },
+      {
+        id: 15,
+        nama_role: "Procurement Officer",
+        status: "Active",
+        created_at: "18/12/2023",
+        updated_at: "27/12/2023",
+        permissions: {
+          dashboard: { create: false, list: true, detail: true, edit: false, delete: false },
+          "user-management": { create: false, list: false, detail: false, edit: false, delete: false },
+          "master-data": { create: true, list: true, detail: true, edit: true, delete: false },
+          projects: { create: false, list: true, detail: true, edit: false, delete: false },
+          messaging: { create: true, list: true, detail: true, edit: true, delete: false },
+          laporan: { create: true, list: true, detail: true, edit: false, delete: false }
+        }
+      },
+      {
+        id: 16,
+        nama_role: "Legal Officer",
+        status: "Active",
+        created_at: "05/01/2024",
+        updated_at: "15/01/2024",
+        permissions: {
+          dashboard: { create: false, list: true, detail: true, edit: false, delete: false },
+          "user-management": { create: false, list: false, detail: false, edit: false, delete: false },
+          "master-data": { create: false, list: true, detail: true, edit: false, delete: false },
+          projects: { create: false, list: true, detail: true, edit: false, delete: false },
+          messaging: { create: true, list: true, detail: true, edit: true, delete: false },
+          laporan: { create: true, list: true, detail: true, edit: false, delete: false }
+        }
+      },
+      {
+        id: 17,
+        nama_role: "IT Support",
+        status: "Active",
+        created_at: "22/01/2024",
+        updated_at: "30/01/2024",
+        permissions: {
+          dashboard: { create: false, list: true, detail: true, edit: false, delete: false },
+          "user-management": { create: false, list: true, detail: true, edit: false, delete: false },
+          "master-data": { create: false, list: true, detail: true, edit: false, delete: false },
+          projects: { create: false, list: true, detail: true, edit: false, delete: false },
+          messaging: { create: true, list: true, detail: true, edit: true, delete: false },
+          laporan: { create: false, list: true, detail: true, edit: false, delete: false }
+        }
+      },
+      {
+        id: 18,
+        nama_role: "Auditor",
+        status: "Active",
+        created_at: "08/02/2024",
+        updated_at: "18/02/2024",
+        permissions: {
+          dashboard: { create: false, list: true, detail: true, edit: false, delete: false },
+          "user-management": { create: false, list: true, detail: true, edit: false, delete: false },
+          "master-data": { create: false, list: true, detail: true, edit: false, delete: false },
+          projects: { create: false, list: true, detail: true, edit: false, delete: false },
+          messaging: { create: false, list: true, detail: true, edit: false, delete: false },
+          laporan: { create: true, list: true, detail: true, edit: false, delete: false }
+        }
+      },
+      {
+        id: 19,
+        nama_role: "Stakeholder",
+        status: "Inactive",
+        created_at: "25/02/2024",
+        updated_at: "05/03/2024",
+        permissions: {
+          dashboard: { create: false, list: true, detail: true, edit: false, delete: false },
+          "user-management": { create: false, list: false, detail: false, edit: false, delete: false },
+          "master-data": { create: false, list: true, detail: true, edit: false, delete: false },
+          projects: { create: false, list: true, detail: true, edit: false, delete: false },
+          messaging: { create: false, list: true, detail: false, edit: false, delete: false },
+          laporan: { create: false, list: true, detail: true, edit: false, delete: false }
+        }
+      },
+      {
+        id: 20,
+        nama_role: "Consultant",
+        status: "Active",
+        created_at: "12/03/2024",
+        updated_at: "20/03/2024",
+        permissions: {
+          dashboard: { create: false, list: true, detail: true, edit: false, delete: false },
+          "user-management": { create: false, list: false, detail: false, edit: false, delete: false },
+          "master-data": { create: false, list: true, detail: true, edit: false, delete: false },
+          projects: { create: false, list: true, detail: true, edit: true, delete: false },
+          messaging: { create: true, list: true, detail: true, edit: true, delete: false },
+          laporan: { create: true, list: true, detail: true, edit: false, delete: false }
+        }
+      }
+    ],
+    meta: {
+      total_page: 1,
+      total: 20,
+      page: 1,
+      per_page: 20,
+    },
+    version: "1.0.0",
+  },
+};
+
+const detailRole = (id) => {
+  const role = listRoles.data.items.find((item) => item.id === Number(id));
+  
+  if (role) {
+    return {
+      status_code: 200,
+      data: role,
+      version: "1.0.0",
+    };
+  }
+
+  return {
+    status_code: 404,
+    message: "Role not found",
+    version: "1.0.0",
+  };
+};
+
+const userLoginHistory = (userId) => {
+  const loginHistories = {
+    1: [
+      { id: 1, updated_date: "27/10/2025 08:30:15", activity: "Login" },
+      { id: 2, updated_date: "27/10/2025 17:45:22", activity: "Logout" },
+      { id: 3, updated_date: "26/10/2025 09:15:30", activity: "Login" },
+      { id: 4, updated_date: "26/10/2025 18:20:45", activity: "Logout" },
+      { id: 5, updated_date: "25/10/2025 08:00:10", activity: "Login" },
+      { id: 6, updated_date: "25/10/2025 17:30:55", activity: "Logout" },
+    ],
+    2: [
+      { id: 1, updated_date: "27/10/2025 07:45:20", activity: "Login" },
+      { id: 2, updated_date: "27/10/2025 16:30:40", activity: "Logout" },
+      { id: 3, updated_date: "26/10/2025 08:20:15", activity: "Login" },
+      { id: 4, updated_date: "26/10/2025 17:15:30", activity: "Logout" },
+    ],
+    3: [
+      { id: 1, updated_date: "20/10/2025 10:00:00", activity: "Login" },
+      { id: 2, updated_date: "20/10/2025 15:30:00", activity: "Logout" },
+    ],
+    4: [
+      { id: 1, updated_date: "27/10/2025 09:00:00", activity: "Login" },
+      { id: 2, updated_date: "27/10/2025 18:00:00", activity: "Logout" },
+      { id: 3, updated_date: "26/10/2025 09:30:00", activity: "Login" },
+      { id: 4, updated_date: "26/10/2025 17:45:00", activity: "Logout" },
+    ],
+    5: [
+      { id: 1, updated_date: "27/10/2025 08:15:00", activity: "Login" },
+      { id: 2, updated_date: "27/10/2025 17:00:00", activity: "Logout" },
+    ],
+    6: [],
+    7: [],
+  };
+
+  const history = loginHistories[Number(userId)] || [];
+
+  return {
+    status_code: 200,
+    data: {
+      items: history,
+      meta: {
+        total_page: 1,
+        total: history.length,
+        page: 1,
+        per_page: 10,
+      },
+    },
+    version: "1.0.0",
+  };
+};
+
+export { listUsers, detailUser, listRoles, detailRole, userLoginHistory };
+</file>
+
+<file path="src/app/(protected)/user-management/users/[id]/page.jsx">
+import React from "react";
+import { Tag, Descriptions, Typography, Space, Button, Flex, message, Modal, Table } from "antd";
+import { useParams, useNavigate, Link } from "react-router";
+import { generatePath } from "react-router";
+import { Page, Section } from "admiral";
+import { detailUser, userLoginHistory } from "@protected/user-management/_data";
+
+const UserDetailPage = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const userId = String(id || "");
+  const user = detailUser(userId)?.data || {};
+
+  const renderStatusTag = (status) => {
+    const color = status === "Active" ? "#52c41a" : "#ff4d4f";
+    const backgroundColor = status === "Active" ? "#f6ffed" : "#fff2f0";
+    return <Tag style={{ color, backgroundColor, border: 'none' }}>{status}</Tag>;
+  };
+
+  const breadcrumbs = [
+    {
+      label: "User Management",
+      path: "/user-management/users",
+    },
+    {
+      label: "Daftar User",
+      path: "/user-management/users",
+    },
+    {
+      label: user.nama_user || "",
+      path: "#",
+    },
+  ];
+
+  const items = [
+    {
+      key: "nip",
+      label: "NIP",
+      children: <Typography.Text strong>{user.nip || "-"}</Typography.Text>,
+    },
+    {
+      key: "nama_user",
+      label: "Nama User",
+      children: <Typography.Text strong>{user.nama_user || "-"}</Typography.Text>,
+    },
+    {
+      key: "username",
+      label: "Username",
+      children: <Typography.Text strong>{user.username || "-"}</Typography.Text>,
+    },
+    {
+      key: "email",
+      label: "Email",
+      children: <Typography.Text strong>{user.email || "-"}</Typography.Text>,
+    },
+    {
+      key: "perusahaan",
+      label: "Perusahaan",
+      children: <Typography.Text strong>{user.perusahaan || "-"}</Typography.Text>,
+    },
+    {
+      key: "role",
+      label: "Role",
+      children: <Typography.Text strong>{user.role || "-"}</Typography.Text>,
+    },
+    {
+      key: "jabatan",
+      label: "Jabatan",
+      children: <Typography.Text strong>{user.jabatan || "-"}</Typography.Text>,
+    },
+    {
+      key: "fungsi",
+      label: "Fungsi",
+      children: <Typography.Text strong>{user.fungsi || "-"}</Typography.Text>,
+    },
+    {
+      key: "no_hp",
+      label: "No HP",
+      children: <Typography.Text strong>{user.no_hp || "-"}</Typography.Text>,
+    },
+    {
+      key: "status",
+      label: "Status",
+      children: user.status ? renderStatusTag(user.status) : "-",
+    },
+    {
+      key: "created_at",
+      label: "Created At",
+      children: <Typography.Text strong>{user.created_at || "-"}</Typography.Text>,
+    },
+    {
+      key: "updated_at",
+      label: "Updated At",
+      children: <Typography.Text strong>{user.updated_at || "-"}</Typography.Text>,
+    },
+  ];
+
+  const loginHistoryColumns = [
+    {
+      title: "Updated Date",
+      dataIndex: "updated_date",
+      key: "updated_date",
+    },
+    {
+      title: "Activity",
+      dataIndex: "activity",
+      key: "activity",
+    },
+  ];
+
+  const loginHistory = userLoginHistory(userId)?.data?.items || [];
+
+  const handleDelete = () => {
+    Modal.confirm({
+      title: "Konfirmasi Hapus",
+      content: "Apakah Anda yakin ingin menghapus data user ini?",
+      okText: "Delete",
+      cancelText: "Cancel",
+      okType: "danger",
+      onOk: () => {
+        message.success("User successfully deleted");
+        navigate("/user-management/users");
+      },
+    });
+  };
+
+  return (
+    <Page
+      title={`Detail User: ${user.nama_user || ""}`}
+      breadcrumbs={breadcrumbs}
+      goBack={() => navigate("/user-management/users")}
+      noStyle
+      topActions={
+        <Flex gap={10}>
+          <Button
+            htmlType="button"
+            onClick={handleDelete}
+            danger
+          >
+            Delete
+          </Button>
+          <Link
+            to={generatePath("/user-management/users/:id/update", {
+              id: id,
+            })}
+          >
+            <Button htmlType="button" type="primary">
+              Edit
+            </Button>
+          </Link>
+        </Flex>
+      }
+    >
+      <Section>
+        <Space style={{ width: "100%" }} direction="vertical" size="middle">
+          <Section title="User Information">
+            <Descriptions
+              bordered
+              layout="horizontal"
+              items={items}
+              column={{
+                md: 1,
+                lg: 2,
+                xl: 2,
+                xxl: 2,
+              }}
+            />
+          </Section>
+          <Section title="History Login">
+            <Table
+              columns={loginHistoryColumns}
+              dataSource={loginHistory}
+              rowKey="id"
+              pagination={false}
+            />
+          </Section>
+        </Space>
+      </Section>
+    </Page>
+  );
+};
+
+export default UserDetailPage;
+</file>
+
+<file path="src/app/(protected)/user-management/users/page.jsx">
+import React, { useState } from "react";
+import {
+  Button,
+  Modal,
+  message,
+  Tag,
+} from "antd";
+import { Link } from "react-router";
+import { SearchOutlined, PlusOutlined, EditOutlined, CheckCircleOutlined, CloseCircleOutlined, StopOutlined, PlayCircleOutlined } from "@ant-design/icons";
+import { Page, DataTable } from "admiral";
+import { listUsers } from "@protected/user-management/_data";
+import { useFilter } from "@/app/_hooks/datatable/use-filter";
+import { makeSource } from "@/utils/data-table";
+import { useGetData } from "@/app/_hooks/use-get-data";
+
+const UsersPage = () => {
+  const { handleChange, filters } = useFilter();
+  const usersData = useGetData(listUsers);
+  const [users, setUsers] = useState(listUsers.data.items);
+
+  const renderStatusTag = (status) => {
+    if (!status || status === "-") {
+      return <span>-</span>;
+    }
+    const color = status === "Active" ? "#52c41a" : "#ff4d4f";
+    const backgroundColor = status === "Active" ? "#f6ffed" : "#fff2f0";
+    return <Tag style={{ color, backgroundColor, border: 'none' }}>{status}</Tag>;
+  };
+
+  const handleApprove = (record) => {
+    Modal.confirm({
+      title: "Approve User",
+      content: "Are you sure you want to approve this user?",
+      okText: "Approve",
+      cancelText: "Cancel",
+      onOk: () => {
+        setUsers(prevUsers => 
+          prevUsers.map(user => 
+            user.id === record.id 
+              ? { ...user, status: "Active" }
+              : user
+          )
+        );
+        message.success("User approved successfully");
+      },
+    });
+  };
+
+  const handleReject = (record) => {
+    Modal.confirm({
+      title: "Reject User",
+      content: "Are you sure you want to reject this user? This action cannot be undone.",
+      okText: "Reject",
+      cancelText: "Cancel",
+      okType: "danger",
+      onOk: () => {
+        setUsers(prevUsers => prevUsers.filter(user => user.id !== record.id));
+        message.success("User rejected successfully");
+      },
+    });
+  };
+
+  const handleToggleStatus = (record) => {
+    const newStatus = record.status === "Active" ? "Inactive" : "Active";
+    const actionText = newStatus === "Active" ? "activate" : "set to inactive";
+    const actionTitle = newStatus === "Active" ? "Activate" : "Set to Inactive";
+    
+    Modal.confirm({
+      title: `${actionTitle} User`,
+      content: `Are you sure you want to ${actionText} this user?`,
+      okText: actionTitle,
+      cancelText: "Cancel",
+      okType: newStatus === "Inactive" ? "danger" : "primary",
+      onOk: () => {
+        setUsers(prevUsers => 
+          prevUsers.map(user => 
+            user.id === record.id 
+              ? { ...user, status: newStatus }
+              : user
+          )
+        );
+        message.success(`User ${newStatus === "Active" ? "activated" : "set to inactive"} successfully`);
+      },
+    });
+  };
+
+  const renderActionButtons = (record) => {
+    if (!record.status || record.status === "-") {
+      return (
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <Button 
+            type="text" 
+            icon={<CheckCircleOutlined />} 
+            onClick={() => handleApprove(record)}
+            style={{ color: '#52c41a' }}
+          />
+          <Button 
+            type="text" 
+            icon={<CloseCircleOutlined />} 
+            onClick={() => handleReject(record)}
+            style={{ color: '#ff4d4f' }}
+          />
+        </div>
+      );
+    }
+    
+    return (
+      <div style={{ display: 'flex', gap: '8px' }}>
+        <Link to={`/user-management/users/${record.id}/update`}>
+          <Button 
+            type="text" 
+            icon={<EditOutlined />}
+          />
+        </Link>
+        <Button 
+          type="text" 
+          icon={record.status === "Active" ? <StopOutlined /> : <PlayCircleOutlined />}
+          onClick={() => handleToggleStatus(record)}
+          style={{ 
+            color: record.status === "Active" ? '#ff4d4f' : '#52c41a'
+          }}
+          title={record.status === "Active" ? "Set to Inactive" : "Activate User"}
+        />
+      </div>
+    );
+  };
+
+  const filterComponents = [
+    {
+      label: "Status",
+      name: "status",
+      type: "Select",
+      placeholder: "Select status",
+      defaultValue: filters.status,
+      options: [
+        {
+          label: "Active",
+          value: "Active",
+        },
+        {
+          label: "Inactive",
+          value: "Inactive",
+        },
+      ],
+    },
+  ];
+
+  const columns = [
+    {
+      title: "Nama User",
+      dataIndex: "nama_user",
+      key: "nama_user",
+      sorter: true,
+      render: (text, record) => (
+        <Link to={`/user-management/users/${record.id}`} style={{ color: '#1677ff' }}>
+          <u>{text}</u>
+        </Link>
+      ),
+    },
+    {
+      title: "Role",
+      dataIndex: "role",
+      key: "role",
+      sorter: true,
+    },
+    {
+      title: "Email",
+      dataIndex: "email",
+      key: "email",
+      sorter: true,
+    },
+    {
+      title: "Perusahaan",
+      dataIndex: "perusahaan",
+      key: "perusahaan",
+      sorter: true,
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
+      render: (text) => renderStatusTag(text),
+      sorter: true,
+    },
+    {
+      title: "Created At",
+      dataIndex: "created_at",
+      key: "created_at",
+      sorter: true,
+    },
+    {
+      title: "Action",
+      key: "action",
+      render: (_, record) => renderActionButtons(record),
+    },
+  ];
+
+  const breadcrumbs = [
+    {
+      label: "User Management",
+      path: "/user-management/users",
+    },
+    {
+      label: "Daftar User",
+      path: "/user-management/users",
+    },
+  ];
+
+  return (
+    <Page
+      title="Daftar User"
+      breadcrumbs={breadcrumbs}
+      noStyle
+      topActions={
+        <Link to="/user-management/users/create">
+          <Button 
+            type="primary" 
+            icon={<PlusOutlined />}
+          >
+            Tambah User
+          </Button>
+        </Link>
+      }
+    >
+      <DataTable
+        search={filters.search}
+        searchPlaceholder="Search..."
+        searchIcon={<SearchOutlined />}
+        rowKey="id"
+        columns={columns}
+        source={makeSource({ data: { items: users } })}
+        onChange={handleChange}
+        loading={usersData.loading}
+        filterComponents={filterComponents}
+        showRowSelection={false}
+        pageSize={20}
+      />
+    </Page>
+  );
+};
+
+export default UsersPage;
+</file>
+
+</files>

@@ -10,8 +10,7 @@ const listFeasibilityStudies = {
         capex_estimate: 15000000000,
         irr_estimate: 18.5,
         npv_estimate: 2500000000,
-        status: "Approved",
-        sync_status: "Synced",
+        status: "Assign",
         last_sync_date: "2024-10-20T08:30:00Z",
         investment_name: "Solar Power Plant Development",
         investment_code: "SPP-001",
@@ -25,8 +24,9 @@ const listFeasibilityStudies = {
         offtaker: "PLN (Perusahaan Listrik Negara)",
         dokumen_pendukung: "Environmental Impact Assessment, Technical Feasibility Study, Financial Model",
         keterangan: "Proyek strategis untuk mendukung target energi terbarukan nasional 23% pada tahun 2025",
+        tim_project: "Tim Engineering",
         approver_pmo_ah: ["Ahmad Rizky (PMO AH)", "Siti Nurhaliza (PMO AH)"],
-        approver_pmo_mind_id: ["Agus Setiawan (PMO Mind ID)", "Rina Kartika (PMO Mind ID)"],
+        approver_pmo_mind_id: ["Agus Setiawan (PMO MIND ID)", "Rina Kartika (PMO MIND ID)"],
         viewer: ["Fajar Nugroho", "Maya Sari", "Riko Pratama"]
       },
       {
@@ -37,8 +37,7 @@ const listFeasibilityStudies = {
         capex_estimate: 8500000000,
         irr_estimate: 22.3,
         npv_estimate: 1800000000,
-        status: "Under Review",
-        sync_status: "Pending",
+        status: "Unassign",
         last_sync_date: "2024-10-19T14:15:00Z",
         investment_name: "Cloud Infrastructure Modernization",
         investment_code: "CIM-002",
@@ -51,7 +50,8 @@ const listFeasibilityStudies = {
         raw_material_supplier: "Dell Technologies, Cisco Systems",
         offtaker: "Internal Business Units",
         dokumen_pendukung: "IT Architecture Blueprint, Security Assessment, Cost-Benefit Analysis",
-        keterangan: "Investasi infrastruktur cloud untuk mendukung transformasi digital perusahaan"
+        keterangan: "Investasi infrastruktur cloud untuk mendukung transformasi digital perusahaan",
+        tim_project: "Tim IT & Digital"
       },
       {
         id: 3,
@@ -61,8 +61,7 @@ const listFeasibilityStudies = {
         capex_estimate: 25000000000,
         irr_estimate: 16.8,
         npv_estimate: 3200000000,
-        status: "Approved",
-        sync_status: "Synced",
+        status: "Assign",
         last_sync_date: "2024-10-20T10:45:00Z",
         investment_name: "New Production Line Installation",
         investment_code: "NPL-003",
@@ -75,7 +74,11 @@ const listFeasibilityStudies = {
         raw_material_supplier: "PT Steel Indonesia, PT Chemical Nusantara",
         offtaker: "Domestic Market, Export to ASEAN",
         dokumen_pendukung: "Market Research, Production Planning, Environmental Permit",
-        keterangan: "Ekspansi kapasitas produksi untuk meningkatkan pangsa pasar dan daya saing"
+        keterangan: "Ekspansi kapasitas produksi untuk meningkatkan pangsa pasar dan daya saing",
+        tim_project: "Tim Operations",
+        approver_pmo_ah: ["Budi Santoso (PMO AH)", "Dewi Sartika (PMO AH)"],
+        approver_pmo_mind_id: ["Dani Kurniawan (PMO MIND ID)", "Lina Marlina (PMO MIND ID)"],
+        viewer: ["Nina Anggraini", "Yoga Permana", "Tika Rahayu"]
       },
       {
         id: 4,
@@ -85,8 +88,7 @@ const listFeasibilityStudies = {
         capex_estimate: 12000000000,
         irr_estimate: 19.2,
         npv_estimate: 2100000000,
-        status: "Draft",
-        sync_status: "Failed",
+        status: "Unassign",
         last_sync_date: "2024-10-18T16:20:00Z",
         investment_name: "Integrated Logistics Center",
         investment_code: "ILC-004",
@@ -99,7 +101,8 @@ const listFeasibilityStudies = {
         raw_material_supplier: "PT Konstruksi Indonesia, PT Equipment Supplier",
         offtaker: "E-commerce Partners, Retail Chains",
         dokumen_pendukung: "Location Analysis, Traffic Impact Study, Business Plan",
-        keterangan: "Pembangunan hub logistik strategis untuk mendukung pertumbuhan e-commerce"
+        keterangan: "Pembangunan hub logistik strategis untuk mendukung pertumbuhan e-commerce",
+        tim_project: "Tim Procurement"
       },
       {
         id: 5,
@@ -109,8 +112,7 @@ const listFeasibilityStudies = {
         capex_estimate: 6500000000,
         irr_estimate: 15.7,
         npv_estimate: 950000000,
-        status: "Under Review",
-        sync_status: "Synced",
+        status: "Assign",
         last_sync_date: "2024-10-20T12:00:00Z",
         investment_name: "Medical Equipment Modernization",
         investment_code: "MEM-005",
@@ -123,7 +125,11 @@ const listFeasibilityStudies = {
         raw_material_supplier: "Medical Equipment Distributors",
         offtaker: "Hospital Patients, Insurance Companies",
         dokumen_pendukung: "Medical Technology Assessment, ROI Analysis, Regulatory Compliance",
-        keterangan: "Investasi teknologi medis terbaru untuk meningkatkan standar pelayanan rumah sakit"
+        keterangan: "Investasi teknologi medis terbaru untuk meningkatkan standar pelayanan rumah sakit",
+        tim_project: "Tim HSE (Health Safety Environment)",
+        approver_pmo_ah: ["Eko Prasetyo (PMO AH)", "Ahmad Rizky (PMO AH)"],
+        approver_pmo_mind_id: ["Hendra Wijaya (PMO MIND ID)", "Agus Setiawan (PMO MIND ID)"],
+        viewer: ["Indra Gunawan", "Sari Wulandari", "Fajar Nugroho"]
       },
       {
         id: 6,
@@ -133,8 +139,7 @@ const listFeasibilityStudies = {
         capex_estimate: 18000000000,
         irr_estimate: 20.1,
         npv_estimate: 2800000000,
-        status: "Approved",
-        sync_status: "Synced",
+        status: "Unassign",
         last_sync_date: "2024-10-21T09:15:00Z",
         investment_name: "Advanced Mining Technology Implementation",
         investment_code: "AMT-006",
@@ -147,7 +152,8 @@ const listFeasibilityStudies = {
         raw_material_supplier: "PT Mining Equipment Indonesia",
         offtaker: "International Steel Companies",
         dokumen_pendukung: "Mining Technology Assessment, Environmental Compliance Study, Safety Analysis",
-        keterangan: "Proyek modernisasi teknologi penambangan untuk meningkatkan produktivitas dan sustainability"
+        keterangan: "Proyek modernisasi teknologi penambangan untuk meningkatkan produktivitas dan sustainability",
+        tim_project: "Tim Construction"
       }
     ],
     meta: {

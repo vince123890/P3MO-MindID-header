@@ -15,22 +15,17 @@ export const SIDEBAR_ITEMS = [
     children: [
       {
         key: "/project-anggota-holding",
-        label: <Link to={"/project-anggota-holding"} style={linkStyle}>Project Anggota Holding</Link>,
+        label: <Link to={"/project-anggota-holding"} style={linkStyle}>Overview</Link>,
         permissions: ["All"],
       },
       {
         key: "/strategic-capital-project",
-        label: <Link to={"/strategic-capital-project"} style={linkStyle}>Strategic Capital Project</Link>,
+        label: <Link to={"/strategic-capital-project"} style={linkStyle}>Projects</Link>,
         permissions: ["All"],
       },
       {
         key: "/komparasi-project",
-        label: <Link to={"/komparasi-project"} style={linkStyle}>Komparasi Project</Link>,
-        permissions: ["All"],
-      },
-      {
-        key: "/initiative-project-pipeline",
-        label: <Link to={"/initiative-project-pipeline"} style={linkStyle}>Initiative Project Pipeline</Link>,
+        label: <Link to={"/komparasi-project"} style={linkStyle}>Portfolio</Link>,
         permissions: ["All"],
       },
     ],
@@ -44,6 +39,11 @@ export const SIDEBAR_ITEMS = [
       {
         key: "/user-management/users",
         label: <Link to={"/user-management/users"} style={linkStyle}>Daftar User</Link>,
+        permissions: ["Admin"],
+      },
+      {
+        key: "/user-management/roles",
+        label: <Link to={"/user-management/roles"} style={linkStyle}>Daftar Role</Link>,
         permissions: ["Admin"],
       },
     ],
@@ -70,8 +70,13 @@ export const SIDEBAR_ITEMS = [
         permissions: ["Admin"],
       },
       {
-        key: "/master-data/issue-risks",
-        label: <Link to={"/master-data/issue-risks"} style={linkStyle}>Issue/Resiko</Link>,
+        key: "/master-data/risks",
+        label: <Link to={"/master-data/risks"} style={linkStyle}>Resiko</Link>,
+        permissions: ["Admin"],
+      },
+      {
+        key: "/master-data/issues",
+        label: <Link to={"/master-data/issues"} style={linkStyle}>Issues</Link>,
         permissions: ["Admin"],
       },
       {
@@ -83,7 +88,7 @@ export const SIDEBAR_ITEMS = [
   },
   {
     key: "/projects",
-    label: <Link to={"/projects"} style={linkStyle}>Projects</Link>,
+    label: <Link to={"/projects"} style={linkStyle}>PIMS</Link>,
     icon: <MailOutlined />,
     permissions: ["Admin"],
   },

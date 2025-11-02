@@ -1,0 +1,156 @@
+{
+  "module_name": "Master Data - Issues",
+  "data": [
+    {
+      "code": "<b>MI01</b>",
+      "feature": "<b>List Master Data Issues</b>",
+      "acceptances": [
+        {
+          "info": "<b>Fields</b>",
+          "detail": [
+            {
+              "text": "<b>Search</b>:\n- Kode Issue\n- Tipe Issue",
+              "note": ""
+            },
+            {
+              "text": "<b>Filter</b>:\n- Tipe Issue\n- Status",
+              "note": ""
+            },
+            {
+              "text": "<b>Sorting ASC,DESC</b>:\n- Kode Issue\n- Tipe Issue\n- Status\n- Created At",
+              "note": "Default sorting by created_at"
+            }
+          ]
+        },
+        {
+          "info": "<b>Fields Column</b>",
+          "detail": [
+            {
+              "text": "<b>Kode Issue</b>\n- Hyperlink to detail"
+            },
+            {
+              "text": "<b>Tipe Issue</b>\n- Read Only"
+            },
+            {
+              "text": "<b>Status</b>\n- Tag (Active/Inactive)\n- Read Only"
+            }
+          ]
+        },
+        {
+          "info": "<b>Behavior</b>",
+          "detail": [
+            {
+              "text": "<b>Role</b>: Admin"
+            },
+            {
+              "text": "Default sorting based on most recent data"
+            },
+            {
+              "text": "<b>Action</b>: Detail, Edit, Delete\nBulk Action: Delete"
+            },
+            {
+              "text": "<b>Bulk Action</b>: Delete",
+              "note": "Multiple Data Check"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "<b>MI02</b>",
+      "feature": "<b>Create Master Data Issues</b>",
+      "acceptances": [
+        {
+          "info": "<b>Fields</b>",
+          "detail": [
+            {
+              "text": "<b>Kode Issue*</b>:\n- Text Field\n- String\n- Unique",
+              "note": ""
+            },
+            {
+              "text": "<b>Tipe Issue*</b>:\n- Select Dropdown\n- Options: Technical Issue, Budget Issue, Schedule Issue, Resource Issue, Quality Issue, Scope Issue, Communication Issue, Stakeholder Issue, External Issue, Compliance Issue",
+              "note": ""
+            },
+            {
+              "text": "<b>Status*</b>:\n- Switch Button\n- Default ON",
+              "note": ""
+            }
+          ]
+        },
+        {
+          "info": "<b>Behavior</b>",
+          "detail": [
+            {
+              "text": "<b>Cancel</b>:\n Reset and Back to list issues"
+            },
+            {
+              "text": "<b>Create</b>\n Save and Display data in the issues list"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "<b>MI03</b>",
+      "feature": "<b>Detail Master Data Issues</b>",
+      "acceptances": [
+        {
+          "info": "<b>Fields</b>",
+          "detail": [
+            {
+              "text": "<b>Kode Issue</b>\n- Read Only"
+            },
+            {
+              "text": "<b>Tipe Issue</b>\n- Read Only"
+            },
+            {
+              "text": "<b>Status</b>\n- Tag (Active/Inactive)\n- Read Only"
+            }
+          ]
+        },
+        {
+          "info": "<b>Behavior</b>",
+          "detail": [
+            {
+              "text": "<b>Back</b>:\n Back to list issues"
+            },
+            {
+              "text": "<b>Edit</b>\n Navigate to update page"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "<b>MI04</b>",
+      "feature": "<b>Update Master Data Issues</b>",
+      "acceptances": [
+        {
+          "info": "<b>Fields</b>",
+          "detail": [
+            {
+              "text": "<b>Kode Issue</b>\n- Text Field\n- Pre-filled with current data\n- Editable"
+            },
+            {
+              "text": "<b>Tipe Issue</b>\n- Select Dropdown\n- Pre-filled with current data\n- Editable"
+            },
+            {
+              "text": "<b>Status</b>\n- Switch Button\n- Pre-filled with current data\n- Editable"
+            }
+          ]
+        },
+        {
+          "info": "<b>Behavior</b>",
+          "detail": [
+            {
+              "text": "<b>Cancel</b>:\n Back to detail page"
+            },
+            {
+              "text": "<b>Update</b>\n Save changes and navigate to detail page"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

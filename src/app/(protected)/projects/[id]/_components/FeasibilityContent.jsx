@@ -1,4 +1,4 @@
-import { Space, Table } from "antd";
+import { Space, Table, Descriptions, Typography } from "antd";
 import { FileOutlined, DownloadOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 import { Section } from "admiral";
@@ -37,11 +37,6 @@ const FeasibilityContent = ({ project }) => {
       ),
     },
     {
-      title: "Size",
-      dataIndex: "size",
-      key: "size",
-    },
-    {
       title: "Upload Date",
       dataIndex: "upload_date",
       key: "upload_date",
@@ -62,217 +57,192 @@ const FeasibilityContent = ({ project }) => {
     },
   ];
 
+  const basicInfoItems = [
+    {
+      key: "business_initiative_name",
+      label: "Investment Name",
+      children: <Typography.Text strong>{project?.business_initiative_name || "-"}</Typography.Text>,
+    },
+    {
+      key: "company",
+      label: "Company",
+      children: <Typography.Text strong>{project?.company || "-"}</Typography.Text>,
+    },
+    {
+      key: "project_code",
+      label: "Investment Code",
+      children: <Typography.Text strong>{project?.project_code || "-"}</Typography.Text>,
+    },
+  ];
+
+  const financialEstimatesItems = [
+    {
+      key: "capex_estimate",
+      label: "CAPEX (nominal)",
+      children: <Typography.Text strong>{formatCurrency(project?.capex_estimate)}</Typography.Text>,
+    },
+    {
+      key: "opex_estimate_yearly",
+      label: "OPEX (Nominal)",
+      children: <Typography.Text strong>{formatCurrency(project?.opex_estimate_yearly)}</Typography.Text>,
+    },
+    {
+      key: "npv_estimate",
+      label: "NPV",
+      children: <Typography.Text strong>{formatCurrency(project?.npv_estimate)}</Typography.Text>,
+    },
+    {
+      key: "irr_estimate",
+      label: "IRR",
+      children: <Typography.Text strong>{project?.irr_estimate || 0}%</Typography.Text>,
+    },
+    {
+      key: "currency",
+      label: "Currency",
+      children: <Typography.Text strong>{project?.currency || "-"}</Typography.Text>,
+    },
+    {
+      key: "discount_rate",
+      label: "Discount Rate",
+      children: <Typography.Text strong>{project?.discount_rate || 0}%</Typography.Text>,
+    },
+  ];
+
+  const businessPartnersItems = [
+    {
+      key: "technology_licensor",
+      label: "Teknologi Lisensor",
+      children: <Typography.Text strong>{project?.technology_licensor || "-"}</Typography.Text>,
+      span: 2,
+    },
+    {
+      key: "raw_material_suppliers",
+      label: "Raw Material Supplier",
+      children: <Typography.Text strong>{project?.raw_material_suppliers || "-"}</Typography.Text>,
+      span: 2,
+    },
+    {
+      key: "offtaker",
+      label: "Offtaker",
+      children: <Typography.Text strong>{project?.offtaker || "-"}</Typography.Text>,
+      span: 2,
+    },
+  ];
+
+  const projectObjectivesItems = [
+    {
+      key: "sasaran_penjelasan",
+      label: "Sasaran (penjelasan)",
+      children: <Typography.Text strong>{project?.sasaran_penjelasan || "-"}</Typography.Text>,
+      span: 2,
+    },
+  ];
+
+  const remarksItems = [
+    {
+      key: "keterangan",
+      label: "Keterangan",
+      children: <Typography.Text strong>{project?.keterangan || "No remarks provided"}</Typography.Text>,
+      span: 2,
+    },
+  ];
+
   return (
     <Space direction="vertical" size="middle" style={{ width: "100%" }}>
       {/* Basic Information Section */}
-      <Section>
-        <Section title="Basic Information">
-          <Space direction="vertical" size="small" style={{ width: "100%" }}>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
-              <div>
-                <label style={{ display: "block", marginBottom: "4px", fontWeight: "bold" }}>Investment Name</label>
-                <div style={{ 
-                  padding: "8px 12px", 
-                  border: "1px solid #d9d9d9", 
-                  borderRadius: "6px", 
-                  backgroundColor: "#f5f5f5" 
-                }}>
-                  {project?.business_initiative_name || "-"}
-                </div>
-              </div>
-              <div>
-                <label style={{ display: "block", marginBottom: "4px", fontWeight: "bold" }}>Company</label>
-                <div style={{ 
-                  padding: "8px 12px", 
-                  border: "1px solid #d9d9d9", 
-                  borderRadius: "6px", 
-                  backgroundColor: "#f5f5f5" 
-                }}>
-                  {project?.company || "-"}
-                </div>
-              </div>
-              <div>
-                <label style={{ display: "block", marginBottom: "4px", fontWeight: "bold" }}>Investment Code</label>
-                <div style={{ 
-                  padding: "8px 12px", 
-                  border: "1px solid #d9d9d9", 
-                  borderRadius: "6px", 
-                  backgroundColor: "#f5f5f5" 
-                }}>
-                  {project?.project_code || "-"}
-                </div>
-              </div>
-            </div>
-          </Space>
-        </Section>
+      <Section title="Basic Information">
+        <Descriptions
+          bordered
+          layout="horizontal"
+          items={basicInfoItems}
+          column={{
+            md: 1,
+            lg: 2,
+            xl: 2,
+            xxl: 2,
+          }}
+          contentStyle={{ padding: "16px" }}
+          labelStyle={{ padding: "16px" }}
+        />
       </Section>
 
       {/* Financial Estimates Section */}
-      <Section>
-        <Section title="Financial Estimates">
-          <Space direction="vertical" size="small" style={{ width: "100%" }}>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "16px" }}>
-              <div>
-                <label style={{ display: "block", marginBottom: "4px", fontWeight: "bold" }}>CAPEX (nominal)</label>
-                <div style={{ 
-                  padding: "8px 12px", 
-                  border: "1px solid #d9d9d9", 
-                  borderRadius: "6px", 
-                  backgroundColor: "#f5f5f5" 
-                }}>
-                  {formatCurrency(project?.capex_estimate)}
-                </div>
-              </div>
-              <div>
-                <label style={{ display: "block", marginBottom: "4px", fontWeight: "bold" }}>OPEX (Nominal)</label>
-                <div style={{ 
-                  padding: "8px 12px", 
-                  border: "1px solid #d9d9d9", 
-                  borderRadius: "6px", 
-                  backgroundColor: "#f5f5f5" 
-                }}>
-                  {formatCurrency(project?.opex_estimate_yearly)}
-                </div>
-              </div>
-              <div>
-                <label style={{ display: "block", marginBottom: "4px", fontWeight: "bold" }}>NPV</label>
-                <div style={{ 
-                  padding: "8px 12px", 
-                  border: "1px solid #d9d9d9", 
-                  borderRadius: "6px", 
-                  backgroundColor: "#f5f5f5" 
-                }}>
-                  {formatCurrency(project?.npv_estimate)}
-                </div>
-              </div>
-              <div>
-                <label style={{ display: "block", marginBottom: "4px", fontWeight: "bold" }}>IRR</label>
-                <div style={{ 
-                  padding: "8px 12px", 
-                  border: "1px solid #d9d9d9", 
-                  borderRadius: "6px", 
-                  backgroundColor: "#f5f5f5" 
-                }}>
-                  {project?.irr_estimate || 0}%
-                </div>
-              </div>
-              <div>
-                <label style={{ display: "block", marginBottom: "4px", fontWeight: "bold" }}>Currency</label>
-                <div style={{ 
-                  padding: "8px 12px", 
-                  border: "1px solid #d9d9d9", 
-                  borderRadius: "6px", 
-                  backgroundColor: "#f5f5f5" 
-                }}>
-                  {project?.currency || "-"}
-                </div>
-              </div>
-              <div>
-                <label style={{ display: "block", marginBottom: "4px", fontWeight: "bold" }}>Discount Rate</label>
-                <div style={{ 
-                  padding: "8px 12px", 
-                  border: "1px solid #d9d9d9", 
-                  borderRadius: "6px", 
-                  backgroundColor: "#f5f5f5" 
-                }}>
-                  {project?.discount_rate || 0}%
-                </div>
-              </div>
-            </div>
-          </Space>
-        </Section>
+      <Section title="Financial Estimates">
+        <Descriptions
+          bordered
+          layout="horizontal"
+          items={financialEstimatesItems}
+          column={{
+            md: 1,
+            lg: 2,
+            xl: 3,
+            xxl: 3,
+          }}
+          contentStyle={{ padding: "16px" }}
+          labelStyle={{ padding: "16px" }}
+        />
       </Section>
 
       {/* Business Partners Section */}
-      <Section>
-        <Section title="Business Partners">
-          <Space direction="vertical" size="small" style={{ width: "100%" }}>
-            <div>
-              <label style={{ display: "block", marginBottom: "4px", fontWeight: "bold" }}>Teknologi Lisensor</label>
-              <div style={{ 
-                padding: "8px 12px", 
-                border: "1px solid #d9d9d9", 
-                borderRadius: "6px", 
-                backgroundColor: "#f5f5f5" 
-              }}>
-                {project?.technology_licensor || "-"}
-              </div>
-            </div>
-            <div>
-              <label style={{ display: "block", marginBottom: "4px", fontWeight: "bold" }}>Raw Material Supplier</label>
-              <div style={{ 
-                padding: "8px 12px", 
-                border: "1px solid #d9d9d9", 
-                borderRadius: "6px", 
-                backgroundColor: "#f5f5f5" 
-              }}>
-                {project?.raw_material_suppliers || "-"}
-              </div>
-            </div>
-            <div>
-              <label style={{ display: "block", marginBottom: "4px", fontWeight: "bold" }}>Offtaker</label>
-              <div style={{ 
-                padding: "8px 12px", 
-                border: "1px solid #d9d9d9", 
-                borderRadius: "6px", 
-                backgroundColor: "#f5f5f5" 
-              }}>
-                {project?.offtaker || "-"}
-              </div>
-            </div>
-          </Space>
-        </Section>
+      <Section title="Business Partners">
+        <Descriptions
+          bordered
+          layout="horizontal"
+          items={businessPartnersItems}
+          column={{
+            md: 1,
+            lg: 2,
+            xl: 2,
+            xxl: 2,
+          }}
+          contentStyle={{ padding: "16px" }}
+          labelStyle={{ padding: "16px" }}
+        />
       </Section>
 
       {/* Project Objectives Section */}
-      <Section>
-        <Section title="Project Objectives">
-          <div>
-            <label style={{ display: "block", marginBottom: "4px", fontWeight: "bold" }}>Sasaran (penjelasan)</label>
-            <div style={{ 
-              padding: "8px 12px", 
-              border: "1px solid #d9d9d9", 
-              borderRadius: "6px", 
-              backgroundColor: "#f5f5f5",
-              minHeight: "80px",
-              whiteSpace: "pre-wrap"
-            }}>
-              {project?.sasaran_penjelasan || "-"}
-            </div>
-          </div>
-        </Section>
+      <Section title="Project Objectives">
+        <Descriptions
+          bordered
+          layout="horizontal"
+          items={projectObjectivesItems}
+          column={{
+            md: 1,
+            lg: 2,
+            xl: 2,
+            xxl: 2,
+          }}
+          contentStyle={{ padding: "16px" }}
+          labelStyle={{ padding: "16px" }}
+        />
       </Section>
 
       {/* Supporting Documents Section */}
-      <Section>
-        <Section title="Dokumen Pendukung">
-          <Table
-            columns={documentColumns}
-            dataSource={project?.dokumen_pendukung || []}
-            pagination={false}
-            size="small"
-            locale={{ emptyText: "No documents uploaded" }}
-          />
-        </Section>
+      <Section title="Dokumen Pendukung">
+        <Table
+          columns={documentColumns}
+          dataSource={project?.dokumen_pendukung || []}
+          pagination={false}
+          size="small"
+          locale={{ emptyText: "No documents uploaded" }}
+        />
       </Section>
 
       {/* Remarks Section */}
-      <Section>
-        <Section title="Keterangan">
-          <div>
-            <label style={{ display: "block", marginBottom: "4px", fontWeight: "bold" }}>Keterangan</label>
-            <div style={{ 
-              padding: "8px 12px", 
-              border: "1px solid #d9d9d9", 
-              borderRadius: "6px", 
-              backgroundColor: "#f5f5f5",
-              minHeight: "80px",
-              whiteSpace: "pre-wrap"
-            }}>
-              {project?.keterangan || "No remarks provided"}
-            </div>
-          </div>
-        </Section>
+      <Section title="Keterangan">
+        <Descriptions
+          bordered
+          layout="horizontal"
+          items={remarksItems}
+          column={{
+            md: 1,
+            lg: 2,
+            xl: 2,
+            xxl: 2,
+          }}
+          contentStyle={{ padding: "16px" }}
+          labelStyle={{ padding: "16px" }}
+        />
       </Section>
     </Space>
   );

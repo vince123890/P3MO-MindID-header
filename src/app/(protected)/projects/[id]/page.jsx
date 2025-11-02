@@ -4,6 +4,7 @@ import { ArrowLeftOutlined, CheckOutlined, CloseOutlined, CommentOutlined, EyeOu
 import { Link } from "react-router";
 import { Page, Tabs } from "admiral";
 import { useState, lazy, Suspense } from "react";
+import { useNavigate } from "react-router";
 
 import { useGetData } from "@/app/_hooks/use-get-data";
 import { projectDetail } from "../_data/index.js";
@@ -13,6 +14,7 @@ import { getProjectActivities } from "../_data/activities.js";
 
 const { Title, Text } = Typography;
 const { TextArea } = Input;
+
 
 // Lazy load components to improve initial loading performance
 const FeasibilityContent = lazy(() => import('./_components/FeasibilityContent.jsx'));
@@ -43,6 +45,7 @@ const LoadingSpinner = () => (
 
 const Component = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   
   // Handle issues, risks, activities loading state
   const [issuesLoading, setIssuesLoading] = useState(false);
@@ -111,6 +114,10 @@ const Component = () => {
   const project = staticProject;
 
   const breadcrumbs = [
+    {
+      label: "Dashboard",
+      path: "/dashboard",
+    },
     {
       label: "Projects",
       path: "/projects",
@@ -251,7 +258,10 @@ const Component = () => {
       label: "Change Status",
       children: (
         <Suspense fallback={<LoadingSpinner />}>
-          <ProjectChangeStatusContent />
+          <ProjectChangeStatusContent 
+            id={String(id)}
+            filters={filterProps}
+          />
         </Suspense>
       ),
     },
@@ -277,7 +287,7 @@ const Component = () => {
     },
     {
       key: "document-manager",
-      label: "Document Manager",
+      label: "Document Management",
       children: (
         <Suspense fallback={<LoadingSpinner />}>
           <DocumentManagerContent />
@@ -288,23 +298,42 @@ const Component = () => {
 
   return (
     <Page
-      title="Project Detail"
-      breadcrumbs={breadcrumbs}
       topActions={
         <Space>
-          <Link to={"/projects"}>
-            <Button icon={<ArrowLeftOutlined />}>Back to List</Button>
-          </Link>
+          <Button type="primary" onClick={handleSubmit}>
+            Submit
+          </Button>
+          <Button 
+            type="primary" 
+            icon={<CheckOutlined />}
+            style={{ backgroundColor: '#52c41a', borderColor: '#52c41a' }}
+            onClick={() => handleApproval('approve')}
+          >
+            Approve
+          </Button>
+          <Button 
+            danger 
+            icon={<CloseOutlined />}
+            onClick={() => handleApproval('reject')}
+          >
+            Reject
+          </Button>
         </Space>
       }
+      title={`Projects Detail: ${project?.project_code || ""}`}
+      breadcrumbs={breadcrumbs}
+      goBack={() => navigate("/projects")}
+      noStyle
     >
       <div style={{ position: 'relative', width: '100%' }}>
+
         {/* Main Content - Full Width Wizard */}
         <ProjectWizard 
           project={project}
           existingTabItems={tabItems}
           handleSubmit={handleSubmit}
           handleApproval={handleApproval}
+          hideWizardTabs={true}
         />
 
         {/* Floating Approval Log - WhatsApp Style */}

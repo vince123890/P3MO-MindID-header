@@ -1,0 +1,2 @@
+import{j as o}from"./@react-router-BOJM2k20.js";import{T as f}from"./index-QOKA2q-x.js";import"./reactNode-Csz1gYGy.js";try{let e=typeof window<"u"?window:typeof global<"u"?global:typeof globalThis<"u"?globalThis:typeof self<"u"?self:{},t=new e.Error().stack;t&&(e._sentryDebugIds=e._sentryDebugIds||{},e._sentryDebugIds[t]="99f7e874-7c5c-43f8-99f9-7bb9f17637b6",e._sentryDebugIdIdentifier="sentry-dbid-99f7e874-7c5c-43f8-99f9-7bb9f17637b6")}catch{}const d=()=>o.jsx(f.Text,{children:"Welcome to Our Public Page"});export{d as default};
+//# sourceMappingURL=page-w0SdMEMb.js.map

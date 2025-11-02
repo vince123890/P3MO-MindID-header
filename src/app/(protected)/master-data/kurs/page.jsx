@@ -1,5 +1,5 @@
-import { Button, Flex, message, Tag } from "antd";
-import { DeleteOutlined, EditOutlined, EyeOutlined, PlusCircleOutlined } from "@ant-design/icons";
+import { Button, message, Tag } from "antd";
+import { EditOutlined, PlusOutlined } from "@ant-design/icons";
 import { Link } from "react-router";
 import { Page, DataTable } from "admiral";
 import dayjs from "dayjs";
@@ -8,7 +8,7 @@ import { makeSource } from "@/utils/data-table";
 import { useFilter } from "@/app/_hooks/datatable/use-filter";
 import { urlParser } from "@/utils/url-parser";
 import { useGetData } from "@/app/_hooks/use-get-data";
-import { formatDate } from "@/utils/date-format";
+import { formatToMonthYear } from "@/utils/date-format";
 import { allKurs } from "./_data";
 
 export const Component = () => {
@@ -30,11 +30,11 @@ export const Component = () => {
     },
     {
       dataIndex: "tanggal",
-      title: "Tanggal",
+      title: "Bulan Tahun",
       key: "tanggal",
       sorter: true,
       render: (_, record) => {
-        return formatDate(record.tanggal);
+        return formatToMonthYear(record.tanggal);
       },
     },
     {
@@ -48,36 +48,18 @@ export const Component = () => {
       },
     },
     {
-      dataIndex: "created_at",
-      title: "Created At",
-      key: "created_at",
-      sorter: true,
-      render: (_, record) => {
-        return formatDate(record.created_at);
-      },
-    },
-    {
       dataIndex: "Action",
       title: "Action",
       key: "Action",
       render: (_, record) => {
         return (
-          <Flex>
-            <Link
-              to={urlParser("/master-data/kurs/:id/update", {
-                id: record.id,
-              })}
-            >
-              <Button type="link" icon={<EditOutlined />} />
-            </Link>
-            <Button
-              type="link"
-              icon={<DeleteOutlined style={{ color: "red" }} />}
-              onClick={() => {
-                message.success("Kurs successfully deleted");
-              }}
-            />
-          </Flex>
+          <Link
+            to={urlParser("/master-data/kurs/:id/update", {
+              id: record.id,
+            })}
+          >
+            <Button type="link" icon={<EditOutlined />} />
+          </Link>
         );
       },
     },
@@ -100,56 +82,18 @@ export const Component = () => {
       breadcrumbs={breadcrumbs}
       topActions={
         <Link to={"/master-data/kurs/create"}>
-          <Button type="primary" icon={<PlusCircleOutlined />}>Tambah Kurs</Button>
+          <Button type="primary" icon={<PlusOutlined />}>Tambah Kurs</Button>
         </Link>
       }
       noStyle
     >
       <DataTable
-        filterComponents={[
-          {
-            label: "Status",
-            name: "status",
-            type: "Select",
-            placeholder: "Select Status",
-            width: 140,
-            defaultValue: filters.status,
-            options: [
-              { label: "Active", value: "Active" },
-              { label: "Inactive", value: "Inactive" },
-            ],
-          },
-          {
-            label: "Tanggal",
-            name: "tanggal",
-            type: "DateRangePicker",
-            width: 230,
-            defaultValue:
-              typeof filters.tanggal?.[0] === "number"
-                ? [dayjs(dayjs.unix(filters.tanggal[0])), dayjs(dayjs.unix(filters.tanggal[1]))]
-                : [undefined, undefined],
-            placeholder: ["Start", "End"],
-          },
-        ]}
         onChange={handleChange}
         rowKey="id"
         loading={allKursData.loading}
         source={makeSource(allKursData.data)}
         columns={allKursColumns}
         search={filters.search}
-        showRowSelection={true}
-        batchActionMenus={[
-          {
-            key: "delete",
-            label: "Delete",
-            onClick: (_values, cb) => {
-              message.success("Selected kurs successfully deleted");
-              cb.reset();
-            },
-            danger: true,
-            icon: <DeleteOutlined />,
-          },
-        ]}
       />
     </Page>
   );

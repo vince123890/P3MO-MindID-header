@@ -1,5 +1,5 @@
 import { Page, Section } from "admiral";
-import { Space, Button, Descriptions, Flex, message, Tag } from "antd";
+import { Space, Button, Descriptions, Flex, message, Tag, Modal } from "antd";
 import { generatePath, Link, useNavigate } from "react-router";
 import { Typography } from "antd";
 import { useParams } from "react-router";
@@ -23,7 +23,7 @@ export const Component = () => {
       path: "/master-data/template-messaging",
     },
     {
-      label: data?.data?.nama_template || "",
+      label: `Template Details: ${data?.data?.nama_template || ""}`,
       path: "#",
     },
   ];
@@ -35,10 +35,17 @@ export const Component = () => {
       children: <Typography.Text strong>{data?.data?.nama_template ?? "-"}</Typography.Text>,
     },
     {
-      key: "perusahaan",
-      label: "Perusahaan",
+      key: "category",
+      label: "Category",
       children: (
-        <Typography.Text strong>{data?.data?.perusahaan ?? "-"}</Typography.Text>
+        <Typography.Text strong>{data?.data?.category ?? "-"}</Typography.Text>
+      ),
+    },
+    {
+      key: "trigger",
+      label: "Trigger",
+      children: (
+        <Typography.Text strong>{data?.data?.trigger ?? "-"}</Typography.Text>
       ),
     },
     {
@@ -70,16 +77,6 @@ export const Component = () => {
     <Page
       topActions={
         <Flex gap={10}>
-          <Button
-            htmlType="button"
-            onClick={() => {
-              message.success("Template Messaging successfully deleted");
-              navigate("/master-data/template-messaging");
-            }}
-            danger
-          >
-            Delete
-          </Button>
           <Link
             to={generatePath("/master-data/template-messaging/:id/update", {
               id: params.id,

@@ -1,0 +1,268 @@
+{
+  "module_name": "Master Data - Risks",
+  "data": [
+    {
+      "code": "<b>RSK01</b>",
+      "feature": "<b>List Master Data Risks</b>",
+      "acceptances": [
+        {
+          "info": "<b>Component Structure</b>",
+          "detail": [
+            {
+              "text": "<b>RiskColumns.jsx</b>\n- Separated column definitions for DataTable",
+              "note": "Reusable component for table columns"
+            },
+            {
+              "text": "<b>RiskFilters.jsx</b>\n- Separated filter configurations",
+              "note": "Reusable component for search and filter options"
+            },
+            {
+              "text": "<b>RiskActions.jsx</b>\n- Separated action handlers",
+              "note": "Reusable component for delete and edit actions"
+            }
+          ]
+        },
+        {
+          "info": "<b>Fields</b>",
+          "detail": [
+            {
+              "text": "<b>Search</b>:\n- Kode Resiko\n- Tipe Resiko",
+              "note": ""
+            },
+            {
+              "text": "<b>Filter</b>:\n- Status (Active/Inactive)\n- Tipe Resiko (10 options)",
+              "note": ""
+            },
+            {
+              "text": "<b>Sorting ASC,DESC</b>:\n- Kode Resiko\n- Tipe Resiko\n- Status",
+              "note": "Default sorting by created_at"
+            }
+          ]
+        },
+        {
+          "info": "<b>Fields Column</b>",
+          "detail": [
+            {
+              "text": "<b>Kode Resiko</b>\n- Hyperlink to detail"
+            },
+            {
+              "text": "<b>Tipe Resiko</b>\n- Read Only"
+            },
+            {
+              "text": "<b>Status</b>\n- Read Only\n- Tag with color (Active: green, Inactive: red)"
+            }
+          ]
+        },
+        {
+          "info": "<b>Behavior</b>",
+          "detail": [
+            {
+              "text": "<b>Role</b>: Admin"
+            },
+            {
+              "text": "Default sorting based on most recent data"
+            },
+            {
+              "text": "<b>Action</b>: Detail, Edit, Delete\nBulk Action: Delete"
+            },
+            {
+              "text": "<b>Bulk Action</b>: Delete",
+              "note": "Multiple Data Check"
+            },
+            {
+              "text": "<b>Delete Confirmation</b>\n Show confirmation popup (Delete/Cancel) when deleting data"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "<b>RSK02</b>",
+      "feature": "<b>Create Master Data Risks</b>",
+      "acceptances": [
+        {
+          "info": "<b>Component Structure</b>",
+          "detail": [
+            {
+              "text": "<b>Form.jsx</b>\n- Shared form component for Create and Update",
+              "note": "Reusable form with validation"
+            }
+          ]
+        },
+        {
+          "info": "<b>Fields</b>",
+          "detail": [
+            {
+              "text": "<b>Kode Resiko*</b>:\n- Text Field\n- String",
+              "note": "Required field"
+            },
+            {
+              "text": "<b>Tipe Resiko*</b>:\n- Text Field\n- String",
+              "note": "Required field"
+            },
+            {
+              "text": "<b>Status*</b>:\n- Switch Button\n- Default ON (Active)\n- Active / Inactive",
+              "note": "Required field with default Active status"
+            }
+          ]
+        },
+        {
+          "info": "<b>Behavior</b>",
+          "detail": [
+            {
+              "text": "<b>Create</b>\n Save and Display data in the risks list"
+            },
+            {
+              "text": "<b>Reset</b>\n Reset form to empty state"
+            },
+            {
+              "text": "<b>Breadcrumb</b>\n Master Data > Resiko > <b>Tambah Resiko</b>"
+            },
+            {
+              "text": "<b>Page Title</b>\n <b>Tambah Resiko</b>"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "<b>RSK03</b>",
+      "feature": "<b>Detail Master Data Risks</b>",
+      "acceptances": [
+        {
+          "info": "<b>Component Structure</b>",
+          "detail": [
+            {
+              "text": "<b>RiskDetailItems.jsx</b>\n- Separated detail items configuration",
+              "note": "Reusable component for detail view items"
+            },
+            {
+              "text": "<b>RiskDetailActions</b>\n- Separated detail page actions",
+              "note": "Reusable component for delete and edit buttons"
+            }
+          ]
+        },
+        {
+          "info": "<b>Fields</b>",
+          "detail": [
+            {
+              "text": "<b>Kode Resiko</b>\n- Read Only"
+            },
+            {
+              "text": "<b>Tipe Resiko</b>\n- Read Only"
+            },
+            {
+              "text": "<b>Status</b>\n- Read Only\n- Tag with color (Active: green, Inactive: red)"
+            },
+            {
+              "text": "<b>Created At</b>\n- Read Only\n- Date format",
+              "note": "Display creation timestamp"
+            },
+            {
+              "text": "<b>Updated At</b>\n- Read Only\n- Date format",
+              "note": "Display last update timestamp"
+            }
+          ]
+        },
+        {
+          "info": "<b>Behavior</b>",
+          "detail": [
+            {
+              "text": "<b>Edit Button</b>\n Navigate to edit page"
+            },
+            {
+              "text": "<b>Delete Button</b>\n Show delete confirmation and remove data"
+            },
+            {
+              "text": "<b>Breadcrumb</b>\n Master Data > Resiko > <b>Resiko Details: [Kode] - [Tipe]</b>"
+            },
+            {
+              "text": "<b>Page Title</b>\n <b>Resiko Details: [Kode] - [Tipe]</b>"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "<b>RSK04</b>",
+      "feature": "<b>Edit Master Data Risks</b>",
+      "acceptances": [
+        {
+          "info": "<b>Component Structure</b>",
+          "detail": [
+            {
+              "text": "<b>Form.jsx</b>\n- Shared form component for Create and Update",
+              "note": "Reusable form with pre-filled data"
+            }
+          ]
+        },
+        {
+          "info": "<b>Fields</b>",
+          "detail": [
+            {
+              "text": "<b>Kode Resiko*</b>:\n- Text Field\n- String",
+              "note": "Required field"
+            },
+            {
+              "text": "<b>Tipe Resiko*</b>:\n- Text Field\n- String",
+              "note": "Required field"
+            },
+            {
+              "text": "<b>Status*</b>:\n- Switch Button\n- Active / Inactive",
+              "note": "Update Status functionality - shows current status"
+            }
+          ]
+        },
+        {
+          "info": "<b>Behavior</b>",
+          "detail": [
+            {
+              "text": "<b>Update</b>\n Save and Display updated data in the risks detail"
+            },
+            {
+              "text": "<b>Reset</b>\n Reset form to initial values"
+            },
+            {
+              "text": "<b>Breadcrumb</b>\n Master Data > Resiko > Resiko Details: [Kode] - [Tipe] > <b>Update Resiko: [Kode] - [Tipe]</b>"
+            },
+            {
+              "text": "<b>Page Title</b>\n <b>Update Resiko: [Kode] - [Tipe]</b>"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "<b>RSK05</b>",
+      "feature": "<b>Delete Master Data Risks</b>",
+      "acceptances": [
+        {
+          "info": "<b>Component Structure</b>",
+          "detail": [
+            {
+              "text": "<b>RiskActions.jsx</b>\n- Centralized delete functionality",
+              "note": "Reusable delete actions for both list and detail pages"
+            }
+          ]
+        },
+        {
+          "info": "<b>Behavior</b>",
+          "detail": [
+            {
+              "text": "<b>Single Delete</b>\n Delete single item from detail or list page"
+            },
+            {
+              "text": "<b>Bulk Delete</b>\n Delete multiple selected items from list page"
+            },
+            {
+              "text": "<b>Delete Confirmation</b>\n Show confirmation popup with 'Konfirmasi Hapus' title and 'Apakah Anda yakin ingin menghapus Resiko ini?' message"
+            },
+            {
+              "text": "<b>Confirmation Buttons</b>\n Delete (danger type) and Cancel buttons"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

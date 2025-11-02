@@ -1,0 +1,58 @@
+{
+  "module_name": "Projects - Document Management Enhancement",
+  "data": [
+    {
+      "code": "<b>PD01</b>",
+      "feature": "<b>Enhance Document Management with Search Functionality</b>",
+      "acceptances": [
+        {
+          "info": "<b>Fields</b>",
+          "detail": [
+            {
+              "text": "<b>Search Field</b>:\n- Text input with search icon\n- Placeholder: \"Search by Stage, Document, Type, or Chapter...\"\n- Allow clear functionality\n- Positioned above the document table",
+              "note": ""
+            }
+          ]
+        },
+        {
+          "info": "<b>Search Functionality</b>",
+          "detail": [
+            {
+              "text": "<b>Search Scope</b>:\n- Stage column\n- Document column\n- Type column\n- Chapter column",
+              "note": "Search is case-insensitive"
+            },
+            {
+              "text": "<b>Real-time Filtering</b>:\n- Documents are filtered as user types\n- Table updates dynamically based on search input",
+              "note": ""
+            },
+            {
+              "text": "<b>Clear Search</b>:\n- Clear button (X) appears when search text is entered\n- Clicking clear shows all documents again",
+              "note": ""
+            }
+          ]
+        },
+        {
+          "info": "<b>Behavior</b>",
+          "detail": [
+            {
+              "text": "<b>Empty Search</b>:\n- When search field is empty, all documents are displayed",
+              "note": ""
+            },
+            {
+              "text": "<b>Partial Matches</b>:\n- Search returns documents containing the search term in any of the searchable fields",
+              "note": ""
+            },
+            {
+              "text": "<b>Pagination</b>:\n- Pagination updates based on filtered results\n- Page numbers and total count reflect current filtered data",
+              "note": ""
+            },
+            {
+              "text": "<b>Performance</b>:\n- Search filtering is optimized using React useMemo for efficient re-renders",
+              "note": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

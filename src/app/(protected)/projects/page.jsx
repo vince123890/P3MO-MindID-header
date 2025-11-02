@@ -1,6 +1,5 @@
-import { useState } from "react";
+import { useMemo } from "react";
 import { Tag } from "antd";
-import { FilterOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import { Link } from "react-router";
 import { Page, DataTable } from "admiral";
@@ -14,6 +13,47 @@ export const Component = () => {
   const { handleChange, filters } = useFilter();
 
   const allProjectsData = useGetData(allProjects);
+
+  // Generate search suggestions from project data
+  const searchOptions = useMemo(() => {
+    if (!filters.search || filters.search.length < 1 || !allProjectsData.data?.data?.items) {
+      return [];
+    }
+
+    const items = allProjectsData.data.data.items;
+    const suggestions = [];
+
+    items.forEach((project) => {
+      // Match project code
+      if (project.project_code?.toLowerCase().includes(filters.search.toLowerCase())) {
+        suggestions.push({
+          value: project.project_code,
+          label: (
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <span><strong>Code:</strong> {project.project_code}</span>
+              <span style={{ color: "#999", fontSize: "12px" }}>{project.company}</span>
+            </div>
+          ),
+        });
+      }
+
+      // Match business initiative name
+      if (project.business_initiative_name?.toLowerCase().includes(filters.search.toLowerCase())) {
+        suggestions.push({
+          value: project.business_initiative_name,
+          label: (
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <span><strong>Initiative:</strong> {project.business_initiative_name}</span>
+              <span style={{ color: "#999", fontSize: "12px" }}>{project.project_code}</span>
+            </div>
+          ),
+        });
+      }
+    });
+
+    // Remove duplicates and limit to 10 suggestions
+    return suggestions.slice(0, 10);
+  }, [filters.search, allProjectsData.data]);
 
   // Status tag colors
   const getStatusColor = (status) => {
@@ -31,7 +71,7 @@ export const Component = () => {
     }
   };
 
-  // Simple Project List Columns
+  // Project List Columns
   const projectColumns = [
     {
       dataIndex: "project_code",
@@ -46,7 +86,7 @@ export const Component = () => {
     },
     {
       dataIndex: "business_initiative_name",
-      title: "Business Initiative Name",
+      title: "Project Name",
       key: "business_initiative_name",
       sorter: true,
       width: 300,
@@ -59,20 +99,24 @@ export const Component = () => {
       sorter: true,
     },
     {
-      dataIndex: "amendment_number",
-      title: "Amendment No",
-      key: "amendment_number",
+      dataIndex: "status_indicator",
+      title: "Status Indicator",
+      key: "status_indicator",
       sorter: true,
-    },
-    {
-      dataIndex: "baseline",
-      title: "Baseline",
-      key: "baseline",
-      sorter: true,
+      render: (status_indicator) => {
+        const color = status_indicator === "On Track" ? "green" : 
+                     status_indicator === "At Risk" ? "orange" : 
+                     status_indicator === "Off Track" ? "red" : "default";
+        return (
+          <Tag color={color} bordered={false}>
+            {status_indicator || "Unknown"}
+          </Tag>
+        );
+      },
     },
     {
       dataIndex: "status",
-      title: "Status",
+      title: "Workflow Status",
       key: "status",
       sorter: true,
       render: (status) => (
@@ -82,24 +126,33 @@ export const Component = () => {
       ),
     },
     {
-      dataIndex: "created_at",
-      title: "Created Date",
-      key: "created_at",
+      dataIndex: "days_remaining_till_cod",
+      title: "Days Remaining till COD",
+      key: "days_remaining_till_cod",
       sorter: true,
-      render: (date) => date ? dayjs(date).format("DD/MM/YYYY") : "-",
+      render: (days) => {
+        if (days === null || days === undefined) return "-";
+        const color = days > 90 ? "green" : days > 30 ? "orange" : "red";
+        return (
+          <Tag color={color} bordered={false}>
+            {days} days
+          </Tag>
+        );
+      },
     },
   ];
 
+
   const breadcrumbs = [
     {
-      label: "Projects",
+      label: "PIMS",
       path: "/projects",
     },
   ];
 
   return (
     <Page
-      title="Projects"
+      title="PIMS"
       breadcrumbs={breadcrumbs}
       noStyle
     >
@@ -110,57 +163,21 @@ export const Component = () => {
         source={makeSource(allProjectsData.data)}
         columns={projectColumns}
         showRowSelection={false}
-        filters={[
+        search={filters.search}
+        searchOptions={searchOptions}
+        filterComponents={[
           {
-            label: "filter",
-            name: "filter",
-            type: "Group",
-            icon: <FilterOutlined />,
-            cols: 2,
-            filters: [
-              {
-                label: "Company",
-                name: "company",
-                type: "Select",
-                placeholder: "Select company",
-                defaultValue: filters.company,
-                options: [
-                  { label: "PT Aneka Tambang Tbk", value: "PT Aneka Tambang Tbk" },
-                  { label: "PT Other Company", value: "PT Other Company" },
-                ],
-              },
-              {
-                label: "Status",
-                name: "status",
-                type: "Select",
-                placeholder: "Select status",
-                defaultValue: filters.status,
-                options: [
-                  { label: "Active", value: "Active" },
-                  { label: "Pending", value: "Pending" },
-                  { label: "Completed", value: "Completed" },
-                  { label: "Cancelled", value: "Cancelled" },
-                ],
-              },
-              {
-                label: "Division",
-                name: "division",
-                type: "Select",
-                placeholder: "Select division",
-                defaultValue: filters.division,
-                options: [
-                  { label: "Engineering", value: "Engineering" },
-                  { label: "IT", value: "IT" },
-                  { label: "Environmental", value: "Environmental" },
-                  { label: "HR", value: "HR" },
-                ],
-              },
-              {
-                label: "Created Date",
-                name: "created_date",
-                type: "DateRangePicker",
-                defaultValue: filters.created_date,
-              },
+            label: "Status",
+            name: "status",
+            type: "Select",
+            placeholder: "Select Status",
+            width: 140,
+            defaultValue: filters.status,
+            options: [
+              { label: "Active", value: "Active" },
+              { label: "Pending", value: "Pending" },
+              { label: "Completed", value: "Completed" },
+              { label: "Cancelled", value: "Cancelled" },
             ],
           },
         ]}

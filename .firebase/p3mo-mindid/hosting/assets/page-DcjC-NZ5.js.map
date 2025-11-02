@@ -1,0 +1,1 @@
+{"version":3,"file":"page-DcjC-NZ5.js","sources":["../../src/app/(protected)/list-components/data-datable/page.jsx"],"sourcesContent":["const Components = () =>{\n    return <div>Test component</div>\n}\nexport default Components"],"names":["Components","jsx"],"mappings":"yXAAA,MAAMA,EAAa,IACRC,EAAAA,IAAC,OAAI,SAAA,gBAAA,CAAc"}

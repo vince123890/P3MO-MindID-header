@@ -1,0 +1,2 @@
+import{a as f}from"./@react-router-BOJM2k20.js";try{let e=typeof window<"u"?window:typeof global<"u"?global:typeof globalThis<"u"?globalThis:typeof self<"u"?self:{},d=new e.Error().stack;d&&(e._sentryDebugIds=e._sentryDebugIds||{},e._sentryDebugIds[d]="46c726ac-f340-457e-80ca-b844bd97d8e0",e._sentryDebugIdIdentifier="sentry-dbid-46c726ac-f340-457e-80ca-b844bd97d8e0")}catch{}const a=(e,d)=>{f.useEffect(()=>{var s;(s=e==null?void 0:e.errors)==null||s.forEach(t=>d==null?void 0:d(t))},[e])};export{a as u};
+//# sourceMappingURL=use-form-error-handling-Dj-OCOIU.js.map

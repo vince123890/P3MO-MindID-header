@@ -1,5 +1,5 @@
 import { Page, Section } from "admiral";
-import { Space, Button, Descriptions, Flex, message, Tag } from "antd";
+import { Space, Button, Descriptions, Flex, message, Tag, Modal } from "antd";
 import { generatePath, Link, useNavigate } from "react-router";
 import { Typography } from "antd";
 import { useParams } from "react-router";
@@ -19,7 +19,7 @@ export const Component = () => {
       path: "/messaging",
     },
     {
-      label: data?.data?.subject || "",
+      label: `Message Details: ${data?.data?.subject || ""}`,
       path: "#",
     },
   ];
@@ -106,8 +106,17 @@ export const Component = () => {
           <Button
             htmlType="button"
             onClick={() => {
-              message.success("Message successfully deleted");
-              navigate("/messaging");
+              Modal.confirm({
+                title: 'Delete Message',
+                content: 'Are you sure you want to delete this message?',
+                okText: 'Delete',
+                cancelText: 'Cancel',
+                okType: 'danger',
+                onOk() {
+                  message.success("Message successfully deleted");
+                  navigate("/messaging");
+                },
+              });
             }}
             danger
           >

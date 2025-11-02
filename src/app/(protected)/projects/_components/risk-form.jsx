@@ -1,7 +1,9 @@
-import { Button, Col, Form, Input, Row, DatePicker, Select, message, Space, Flex } from "antd";
+import { Button, Col, Form, Input, Row, DatePicker, Select, message, Space, Flex, Typography } from "antd";
 import { Section } from "admiral";
 import { useNavigate } from "react-router";
+import { useState } from "react";
 import dayjs from "dayjs";
+import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
 
 import { useFormErrorHandling } from "@/app/_hooks/form/use-form-error-handling";
 
@@ -12,10 +14,13 @@ export const RiskForm = ({
   isEdit = false, 
   isView = false,
   initialData = null,
-  onSubmit 
+  onSubmit
 }) => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
+  
+  // State for dynamic sections
+  const [combinedSections, setCombinedSections] = useState([{ id: 1 }]);
 
   useFormErrorHandling(error, ({ key, message }) =>
     form.setFields([{ name: key, errors: [message] }]),
@@ -142,7 +147,7 @@ export const RiskForm = ({
     >
       <Space direction="vertical" size="middle" style={{ width: "100%" }}>
         {/* Risk Identification Section */}
-        <Section>
+        <Section bodyStyle={{ padding: 0 }} bordered={false}>
           <Section title="Risk Identification">
             <Row gutter={16}>
               <Col span={12}>
@@ -221,7 +226,7 @@ export const RiskForm = ({
         </Section>
 
         {/* Risk Description Section */}
-        <Section>
+        <Section bodyStyle={{ padding: 0 }} bordered={false}>
           <Section title="Risk Description">
             <Row gutter={16}>
               <Col span={24}>
@@ -312,133 +317,192 @@ export const RiskForm = ({
           </Section>
         </Section>
 
-        {/* Mitigation Plan Section */}
+        {/* Combined Mitigation & Update Summary Section */}
         <Section>
-          <Section title="Mitigation Plan">
-            <Row gutter={16}>
-              <Col span={24}>
-                <Form.Item
-                  label="Rencana Mitigasi"
-                  name="rencana_mitigasi"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Mitigation plan is required",
-                    },
-                  ]}
-                >
-                  <Input.TextArea 
-                    placeholder="Enter detailed mitigation plan"
-                    rows={4}
-                    disabled={isView}
-                  />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item
-                  label="Status Mitigasi"
-                  name="status_mitigasi"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Mitigation status is required",
-                    },
-                  ]}
-                >
-                  <Select 
-                    placeholder="Select mitigation status"
-                    options={statusMitigasiOptions}
-                    disabled={isView}
-                  />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item
-                  label="Deadline Mitigasi"
-                  name="deadline_mitigasi"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Mitigation deadline is required",
-                    },
-                  ]}
-                >
-                  <DatePicker 
-                    style={{ width: "100%" }} 
-                    placeholder="Select mitigation deadline"
-                    disabled={isView}
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
-          </Section>
-        </Section>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+            <Typography.Text strong style={{ fontSize: "16px", margin: 0 }}>
+              Mitigation & Update Summary
+            </Typography.Text>
+            {!isView && (
+              <Button 
+                type="primary" 
+                icon={<PlusOutlined />}
+                onClick={() => {
+                  const newId = Math.max(...combinedSections.map(s => s.id)) + 1;
+                  setCombinedSections([...combinedSections, { id: newId }]);
+                }}
+              >
+                Add New
+              </Button>
+            )}
+          </div>
+          <Space direction="vertical" size="large" style={{ width: "100%" }}>
+            {combinedSections.map((section, index) => (
+              <div key={section.id} style={{ 
+                border: '1px solid #d9d9d9', 
+                borderRadius: '6px', 
+                padding: '16px',
+                backgroundColor: '#fafafa'
+              }}>
+                <div style={{ 
+                  display: 'flex', 
+                  justifyContent: 'space-between', 
+                  alignItems: 'center', 
+                  marginBottom: '16px',
+                  paddingBottom: '8px',
+                  borderBottom: '1px solid #e8e8e8'
+                }}>
+                  <Typography.Text strong style={{ fontSize: "14px" }}>
+                    Entry {index + 1}
+                  </Typography.Text>
+                  {combinedSections.length > 1 && !isView && (
+                    <Button
+                      type="text"
+                      icon={<DeleteOutlined />}
+                      onClick={() => {
+                        if (combinedSections.length > 1) {
+                          setCombinedSections(combinedSections.filter(s => s.id !== section.id));
+                        }
+                      }}
+                      danger
+                      size="small"
+                    />
+                  )}
+                </div>
+                
+                {/* Mitigation Plan Information */}
+                <Row gutter={16} style={{ marginBottom: '16px' }}>
+                  <Col span={24}>
+                    <Typography.Text strong style={{ marginBottom: '8px', display: 'block' }}>
+                      Mitigation Plan
+                    </Typography.Text>
+                  </Col>
+                  <Col span={24}>
+                    <Form.Item
+                      label="Rencana Mitigasi"
+                      name={`rencana_mitigasi_${section.id}`}
+                      rules={index === 0 ? [
+                        {
+                          required: true,
+                          message: "Mitigation plan is required",
+                        },
+                      ] : []}
+                    >
+                      <Input.TextArea 
+                        placeholder="Enter detailed mitigation plan"
+                        rows={4}
+                        disabled={isView}
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item
+                      label="Status Mitigasi"
+                      name={`status_mitigasi_${section.id}`}
+                      rules={index === 0 ? [
+                        {
+                          required: true,
+                          message: "Mitigation status is required",
+                        },
+                      ] : []}
+                    >
+                      <Select 
+                        placeholder="Select mitigation status"
+                        options={statusMitigasiOptions}
+                        disabled={isView}
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item
+                      label="Deadline Mitigasi"
+                      name={`deadline_mitigasi_${section.id}`}
+                      rules={index === 0 ? [
+                        {
+                          required: true,
+                          message: "Mitigation deadline is required",
+                        },
+                      ] : []}
+                    >
+                      <DatePicker 
+                        style={{ width: "100%" }} 
+                        placeholder="Select mitigation deadline"
+                        disabled={isView}
+                      />
+                    </Form.Item>
+                  </Col>
+                </Row>
 
-        {/* Update Information Section */}
-        <Section>
-          <Section title="Update Information">
-            <Row gutter={16}>
-              <Col span={24}>
-                <Form.Item
-                  label="Update Mitigasi"
-                  name="update_mitigasi"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Mitigation update is required",
-                    },
-                  ]}
-                >
-                  <Input.TextArea 
-                    placeholder="Enter latest mitigation update"
-                    rows={3}
-                    disabled={isView}
-                  />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item
-                  label="Tanggal Update Terkini"
-                  name="tanggal_update_terkini"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Last update date is required",
-                    },
-                  ]}
-                >
-                  <DatePicker 
-                    style={{ width: "100%" }} 
-                    placeholder="Select last update date"
-                    disabled={isView}
-                  />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item
-                  label="PIC"
-                  name="pic"
-                >
-                  <Input 
-                    placeholder="Enter person in charge"
-                    disabled={isView}
-                  />
-                </Form.Item>
-              </Col>
-              <Col span={24}>
-                <Form.Item
-                  label="Keterangan"
-                  name="keterangan"
-                >
-                  <Input.TextArea 
-                    placeholder="Enter additional remarks"
-                    rows={3}
-                    disabled={isView}
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
-          </Section>
+                {/* Update Information */}
+                <Row gutter={16}>
+                  <Col span={24}>
+                    <Typography.Text strong style={{ marginBottom: '8px', display: 'block' }}>
+                      Update Information
+                    </Typography.Text>
+                  </Col>
+                  <Col span={24}>
+                    <Form.Item
+                      label="Update Mitigasi"
+                      name={`update_mitigasi_${section.id}`}
+                      rules={index === 0 ? [
+                        {
+                          required: true,
+                          message: "Mitigation update is required",
+                        },
+                      ] : []}
+                    >
+                      <Input.TextArea 
+                        placeholder="Enter latest mitigation update"
+                        rows={3}
+                        disabled={isView}
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item
+                      label="Tanggal Update Terkini"
+                      name={`tanggal_update_terkini_${section.id}`}
+                      rules={index === 0 ? [
+                        {
+                          required: true,
+                          message: "Last update date is required",
+                        },
+                      ] : []}
+                    >
+                      <DatePicker 
+                        style={{ width: "100%" }} 
+                        placeholder="Select last update date"
+                        disabled={isView}
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item
+                      label="PIC"
+                      name={`pic_${section.id}`}
+                    >
+                      <Input 
+                        placeholder="Enter person in charge"
+                        disabled={isView}
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col span={24}>
+                    <Form.Item
+                      label="Keterangan"
+                      name={`keterangan_${section.id}`}
+                    >
+                      <Input.TextArea 
+                        placeholder="Enter additional remarks"
+                        rows={2}
+                        disabled={isView}
+                      />
+                    </Form.Item>
+                  </Col>
+                </Row>
+              </div>
+            ))}
+          </Space>
         </Section>
 
         {/* Action Buttons */}

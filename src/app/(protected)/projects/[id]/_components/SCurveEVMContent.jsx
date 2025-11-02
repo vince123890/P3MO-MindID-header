@@ -177,18 +177,18 @@ const SCurveEVMContent = ({ project }) => {
               alignItems: "center"
             }}>
               {[
-                { month: 'Jan', value: 0.8 },
-                { month: 'Feb', value: 1.3 },
-                { month: 'Mar', value: 2.2 },
-                { month: 'Apr', value: 3.0 },
-                { month: 'May', value: 5.0 },
-                { month: 'Jun', value: 8.1 },
-                { month: 'Jul', value: 12.0 },
-                { month: 'Aug', value: 17.0 },
-                { month: 'Sep', value: 23.3 },
-                { month: 'Oct', value: 31.0 },
-                { month: 'Nov', value: 37.0 },
-                { month: 'Dec', value: 44.0 }
+                { month: 'Jan', actual: 0.8, plan: 2.8 },
+                { month: 'Feb', actual: 1.3, plan: 4.8 },
+                { month: 'Mar', actual: 2.2, plan: 8.7 },
+                { month: 'Apr', actual: 3.0, plan: 15.1 },
+                { month: 'May', actual: 5.0, plan: 22.8 },
+                { month: 'Jun', actual: 8.1, plan: 32.7 },
+                { month: 'Jul', actual: 12.0, plan: 44.3 },
+                { month: 'Aug', actual: 17.0, plan: 56.8 },
+                { month: 'Sep', actual: 23.3, plan: 68.6 },
+                { month: 'Oct', actual: 31.0, plan: 78.4 },
+                { month: 'Nov', actual: 37.0, plan: 86.2 },
+                { month: 'Dec', actual: 44.0, plan: 92.5 }
               ].map((item, idx) => (
                 <div key={item.month} style={{ 
                   display: "flex",
@@ -206,21 +206,44 @@ const SCurveEVMContent = ({ project }) => {
                     {item.month}
                   </div>
                   
-                  {/* Progress Bar */}
+                  {/* Actual Progress Bar */}
                   <div style={{
                     width: "100%",
-                    height: "32px",
-                    backgroundColor: idx < 6 ? "#19315a" : "#c41e3a",
+                    height: "28px",
+                    backgroundColor: "#c41e3a",
                     borderRadius: "4px",
                     display: "flex",
+                    flexDirection: "column",
                     alignItems: "center",
                     justifyContent: "center",
                     color: "white",
-                    fontSize: "10px",
+                    fontSize: "9px",
                     fontWeight: "bold",
-                    textAlign: "center"
+                    textAlign: "center",
+                    padding: "2px"
                   }}>
-                    {item.value}%
+                    <div style={{ fontSize: "7px", opacity: 0.9 }}>Aktual</div>
+                    <div>{item.actual}%</div>
+                  </div>
+                  
+                  {/* Plan Progress Bar */}
+                  <div style={{
+                    width: "100%",
+                    height: "28px",
+                    backgroundColor: "#19315a",
+                    borderRadius: "4px",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: "white",
+                    fontSize: "9px",
+                    fontWeight: "bold",
+                    textAlign: "center",
+                    padding: "2px"
+                  }}>
+                    <div style={{ fontSize: "7px", opacity: 0.9 }}>Rencana</div>
+                    <div>{item.plan}%</div>
                   </div>
                 </div>
               ))}

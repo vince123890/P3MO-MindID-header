@@ -387,12 +387,32 @@ export const FormProject = ({ formProps, error, loading, isEdit }) => {
             <Row gutter={16}>
               <Col span={24}>
                 <Form.Item
+                  label="Sasaran"
+                  name="sasaran"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please select project objective",
+                    },
+                  ]}
+                >
+                  <Select placeholder="Select project objective">
+                    <Option value="A">Sasaran A: Orientasi peningkatan pendapatan dan laba</Option>
+                    <Option value="B">Sasaran B: Orientasi penugasan tetapi tidak merugikan</Option>
+                    <Option value="C">Sasaran C: Orientasi Peningkatan laba melalui usaha non core</Option>
+                    <Option value="D">Sasaran D: Orientasi peningkatan kehandalan sistem dan efisiensi biaya</Option>
+                    <Option value="E">Sasaran E: Orientasi saran penunjang kebutuhan operasional</Option>
+                  </Select>
+                </Form.Item>
+              </Col>
+              <Col span={24}>
+                <Form.Item
                   label="Sasaran (Penjelasan)"
                   name="sasaran_penjelasan"
                   rules={[
                     {
                       required: true,
-                      message: "Project objectives are required",
+                      message: "Project objectives description is required",
                     },
                   ]}
                 >

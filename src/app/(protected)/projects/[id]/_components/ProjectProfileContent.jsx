@@ -9,10 +9,9 @@ import {
   Col, 
   Dropdown, 
   Typography,
-  Card,
   Select,
-  DatePicker,
-  message
+  message,
+  Descriptions
 } from "antd";
 import { 
   EditOutlined, 
@@ -20,12 +19,14 @@ import {
   DownOutlined 
 } from "@ant-design/icons";
 import { Section } from "admiral";
+import { allKurs } from "@/app/(protected)/master-data/kurs/_data/index.js";
+import { allPerusahaans } from "@/app/(protected)/master-data/perusahaans/_data/index.js";
 
 const { TextArea } = Input;
 const { Text } = Typography;
 const { Option } = Select;
 
-const ProjectProfileContent = ({ project }) => {
+const ProjectProfileContent = ({ project, readOnly = false }) => {
   const [form] = Form.useForm();
   const [selectedAmendment, setSelectedAmendment] = useState("amendment-1");
   const [isEditing, setIsEditing] = useState(false);
@@ -40,7 +41,7 @@ const ProjectProfileContent = ({ project }) => {
       pmo_in_charge: "Ahmad Supardi",
       project_manager: "Budi Santoso",
       project_sponsor: "Direktur Operasi",
-      fase_proyek: "Pelaksanaan",
+      fase_proyek: "Construction",
       kode_inisiatif_proyek: "NIC-2025-001",
       steering_komite: "Komite Antam",
       tipe_proyek: "Infrastructure Development",
@@ -53,6 +54,7 @@ const ProjectProfileContent = ({ project }) => {
       lokasi_proyek: "Sulawesi Tenggara",
       longitudinal: "122.5000",
       latitude: "-4.0000",
+      kurs: "10",
       success_criteria: "Complete project on time with 95% quality standard and within budget allocation",
       latest_modified: "2025-01-15",
     },
@@ -64,7 +66,7 @@ const ProjectProfileContent = ({ project }) => {
       pmo_in_charge: "Ahmad Supardi",
       project_manager: "Budi Santoso", 
       project_sponsor: "Direktur Operasi",
-      fase_proyek: "Pelaksanaan",
+      fase_proyek: "Construction",
       kode_inisiatif_proyek: "NIC-2025-001",
       steering_komite: "Komite Antam",
       tipe_proyek: "Infrastructure Development",
@@ -76,7 +78,8 @@ const ProjectProfileContent = ({ project }) => {
       product: "Nickel Matte",
       lokasi_proyek: "Sulawesi Tenggara",
       longitudinal: "122.5000",
-      latitude: "-4.0000", 
+      latitude: "-4.0000",
+      kurs: "USD 1 = IDR 15320 (2023-09-20)",
       success_criteria: "Complete project on time with 95% quality standard and within budget allocation with increased capacity",
       latest_modified: "2025-02-01",
     },
@@ -101,6 +104,7 @@ const ProjectProfileContent = ({ project }) => {
       lokasi_proyek: "",
       longitudinal: "",
       latitude: "",
+      kurs: "",
       success_criteria: "",
       latest_modified: new Date().toISOString().split('T')[0],
     }
@@ -141,9 +145,14 @@ const ProjectProfileContent = ({ project }) => {
   const handleCreate = () => {
     setSelectedAmendment("amendment-3");
     setIsEditing(true);
+    // Auto-fill Company, Project Name, Kurs, and Fase Proyek with specific values
     form.setFieldsValue({
       ...amendmentData["amendment-3"],
-      amendment_number: 3
+      amendment_number: 3,
+      company: "PT. Antam",
+      project_name: "Nickel Processing Plant",
+      fase_proyek: "FEL 2",
+      kurs: "USD 1 = IDR 15320 (2023-09-20)"
     });
   };
 
@@ -166,65 +175,59 @@ const ProjectProfileContent = ({ project }) => {
   ];
 
   return (
-    <Section loading={false}>
+    <Section loading={false} bodyStyle={{ padding: 0 }} bordered={false}>
       <Space direction="vertical" size="large" style={{ width: "100%" }}>
         {/* Header with Amendment Selection and Actions */}
-        <Row justify="space-between" align="middle">
-          <Col>
-            <Space size="middle">
+        <Section>
+          <Row justify="space-between" align="middle">
+            <Col>
               <Text strong style={{ fontSize: "16px" }}>
                 Current: {selectedAmendment === "amendment-1" ? "Amendment 1" : 
                          selectedAmendment === "amendment-2" ? "Amendment 2" : "Amendment 3"}
               </Text>
-              {selectedAmendment === "amendment-2" && (
-                <Button
-                  icon={<EditOutlined />}
-                  onClick={handleEdit}
-                  disabled={isEditing}
+            </Col>
+            <Col>
+              <Space>
+                {!readOnly && selectedAmendment === "amendment-2" && (
+                  <Button
+                    icon={<EditOutlined />}
+                    onClick={handleEdit}
+                    disabled={isEditing}
+                  >
+                    Edit
+                  </Button>
+                )}
+                <Dropdown
+                  menu={{
+                    items: dropdownItems,
+                    onClick: ({ key }) => handleAmendmentChange(key)
+                  }}
+                  trigger={['click']}
                 >
-                  Edit
-                </Button>
-              )}
-            </Space>
-          </Col>
-          <Col>
-            <Space>
-              <Dropdown
-                menu={{
-                  items: dropdownItems,
-                  onClick: ({ key }) => handleAmendmentChange(key)
-                }}
-                trigger={['click']}
-              >
-                <Button>
-                  Select Amendment <DownOutlined />
-                </Button>
-              </Dropdown>
-              
-              <Dropdown
-                menu={{
-                  items: createDropdownItems,
-                  onClick: ({ key }) => handleCreate()
-                }}
-                trigger={['click']}
-              >
-                <Button type="primary" icon={<PlusOutlined />}>
-                  Add New Amendment <DownOutlined />
-                </Button>
-              </Dropdown>
-            </Space>
-          </Col>
-        </Row>
+                  <Button>
+                    Select Amendment <DownOutlined />
+                  </Button>
+                </Dropdown>
+                
+                {!readOnly && (
+                  <Button type="primary" icon={<PlusOutlined />} onClick={handleCreate}>
+                    Add Amendment 3
+                  </Button>
+                )}
+              </Space>
+            </Col>
+          </Row>
+        </Section>
 
-        {/* Main Form */}
-        <Card>
-          <Form
-            form={form}
-            layout="vertical"
-            initialValues={currentData}
-            disabled={!isEditing && selectedAmendment !== "amendment-3"}
-          >
-            <Row gutter={[24, 16]}>
+        {/* Main Content */}
+        {(isEditing || selectedAmendment === "amendment-3") ? (
+          <Section>
+            <Form
+              form={form}
+              layout="vertical"
+              initialValues={currentData}
+            >
+              <Row gutter={[24, 16]}>
               {/* Amendment Number */}
               <Col xs={24} md={12}>
                 <Form.Item
@@ -256,13 +259,11 @@ const ProjectProfileContent = ({ project }) => {
                 <Form.Item
                   label="Company"
                   name="company"
-                  rules={[{ required: true, message: "Please select company!" }]}
                 >
-                  <Select placeholder="Select company">
-                    <Option value="PT. Antam">PT. Antam</Option>
-                    <Option value="PT. Bukit Asam">PT. Bukit Asam</Option>
-                    <Option value="PT. Inalum">PT. Inalum</Option>
-                  </Select>
+                  <Input 
+                    placeholder="Enter company"
+                    disabled={true}
+                  />
                 </Form.Item>
               </Col>
 
@@ -274,10 +275,11 @@ const ProjectProfileContent = ({ project }) => {
                   rules={[{ required: true, message: "Please select PMO in charge!" }]}
                 >
                   <Select placeholder="Select PMO in charge">
-                    <Option value="Ahmad Supardi">Ahmad Supardi</Option>
-                    <Option value="Siti Rahayu">Siti Rahayu</Option>
-                    <Option value="Budi Hartono">Budi Hartono</Option>
-                    <Option value="Indira Sari">Indira Sari</Option>
+                    {allPerusahaans.data.items.map((company) => (
+                      <Option key={company.id} value={company.nama_perusahaan}>
+                        {company.nama_perusahaan}
+                      </Option>
+                    ))}
                   </Select>
                 </Form.Item>
               </Col>
@@ -287,14 +289,9 @@ const ProjectProfileContent = ({ project }) => {
                 <Form.Item
                   label="Project Name"
                   name="project_name"
-                  rules={[{ required: true, message: "Please select project name!" }]}
+                  rules={[{ required: true, message: "Please input project name!" }]}
                 >
-                  <Select placeholder="Select project name">
-                    <Option value="Nickel Processing Plant">Nickel Processing Plant</Option>
-                    <Option value="Coal Mining Expansion">Coal Mining Expansion</Option>
-                    <Option value="Aluminum Smelter">Aluminum Smelter</Option>
-                    <Option value="Green Energy Initiative">Green Energy Initiative</Option>
-                  </Select>
+                  <Input placeholder="Enter project name" />
                 </Form.Item>
               </Col>
 
@@ -330,13 +327,15 @@ const ProjectProfileContent = ({ project }) => {
                 <Form.Item
                   label="Fase Proyek"
                   name="fase_proyek"
-                  rules={[{ required: true, message: "Please select project phase!" }]}
                 >
-                  <Select placeholder="Select project phase">
-                    <Option value="Persiapan">Persiapan</Option>
-                    <Option value="Pelaksanaan">Pelaksanaan</Option>
-                    <Option value="InHPO">InHPO</Option>
+                  <Select placeholder="Select project phase" disabled={true}>
+                    <Option value="FEL 2">FEL 2</Option>
+                    <Option value="FEL 3">FEL 3</Option>
                     <Option value="FID">FID</Option>
+                    <Option value="Detail Engineering">Detail Engineering</Option>
+                    <Option value="Construction">Construction</Option>
+                    <Option value="Commissioning">Commissioning</Option>
+                    <Option value="Operate Optimize">Operate Optimize</Option>
                   </Select>
                 </Form.Item>
               </Col>
@@ -427,7 +426,7 @@ const ProjectProfileContent = ({ project }) => {
               </Col>
 
               {/* Capacity */}
-              <Col xs={24} md={8}>
+              <Col xs={24} md={12}>
                 <Form.Item
                   label="Capacity"
                   name="capacity"
@@ -438,7 +437,7 @@ const ProjectProfileContent = ({ project }) => {
               </Col>
 
               {/* Unit */}
-              <Col xs={24} md={8}>
+              <Col xs={24} md={12}>
                 <Form.Item
                   label="Unit"
                   name="unit"
@@ -448,25 +447,25 @@ const ProjectProfileContent = ({ project }) => {
                 </Form.Item>
               </Col>
 
-              {/* Product */}
-              <Col xs={24} md={8}>
-                <Form.Item
-                  label="Product"
-                  name="product"
-                  rules={[{ required: true, message: "Please input product!" }]}
-                >
-                  <Input placeholder="Enter product" />
-                </Form.Item>
-              </Col>
-
               {/* Lokasi Proyek */}
-              <Col xs={24}>
+              <Col xs={24} md={12}>
                 <Form.Item
                   label="Lokasi Proyek"
                   name="lokasi_proyek"
                   rules={[{ required: true, message: "Please input project location!" }]}
                 >
                   <Input placeholder="Enter project location" />
+                </Form.Item>
+              </Col>
+
+              {/* Product */}
+              <Col xs={24} md={12}>
+                <Form.Item
+                  label="Product"
+                  name="product"
+                  rules={[{ required: true, message: "Please input product!" }]}
+                >
+                  <Input placeholder="Enter product" />
                 </Form.Item>
               </Col>
 
@@ -492,16 +491,15 @@ const ProjectProfileContent = ({ project }) => {
                 </Form.Item>
               </Col>
 
-              {/* Success Criteria */}
-              <Col xs={24}>
+              {/* Kurs */}
+              <Col xs={24} md={12}>
                 <Form.Item
-                  label="Success Criteria"
-                  name="success_criteria"
-                  rules={[{ required: true, message: "Please input success criteria!" }]}
+                  label="Kurs"
+                  name="kurs"
                 >
-                  <TextArea 
-                    rows={4} 
-                    placeholder="Enter project success criteria"
+                  <Input 
+                    placeholder="Enter kurs"
+                    disabled={true}
                   />
                 </Form.Item>
               </Col>
@@ -518,10 +516,23 @@ const ProjectProfileContent = ({ project }) => {
                   />
                 </Form.Item>
               </Col>
-            </Row>
 
-            {/* Action Buttons */}
-            {(isEditing || selectedAmendment === "amendment-3") && (
+              {/* Success Criteria */}
+              <Col xs={24}>
+                <Form.Item
+                  label="Success Criteria"
+                  name="success_criteria"
+                  rules={[{ required: true, message: "Please input success criteria!" }]}
+                >
+                  <TextArea 
+                    rows={4} 
+                    placeholder="Enter project success criteria"
+                  />
+                </Form.Item>
+              </Col>
+              </Row>
+
+              {/* Action Buttons */}
               <Row justify="end" style={{ marginTop: "24px" }}>
                 <Space>
                   <Button onClick={handleCancel}>
@@ -532,9 +543,146 @@ const ProjectProfileContent = ({ project }) => {
                   </Button>
                 </Space>
               </Row>
-            )}
-          </Form>
-        </Card>
+            </Form>
+          </Section>
+        ) : (
+          <Section title="Project Profile Information">
+            <Descriptions
+              bordered
+              layout="horizontal"
+              labelStyle={{ width: '25%' }}
+              contentStyle={{ width: '25%' }}
+              column={2}
+              items={[
+                {
+                  key: "amendment_number",
+                  label: "Amendment Number",
+                  children: <Text strong>{currentData.amendment_number ?? "-"}</Text>,
+                },
+                {
+                  key: "others",
+                  label: "Others",
+                  children: <Text strong>{currentData.others || "-"}</Text>,
+                },
+                {
+                  key: "company",
+                  label: "Company",
+                  children: <Text strong>{currentData.company ?? "-"}</Text>,
+                },
+                {
+                  key: "pmo_in_charge",
+                  label: "PMO In Charge",
+                  children: <Text strong>{currentData.pmo_in_charge ?? "-"}</Text>,
+                },
+                {
+                  key: "project_name",
+                  label: "Project Name",
+                  children: <Text strong>{currentData.project_name ?? "-"}</Text>,
+                },
+                {
+                  key: "project_manager",
+                  label: "Project Manager",
+                  children: <Text strong>{currentData.project_manager ?? "-"}</Text>,
+                },
+                {
+                  key: "project_sponsor",
+                  label: "Project Sponsor",
+                  children: <Text strong>{currentData.project_sponsor ?? "-"}</Text>,
+                },
+                {
+                  key: "fase_proyek",
+                  label: "Fase Proyek",
+                  children: <Text strong>{currentData.fase_proyek ?? "-"}</Text>,
+                },
+                {
+                  key: "kode_inisiatif_proyek",
+                  label: "Kode Inisiatif Proyek",
+                  children: <Text strong>{currentData.kode_inisiatif_proyek ?? "-"}</Text>,
+                },
+                {
+                  key: "steering_komite",
+                  label: "Steering Komite",
+                  children: <Text strong>{currentData.steering_komite ?? "-"}</Text>,
+                },
+                {
+                  key: "tipe_proyek",
+                  label: "Tipe Proyek",
+                  children: <Text strong>{currentData.tipe_proyek ?? "-"}</Text>,
+                },
+                {
+                  key: "tahun_mulai_proyek",
+                  label: "Tahun Mulai Proyek",
+                  children: <Text strong>{currentData.tahun_mulai_proyek ?? "-"}</Text>,
+                },
+                {
+                  key: "tahun_target_selesai",
+                  label: "Tahun Target Selesai",
+                  children: <Text strong>{currentData.tahun_target_selesai ?? "-"}</Text>,
+                },
+                {
+                  key: "main_contractor",
+                  label: "Main Kontraktor",
+                  children: <Text strong>{currentData.main_contractor ?? "-"}</Text>,
+                },
+                {
+                  key: "capacity",
+                  label: "Capacity",
+                  children: <Text strong>{currentData.capacity ?? "-"}</Text>,
+                },
+                {
+                  key: "unit",
+                  label: "Unit",
+                  children: <Text strong>{currentData.unit ?? "-"}</Text>,
+                },
+                {
+                  key: "product",
+                  label: "Product",
+                  children: <Text strong>{currentData.product ?? "-"}</Text>,
+                },
+                {
+                  key: "lokasi_proyek",
+                  label: "Lokasi Proyek",
+                  children: <Text strong>{currentData.lokasi_proyek ?? "-"}</Text>,
+                  span: 2,
+                },
+                {
+                  key: "longitudinal",
+                  label: "Longitudinal",
+                  children: <Text strong>{currentData.longitudinal ?? "-"}</Text>,
+                },
+                {
+                  key: "latitude",
+                  label: "Latitude",
+                  children: <Text strong>{currentData.latitude ?? "-"}</Text>,
+                },
+                {
+                  key: "kurs",
+                  label: "Kurs",
+                  children: <Text strong>
+                    {currentData.kurs ? 
+                      (() => {
+                        const kursItem = allKurs.data.items.find(k => k.id === currentData.kurs);
+                        return kursItem ? `USD 1 = IDR ${kursItem.nilai_kurs} (${kursItem.tanggal})` : "-";
+                      })()
+                      : "-"
+                    }
+                  </Text>,
+                },
+                {
+                  key: "success_criteria",
+                  label: "Success Criteria",
+                  children: <Text strong>{currentData.success_criteria ?? "-"}</Text>,
+                  span: 2,
+                },
+                {
+                  key: "latest_modified",
+                  label: "Latest Modified",
+                  children: <Text strong>{currentData.latest_modified ?? "-"}</Text>,
+                },
+              ]}
+            />
+          </Section>
+        )}
       </Space>
     </Section>
   );

@@ -1,6 +1,7 @@
 {
   "module_name": "Dashboard - Initiative Project Pipeline",
-  "updated_at": "2025-10-21T11:17:00.000Z",
+  "updated_at": "2025-10-28T01:24:00.000Z",
+  "note": "Menu removed from sidebar - page still accessible via direct URL",
   "data": [
     {
       "code": "<b>IPP01</b>",

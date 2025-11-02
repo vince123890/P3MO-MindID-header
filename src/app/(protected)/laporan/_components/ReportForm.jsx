@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Form, Select, DatePicker, Button, message, Space, Card, Typography } from "antd";
+import { Form, Select, Button, message, Space, Card, Typography, Row, Col, Flex } from "antd";
 import { FileTextOutlined, DownloadOutlined, PrinterOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import { Section } from "admiral";
@@ -8,7 +8,6 @@ import { allProjects } from "../../projects/_data";
 import { generateReportPreview, getMonthName } from "../_data";
 import { PDFViewer } from "@/app/_components/ui/pdf-viewer";
 
-const { RangePicker } = DatePicker;
 const { Title, Text } = Typography;
 
 export default function ReportForm() {
@@ -23,12 +22,35 @@ export default function ReportForm() {
     project: project
   }));
 
+  // Generate month-year options for dropdown
+  const monthYearOptions = [];
+  const currentDate = dayjs();
+  const currentYear = currentDate.year();
+  const currentMonth = currentDate.month();
+  
+  // Generate options for the last 12 months including current month
+  for (let i = 0; i < 12; i++) {
+    const date = currentDate.subtract(i, 'month');
+    const monthName = date.format('MMMM');
+    const year = date.year();
+    const value = date.format('YYYY-MM');
+    
+    monthYearOptions.push({
+      value: value,
+      label: `${monthName} ${year}`
+    });
+  }
+
   const handleGenerateReport = async (values) => {
     setLoading(true);
     
     try {
-      const { project_id, date_range } = values;
-      const [startDate, endDate] = date_range;
+      const { project_id, periode_laporan } = values;
+      
+      // Parse the selected month-year (format: YYYY-MM)
+      const selectedDate = dayjs(periode_laporan);
+      const startDate = selectedDate.startOf('month');
+      const endDate = selectedDate.endOf('month');
       
       // Simulate API call delay
       await new Promise(resolve => setTimeout(resolve, 1500));
@@ -93,111 +115,111 @@ export default function ReportForm() {
 
   return (
     <Space direction="vertical" size="large" style={{ width: "100%" }}>
-      <Section title="Generate Laporan Bulanan" loading={false}>
-        <Card>
+      <Section>
+        <Section title="Report Information">
           <Form
             form={form}
             layout="vertical"
             onFinish={handleGenerateReport}
-            style={{ maxWidth: 600 }}
           >
-            <Form.Item
-              label="Pilih Project"
-              name="project_id"
-              rules={[
-                { required: true, message: "Silakan pilih project!" }
-              ]}
-            >
-              <Select
-                placeholder="Pilih project yang akan dilaporkan"
-                showSearch
-                optionFilterProp="label"
-                options={projectOptions}
-                size="large"
-              />
-            </Form.Item>
-
-            <Form.Item
-              label="Periode Laporan"
-              name="date_range"
-              rules={[
-                { required: true, message: "Silakan pilih periode laporan!" }
-              ]}
-            >
-              <RangePicker
-                style={{ width: "100%" }}
-                size="large"
-                format="DD/MM/YYYY"
-                placeholder={["Tanggal Mulai", "Tanggal Selesai"]}
-              />
-            </Form.Item>
-
-            <Form.Item>
-              <Space>
-                <Button
-                  type="primary"
-                  htmlType="submit"
-                  icon={<FileTextOutlined />}
-                  loading={loading}
-                  size="large"
+            <Row gutter={16}>
+              <Col span={12}>
+                <Form.Item
+                  label="Pilih Project"
+                  name="project_id"
+                  rules={[
+                    { required: true, message: "Silakan pilih project!" }
+                  ]}
                 >
-                  {loading ? "Generating..." : "Generate Laporan"}
-                </Button>
-                
-                <Button
-                  onClick={resetForm}
-                  size="large"
+                  <Select
+                    placeholder="Pilih project yang akan dilaporkan"
+                    showSearch
+                    optionFilterProp="label"
+                    options={projectOptions}
+                  />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item
+                  label="Periode Laporan"
+                  name="periode_laporan"
+                  rules={[
+                    { required: true, message: "Silakan pilih periode laporan!" }
+                  ]}
                 >
-                  Reset
-                </Button>
-              </Space>
-            </Form.Item>
+                  <Select
+                    placeholder="Pilih periode laporan"
+                    options={monthYearOptions}
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
           </Form>
-        </Card>
+        </Section>
       </Section>
+
+      <Flex justify="flex-end" gap={16}>
+        <Button
+          onClick={resetForm}
+          disabled={loading}
+        >
+          Reset
+        </Button>
+        <Button
+          type="primary"
+          htmlType="submit"
+          icon={<FileTextOutlined />}
+          loading={loading}
+          onClick={() => form.submit()}
+        >
+          {loading ? "Generating..." : "Generate Laporan"}
+        </Button>
+      </Flex>
 
       {showPreview && generatedReport && (
         <Section title="Preview Laporan" loading={false}>
           <Space direction="vertical" size="middle" style={{ width: "100%" }}>
             <Card size="small">
-              <Space direction="vertical" size="small">
-                <Title level={4} style={{ margin: 0 }}>
-                  {generatedReport.file_name}
-                </Title>
-                <Text type="secondary">
-                  Periode: {dayjs(generatedReport.period_start).format('DD/MM/YYYY')} - {dayjs(generatedReport.period_end).format('DD/MM/YYYY')}
-                </Text>
-                <Text type="secondary">
-                  Generated: {dayjs(generatedReport.generated_at).format('DD/MM/YYYY HH:mm')}
-                </Text>
-              </Space>
-              
-              <Space style={{ marginTop: 16 }}>
-                <Button
-                  type="primary"
-                  icon={<PrinterOutlined />}
-                  onClick={handlePrint}
-                >
-                  Print Laporan
-                </Button>
-                
-                <Button
-                  icon={<DownloadOutlined />}
-                  onClick={handleDownload}
-                >
-                  Download PDF
-                </Button>
+              <Space direction="vertical" size="small" style={{ width: '100%' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div>
+                    <Title level={4} style={{ margin: 0 }}>
+                      {generatedReport.file_name}
+                    </Title>
+                    <Text type="secondary">
+                      Periode: {dayjs(generatedReport.period_start).format('DD/MM/YYYY')} - {dayjs(generatedReport.period_end).format('DD/MM/YYYY')}
+                    </Text>
+                    <Text type="secondary" style={{ display: 'block' }}>
+                      Generated: {dayjs(generatedReport.generated_at).format('DD/MM/YYYY HH:mm')}
+                    </Text>
+                  </div>
+                  
+                  <Space>
+                    <Button
+                      type="primary"
+                      icon={<PrinterOutlined />}
+                      onClick={handlePrint}
+                    >
+                      Print Laporan
+                    </Button>
+                    
+                    <Button
+                      icon={<DownloadOutlined />}
+                      onClick={handleDownload}
+                    >
+                      Download PDF
+                    </Button>
+                  </Space>
+                </div>
               </Space>
             </Card>
 
-            <Card>
-              <PDFViewer
-                filePath={generatedReport.file_path}
-                fileName={generatedReport.file_name}
-                height="700px"
-                width="100%"
-              />
-            </Card>
+            <PDFViewer
+              filePath={generatedReport.file_path}
+              fileName={generatedReport.file_name}
+              height="700px"
+              width="100%"
+            />
           </Space>
         </Section>
       )}

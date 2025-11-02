@@ -16,24 +16,19 @@ export const Component = () => {
       path: "/master-data/kurs",
     },
     {
-      label: "Create Kurs",
+      label: "Tambah Kurs",
       path: "#",
     },
   ];
 
   const handleOnFinish = (values) => {
-    // Automatically set status to Active when creating
-    const dataWithStatus = {
-      ...values,
-      status: "Active",
-    };
     message.success("Kurs successfully created");
     navigate("/master-data/kurs");
   };
 
   return (
     <Page
-      title="Add Kurs"
+      title="Tambah Kurs"
       breadcrumbs={breadcrumb}
       noStyle
       goBack={() => navigate("/master-data/kurs")}

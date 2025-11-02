@@ -1,7 +1,9 @@
-import { Button, Col, Form, Input, Row, DatePicker, Select, message, Space, Flex } from "antd";
+import { Button, Col, Form, Input, Row, DatePicker, Select, message, Space, Flex, Typography } from "antd";
 import { Section } from "admiral";
 import { useNavigate } from "react-router";
+import { useState } from "react";
 import dayjs from "dayjs";
+import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
 
 import { useFormErrorHandling } from "@/app/_hooks/form/use-form-error-handling";
 
@@ -16,6 +18,18 @@ export const IssueForm = ({
 }) => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
+  
+  // State for dynamic sections - initialize with 3 entries for edit mode, 1 for create
+  // For view mode, use resolution_entries from initialData if available
+  const [combinedSections, setCombinedSections] = useState(() => {
+    if (isView && initialData?.resolution_entries) {
+      return initialData.resolution_entries;
+    } else if (isEdit) {
+      return [{ id: 1 }, { id: 2 }, { id: 3 }];
+    } else {
+      return [{ id: 1 }];
+    }
+  });
 
   useFormErrorHandling(error, ({ key, message }) =>
     form.setFields([{ name: key, errors: [message] }]),
@@ -141,12 +155,29 @@ export const IssueForm = ({
         deadline_resolution: initialData?.deadline_resolution ? dayjs(initialData.deadline_resolution) : null,
         tanggal_update_terkini: initialData?.tanggal_update_terkini ? dayjs(initialData.tanggal_update_terkini) : dayjs(),
         deadline: initialData?.deadline ? dayjs(initialData.deadline) : null,
+        // Initialize resolution_entries data for view mode
+        ...(isView && initialData?.resolution_entries ? 
+          Object.fromEntries(
+            initialData.resolution_entries.flatMap((entry, index) => [
+              [`dampak_issue_${entry.id}`, entry.dampak_issue || ''],
+              [`pic_${entry.id}`, entry.pic || ''],
+              [`prioritas_issue_${entry.id}`, entry.prioritas_issue || ''],
+              [`resolution_${entry.id}`, entry.resolution || ''],
+              [`deadline_resolution_${entry.id}`, entry.deadline_resolution ? dayjs(entry.deadline_resolution) : null],
+              [`deadline_${entry.id}`, entry.deadline ? dayjs(entry.deadline) : null],
+              [`issue_update_${entry.id}`, entry.issue_update || ''],
+              [`tanggal_update_terkini_${entry.id}`, entry.tanggal_update_terkini ? dayjs(entry.tanggal_update_terkini) : null],
+              [`progress_update_${entry.id}`, entry.progress_update || ''],
+              [`keterangan_${entry.id}`, entry.keterangan || ''],
+            ])
+          ) : {}
+        ),
       }}
     >
       <Space direction="vertical" size="middle" style={{ width: "100%" }}>
         {/* Issue Information Section */}
-        <Section>
-          <Section title="Issue Information">
+        <Section bodyStyle={{ padding: 0 }} bordered={false}>
+          <Section title="Issue Information" bodyStyle={{ padding: 24 }}>
             <Row gutter={16}>
               <Col span={12}>
                 <Form.Item
@@ -254,14 +285,6 @@ export const IssueForm = ({
                   />
                 </Form.Item>
               </Col>
-            </Row>
-          </Section>
-        </Section>
-
-        {/* Issue Details Section */}
-        <Section>
-          <Section title="Issue Details">
-            <Row gutter={16}>
               <Col span={24}>
                 <Form.Item
                   label="Deskripsi Issue"
@@ -280,185 +303,259 @@ export const IssueForm = ({
                   />
                 </Form.Item>
               </Col>
-              <Col span={24}>
-                <Form.Item
-                  label="Dampak Issue"
-                  name="dampak_issue"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Issue impact is required",
-                    },
-                  ]}
-                >
-                  <Input.TextArea 
-                    placeholder="Enter issue impact"
-                    rows={3}
-                    disabled={isView}
-                  />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item
-                  label="PIC"
-                  name="pic"
-                  rules={[
-                    {
-                      required: true,
-                      message: "PIC is required",
-                    },
-                  ]}
-                >
-                  <Select 
-                    placeholder="Select PIC"
-                    options={picOptions}
-                    disabled={isView}
-                  />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item
-                  label="Prioritas Issue"
-                  name="prioritas_issue"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Issue priority is required",
-                    },
-                  ]}
-                >
-                  <Select 
-                    placeholder="Select issue priority"
-                    options={prioritasOptions}
-                    disabled={isView}
-                  />
-                </Form.Item>
-              </Col>
             </Row>
           </Section>
         </Section>
 
-        {/* Resolution Section */}
+        {/* Combined Resolution & Update Summary Section */}
         <Section>
-          <Section title="Resolution Information">
-            <Row gutter={16}>
-              <Col span={24}>
-                <Form.Item
-                  label="Resolution"
-                  name="resolution"
-                >
-                  <Input.TextArea 
-                    placeholder="Enter resolution details"
-                    rows={4}
-                    disabled={isView}
-                  />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item
-                  label="Deadline Resolution"
-                  name="deadline_resolution"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Resolution deadline is required",
-                    },
-                  ]}
-                >
-                  <DatePicker 
-                    style={{ width: "100%" }} 
-                    placeholder="Select resolution deadline"
-                    disabled={isView}
-                  />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item
-                  label="Deadline"
-                  name="deadline"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Deadline is required",
-                    },
-                  ]}
-                >
-                  <DatePicker 
-                    style={{ width: "100%" }} 
-                    placeholder="Select deadline"
-                    disabled={isView}
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
-          </Section>
-        </Section>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+            <Typography.Text strong style={{ fontSize: "16px", margin: 0 }}>
+              Resolution & Update Summary
+            </Typography.Text>
+            {!isView && (
+              <Button 
+                type="primary" 
+                icon={<PlusOutlined />}
+                onClick={() => {
+                  const newId = Math.max(...combinedSections.map(s => s.id)) + 1;
+                  setCombinedSections([...combinedSections, { id: newId }]);
+                }}
+              >
+                Add New
+              </Button>
+            )}
+          </div>
+          <Space direction="vertical" size="large" style={{ width: "100%" }}>
+            {combinedSections.map((section, index) => (
+              <div key={section.id} style={{ 
+                border: '1px solid #d9d9d9', 
+                borderRadius: '6px', 
+                padding: '16px',
+                backgroundColor: '#fafafa'
+              }}>
+                <div style={{ 
+                  display: 'flex', 
+                  justifyContent: 'space-between', 
+                  alignItems: 'center', 
+                  marginBottom: '16px',
+                  paddingBottom: '8px',
+                  borderBottom: '1px solid #e8e8e8'
+                }}>
+                  <Typography.Text strong style={{ fontSize: "14px" }}>
+                    Entry {index + 1}
+                  </Typography.Text>
+                  {combinedSections.length > 1 && !isView && (
+                    <Button
+                      type="text"
+                      icon={<DeleteOutlined />}
+                      onClick={() => {
+                        if (combinedSections.length > 1) {
+                          setCombinedSections(combinedSections.filter(s => s.id !== section.id));
+                        }
+                      }}
+                      danger
+                      size="small"
+                    />
+                  )}
+                </div>
+                
+                {/* Issue Detail Section - Moved here and using same component style as Resolution Plan */}
+                <Row gutter={16} style={{ marginBottom: '16px' }}>
+                  <Col span={24}>
+                    <Typography.Text strong style={{ marginBottom: '8px', display: 'block' }}>
+                      Issue Detail
+                    </Typography.Text>
+                  </Col>
+                  <Col span={24}>
+                    <Form.Item
+                      label="Dampak Issue"
+                      name={`dampak_issue_${section.id}`}
+                      rules={index === 0 ? [
+                        {
+                          required: true,
+                          message: "Dampak issue is required",
+                        },
+                      ] : []}
+                    >
+                      <Input.TextArea 
+                        placeholder="Enter dampak issue"
+                        rows={3}
+                        disabled={isView}
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item
+                      label="PIC"
+                      name={`pic_${section.id}`}
+                      rules={index === 0 ? [
+                        {
+                          required: true,
+                          message: "PIC is required",
+                        },
+                      ] : []}
+                    >
+                      <Select 
+                        placeholder="Select PIC"
+                        options={picOptions}
+                        disabled={isView}
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item
+                      label="Prioritas Issue"
+                      name={`prioritas_issue_${section.id}`}
+                      rules={index === 0 ? [
+                        {
+                          required: true,
+                          message: "Prioritas issue is required",
+                        },
+                      ] : []}
+                    >
+                      <Select 
+                        placeholder="Select issue priority"
+                        options={prioritasOptions}
+                        disabled={isView}
+                      />
+                    </Form.Item>
+                  </Col>
+                </Row>
 
-        {/* Update Information Section */}
-        <Section>
-          <Section title="Update Information">
-            <Row gutter={16}>
-              <Col span={24}>
-                <Form.Item
-                  label="Issue Update"
-                  name="issue_update"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Issue update is required",
-                    },
-                  ]}
-                >
-                  <Input.TextArea 
-                    placeholder="Enter issue update"
-                    rows={3}
-                    disabled={isView}
-                  />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item
-                  label="Tanggal Update Terkini"
-                  name="tanggal_update_terkini"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Last update date is required",
-                    },
-                  ]}
-                >
-                  <DatePicker 
-                    style={{ width: "100%" }} 
-                    placeholder="Select last update date"
-                    disabled={isView}
-                  />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item
-                  label="Progress Update"
-                  name="progress_update"
-                >
-                  <Input 
-                    placeholder="Enter progress update"
-                    disabled={isView}
-                  />
-                </Form.Item>
-              </Col>
-              <Col span={24}>
-                <Form.Item
-                  label="Keterangan"
-                  name="keterangan"
-                >
-                  <Input.TextArea 
-                    placeholder="Enter additional remarks"
-                    rows={3}
-                    disabled={isView}
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
-          </Section>
+                {/* Resolution Information */}
+                <Row gutter={16} style={{ marginBottom: '16px' }}>
+                  <Col span={24}>
+                    <Typography.Text strong style={{ marginBottom: '8px', display: 'block' }}>
+                      Resolution Plan
+                    </Typography.Text>
+                  </Col>
+                  <Col span={24}>
+                    <Form.Item
+                      label="Resolution"
+                      name={`resolution_${section.id}`}
+                      rules={index === 0 ? [
+                        {
+                          required: true,
+                          message: "Resolution is required",
+                        },
+                      ] : []}
+                    >
+                      <Input.TextArea 
+                        placeholder="Enter resolution details"
+                        rows={4}
+                        disabled={isView}
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item
+                      label="Deadline Resolution"
+                      name={`deadline_resolution_${section.id}`}
+                      rules={index === 0 ? [
+                        {
+                          required: true,
+                          message: "Resolution deadline is required",
+                        },
+                      ] : []}
+                    >
+                      <DatePicker 
+                        style={{ width: "100%" }} 
+                        placeholder="Select resolution deadline"
+                        disabled={isView}
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item
+                      label="Deadline"
+                      name={`deadline_${section.id}`}
+                      rules={index === 0 ? [
+                        {
+                          required: true,
+                          message: "Deadline is required",
+                        },
+                      ] : []}
+                    >
+                      <DatePicker 
+                        style={{ width: "100%" }} 
+                        placeholder="Select deadline"
+                        disabled={isView}
+                      />
+                    </Form.Item>
+                  </Col>
+                </Row>
+
+                {/* Update Information */}
+                <Row gutter={16}>
+                  <Col span={24}>
+                    <Typography.Text strong style={{ marginBottom: '8px', display: 'block' }}>
+                      Update Information
+                    </Typography.Text>
+                  </Col>
+                  <Col span={24}>
+                    <Form.Item
+                      label="Issue Update"
+                      name={`issue_update_${section.id}`}
+                      rules={index === 0 ? [
+                        {
+                          required: true,
+                          message: "Issue update is required",
+                        },
+                      ] : []}
+                    >
+                      <Input.TextArea 
+                        placeholder="Enter issue update"
+                        rows={3}
+                        disabled={isView}
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item
+                      label="Tanggal Update Terkini"
+                      name={`tanggal_update_terkini_${section.id}`}
+                      rules={index === 0 ? [
+                        {
+                          required: true,
+                          message: "Last update date is required",
+                        },
+                      ] : []}
+                    >
+                      <DatePicker 
+                        style={{ width: "100%" }} 
+                        placeholder="Select last update date"
+                        disabled={isView}
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item
+                      label="Progress Update"
+                      name={`progress_update_${section.id}`}
+                    >
+                      <Input 
+                        placeholder="Enter progress update"
+                        disabled={isView}
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col span={24}>
+                    <Form.Item
+                      label="Keterangan"
+                      name={`keterangan_${section.id}`}
+                    >
+                      <Input.TextArea 
+                        placeholder="Enter additional remarks"
+                        rows={3}
+                        disabled={isView}
+                      />
+                    </Form.Item>
+                  </Col>
+                </Row>
+              </div>
+            ))}
+          </Space>
         </Section>
 
         {/* Action Buttons */}
@@ -467,7 +564,7 @@ export const IssueForm = ({
             <Button 
               type="text" 
               disabled={loading} 
-              onClick={() => navigate(-1)}
+              onClick={onSubmit ? () => onSubmit({ __cancel: true }) : () => navigate(-1)}
             >
               Cancel
             </Button>

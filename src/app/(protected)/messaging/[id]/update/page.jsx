@@ -24,11 +24,11 @@ export const Component = () => {
       path: "/messaging",
     },
     {
-      label: data?.data?.subject ?? "-",
+      label: `Message Details: ${data?.data?.subject ?? "-"}`,
       path: generatePath("/messaging/:id", { id: params.id }),
     },
     {
-      label: "Edit",
+      label: `Edit Message: ${data?.data?.subject}`,
       path: "#",
     },
   ];

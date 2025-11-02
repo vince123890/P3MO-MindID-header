@@ -8,6 +8,8 @@ import {
   BellOutlined,
   ReloadOutlined,
   LogoutOutlined,
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
 } from "@ant-design/icons";
 
 import { useSession } from "../_components/providers/session";
@@ -18,6 +20,7 @@ function Layout() {
   const { switchRole, signout, session } = useSession();
   const role = session?.user?.role;
   const [rolePopup, setRolePopup] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
   const path = useResolvedPath();
 
   // Safe pathname extraction to prevent object-to-primitive conversion
@@ -79,12 +82,24 @@ function Layout() {
     <MainLayout
       header={{
         brandLogo: (
-          <Typography.Title
-            level={3}
-            style={{ color: colorWhite, margin: "0 auto", width: "fit-content" }}
-          >
-            Prototype
-          </Typography.Title>
+          <Flex align="center" justify="space-between" style={{ width: "100%" }}>
+            <Typography.Title
+              level={3}
+              style={{ color: colorWhite, margin: 0 }}
+            >
+              Prototype
+            </Typography.Title>
+            <Button
+              type="text"
+              icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+              onClick={() => setCollapsed(!collapsed)}
+              style={{
+                color: colorWhite,
+                fontSize: "18px",
+              }}
+              title={collapsed ? "Show Sidebar" : "Hide Sidebar"}
+            />
+          </Flex>
         ),
       }}
       sidebar={{
@@ -93,27 +108,34 @@ function Layout() {
             <Dropdown menu={{ items: AccountItem }} trigger={["hover"]}>
               <Flex gap="8px" align="center" style={{ width: "100%" }}>
                 <Avatar icon={<UserOutlined />} />
-                <Flex vertical style={{ flex: 1 }}>
-                  <Flex gap="8px">
-                    <Typography.Text strong style={{ color: colorWhite, fontSize: 14 }}>
-                      {session?.user?.name}
+                {!collapsed && (
+                  <Flex vertical style={{ flex: 1 }}>
+                    <Flex gap="8px">
+                      <Typography.Text strong style={{ color: colorWhite, fontSize: 14 }}>
+                        {session?.user?.name}
+                      </Typography.Text>
+                      <DownOutlined style={{ color: colorWhite }} />
+                    </Flex>
+                    <Typography.Text style={{ fontSize: 12, color: colorWhite }} type="secondary">
+                      {session?.user?.role}
                     </Typography.Text>
-                    <DownOutlined style={{ color: colorWhite }} />
                   </Flex>
-                  <Typography.Text style={{ fontSize: 12, color: colorWhite }} type="secondary">
-                    {session?.user?.role}
-                  </Typography.Text>
-                </Flex>
+                )}
               </Flex>
             </Dropdown>
-            <Badge dot={true} offset={[-10, 6]}>
-              <Button type="text" shape="circle">
-                <BellOutlined style={{ fontSize: "24px", color: colorWhite }} />
-              </Button>
-            </Badge>
+            {!collapsed && (
+              <Badge dot={true} offset={[-10, 6]}>
+                <Button type="text" shape="circle">
+                  <BellOutlined style={{ fontSize: "24px", color: colorWhite }} />
+                </Button>
+              </Badge>
+            )}
           </Flex>
         ),
         width: 250,
+        collapsedWidth: 80,
+        collapsed: collapsed,
+        collapsible: true,
         menu: filteredItems,
         theme: "light",
         defaultSelectedKeys: [pathname],

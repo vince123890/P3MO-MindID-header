@@ -1,5 +1,5 @@
 import { Page, Section } from "admiral";
-import { Space, Button, Descriptions, Flex, message, Tag } from "antd";
+import { Space, Button, Descriptions, Flex, message, Tag, Modal } from "antd";
 import { generatePath, Link, useNavigate } from "react-router";
 import { Typography } from "antd";
 import { useParams } from "react-router";
@@ -23,7 +23,7 @@ export const Component = () => {
       path: "/master-data/perusahaans",
     },
     {
-      label: data?.data?.nama_perusahaan || "",
+      label: `Perusahaan Details: ${data?.data?.nama_perusahaan || ""}`,
       path: "#",
     },
   ];
@@ -82,8 +82,17 @@ export const Component = () => {
           <Button
             htmlType="button"
             onClick={() => {
-              message.success("Perusahaan successfully deleted");
-              navigate("/master-data/perusahaans");
+              Modal.confirm({
+                title: 'Confirm Delete',
+                content: `Are you sure you want to delete ${data?.data?.nama_perusahaan}?`,
+                okText: 'Delete',
+                cancelText: 'Cancel',
+                okType: 'danger',
+                onOk() {
+                  message.success("Perusahaan successfully deleted");
+                  navigate("/master-data/perusahaans");
+                },
+              });
             }}
             danger
           >

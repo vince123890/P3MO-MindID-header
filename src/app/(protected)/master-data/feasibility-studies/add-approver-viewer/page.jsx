@@ -22,14 +22,14 @@ export const Component = () => {
       path: "/master-data/feasibility-studies",
     },
     {
-      label: "Add Approver & Viewer",
+      label: "Tambah Approver & Viewer",
       path: "#",
     },
   ];
 
   return (
     <Page
-      title="Add Approver & Viewer"
+      title="Tambah Approver & Viewer"
       breadcrumbs={breadcrumbs}
       goBack={() => navigate("/master-data/feasibility-studies")}
       noStyle

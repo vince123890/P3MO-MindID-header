@@ -1,5 +1,5 @@
 import { Page, Section } from "admiral";
-import { Space, Button, Descriptions, Flex, message, Tag } from "antd";
+import { Space, Button, Descriptions, Flex, message, Tag, Modal } from "antd";
 import { generatePath, Link, useNavigate } from "react-router";
 import { Typography } from "antd";
 import { useParams } from "react-router";
@@ -19,11 +19,11 @@ export const Component = () => {
       path: "/master-data",
     },
     {
-      label: "Issue/Resiko",
+      label: "Issue",
       path: "/master-data/issue-risks",
     },
     {
-      label: data?.data?.kode_issue_risk || "",
+      label: `Issue Details: ${data?.data?.kode_issue_risk || ""} - ${data?.data?.tipe_issue_risk || ""}`,
       path: "#",
     },
   ];
@@ -31,12 +31,12 @@ export const Component = () => {
   const items = [
     {
       key: "kode_issue_risk",
-      label: "Kode Issue/Resiko",
+      label: "Kode Issue",
       children: <Typography.Text strong>{data?.data?.kode_issue_risk ?? "-"}</Typography.Text>,
     },
     {
       key: "tipe_issue_risk",
-      label: "Tipe Resiko/Issue",
+      label: "Tipe Issue",
       children: (
         <Typography.Text strong>{data?.data?.tipe_issue_risk ?? "-"}</Typography.Text>
       ),
@@ -73,8 +73,17 @@ export const Component = () => {
           <Button
             htmlType="button"
             onClick={() => {
-              message.success("Issue/Risk successfully deleted");
-              navigate("/master-data/issue-risks");
+              Modal.confirm({
+                title: "Konfirmasi Hapus",
+                content: "Apakah Anda yakin ingin menghapus Issue/Risk ini?",
+                okText: "Delete",
+                cancelText: "Cancel",
+                okType: "danger",
+                onOk: () => {
+                  message.success("Issue/Risk successfully deleted");
+                  navigate("/master-data/issue-risks");
+                },
+              });
             }}
             danger
           >
@@ -91,13 +100,13 @@ export const Component = () => {
           </Link>
         </Flex>
       }
-      title={`Issue/Risk Details: ${data?.data?.kode_issue_risk || ""} - ${data?.data?.tipe_issue_risk || ""}`}
+      title={`Issue Details: ${data?.data?.kode_issue_risk || ""} - ${data?.data?.tipe_issue_risk || ""}`}
       breadcrumbs={breadcrumbs}
       goBack={() => navigate("/master-data/issue-risks")}
       noStyle
     >
       <Section loading={loading}>
-        <Section title="Issue/Risk Information">
+        <Section title="Issue Information">
           <Descriptions
             bordered
             layout="horizontal"

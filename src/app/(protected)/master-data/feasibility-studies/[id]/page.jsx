@@ -37,25 +37,10 @@ export const Component = () => {
 
   const getStatusColor = (status) => {
     switch (status) {
-      case "Approved":
+      case "Assign":
         return "green";
-      case "Under Review":
+      case "Unassign":
         return "orange";
-      case "Draft":
-        return "blue";
-      default:
-        return "default";
-    }
-  };
-
-  const getSyncStatusColor = (syncStatus) => {
-    switch (syncStatus) {
-      case "Synced":
-        return "green";
-      case "Pending":
-        return "orange";
-      case "Failed":
-        return "red";
       default:
         return "default";
     }
@@ -71,7 +56,7 @@ export const Component = () => {
       path: "/master-data/feasibility-studies",
     },
     {
-      label: feasibilityStudy?.investment_name || "",
+      label: `Feasibility Study Details: ${feasibilityStudy?.investment_name || ""}`,
       path: "#",
     },
   ];
@@ -166,11 +151,6 @@ export const Component = () => {
       children: <Tag color={getStatusColor(feasibilityStudy?.status)} style={{ border: 'none' }}>{feasibilityStudy?.status}</Tag>,
     },
     {
-      key: "sync_status",
-      label: "Sync Status",
-      children: <Tag color={getSyncStatusColor(feasibilityStudy?.sync_status)} style={{ border: 'none' }}>{feasibilityStudy?.sync_status}</Tag>,
-    },
-    {
       key: "last_sync_date",
       label: "Last Sync Date",
       children: <Typography.Text>{formatDate(feasibilityStudy?.last_sync_date) ?? "-"}</Typography.Text>,
@@ -186,24 +166,29 @@ export const Component = () => {
     {
       key: "perusahaan",
       label: "Perusahaan",
-      children: <Typography.Text strong>{feasibilityStudy?.company ?? "-"}</Typography.Text>,
+      children: <Typography.Text strong>{feasibilityStudy?.status === "Assign" ? (feasibilityStudy?.company ?? "-") : "-"}</Typography.Text>,
+    },
+    {
+      key: "tim_project",
+      label: "Tim Project",
+      children: <Typography.Text strong>{feasibilityStudy?.status === "Assign" ? (feasibilityStudy?.tim_project ?? "-") : "-"}</Typography.Text>,
     },
     {
       key: "approver_pmo_ah",
       label: "Approver PMO AH",
-      children: <Typography.Text>{feasibilityStudy?.approver_pmo_ah ? feasibilityStudy.approver_pmo_ah.join(", ") : "-"}</Typography.Text>,
+      children: <Typography.Text>{feasibilityStudy?.status === "Assign" ? (feasibilityStudy?.approver_pmo_ah ? feasibilityStudy.approver_pmo_ah.join(", ") : "-") : "-"}</Typography.Text>,
       span: 2,
     },
     {
       key: "approver_pmo_mind_id",
       label: "Approver PMO Mind ID",
-      children: <Typography.Text>{feasibilityStudy?.approver_pmo_mind_id ? feasibilityStudy.approver_pmo_mind_id.join(", ") : "-"}</Typography.Text>,
+      children: <Typography.Text>{feasibilityStudy?.status === "Assign" ? (feasibilityStudy?.approver_pmo_mind_id ? feasibilityStudy.approver_pmo_mind_id.join(", ") : "-") : "-"}</Typography.Text>,
       span: 2,
     },
     {
       key: "viewer",
       label: "Viewer",
-      children: <Typography.Text>{feasibilityStudy?.viewer ? feasibilityStudy.viewer.join(", ") : "-"}</Typography.Text>,
+      children: <Typography.Text>{feasibilityStudy?.status === "Assign" ? (feasibilityStudy?.viewer ? feasibilityStudy.viewer.join(", ") : "-") : "-"}</Typography.Text>,
       span: 2,
     },
   ];
@@ -211,16 +196,18 @@ export const Component = () => {
   return (
     <Page
       topActions={
-        <Flex gap={10}>
-          <Link to={`/master-data/feasibility-studies/${params.id}/add-approver-viewer`}>
-            <Button
-              icon={<UserAddOutlined />}
-              type="primary"
-            >
-              Tambah Approver & Viewer
-            </Button>
-          </Link>
-        </Flex>
+        feasibilityStudy?.status !== "Assign" ? (
+          <Flex gap={10}>
+            <Link to={`/master-data/feasibility-studies/${params.id}/add-approver-viewer`}>
+              <Button
+                icon={<UserAddOutlined />}
+                type="primary"
+              >
+                Tambah Approver & Viewer
+              </Button>
+            </Link>
+          </Flex>
+        ) : null
       }
       title={`Feasibility Study Details: ${feasibilityStudy?.investment_name || ""}`}
       breadcrumbs={breadcrumbs}

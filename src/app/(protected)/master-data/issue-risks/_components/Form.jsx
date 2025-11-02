@@ -1,4 +1,4 @@
-import { Button, Col, Form, Input, Row, Select } from "antd";
+import { Button, Col, Form, Input, Row, Select, Switch } from "antd";
 import { Section } from "admiral";
 import { Flex } from "antd";
 import { useNavigate } from "react-router";
@@ -16,38 +16,38 @@ export const FormIssueRisk = ({ formProps, error, loading, isEdit }) => {
   return (
     <Form {...formProps} form={form} layout="vertical">
       <Section>
-        <Section title="Issue/Risk Information">
+        <Section title="Issue Information">
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item
-                label="Kode Issue/Resiko"
+                label="Kode Issue"
                 name="kode_issue_risk"
                 rules={[
                   {
                     required: true,
-                    message: "Kode Issue/Resiko is required",
+                    message: "Kode Issue is required",
                   },
                   {
                     min: 1,
-                    message: "Kode Issue/Resiko must be at least 1 character",
+                    message: "Kode Issue must be at least 1 character",
                   },
                 ]}
               >
-                <Input placeholder="Enter issue/risk code (e.g. IR001)" />
+                <Input placeholder="Enter issue code (e.g. IR001)" />
               </Form.Item>
             </Col>
             <Col span={12}>
               <Form.Item
-                label="Tipe Resiko/Issue"
+                label="Tipe Issue"
                 name="tipe_issue_risk"
                 rules={[
                   {
                     required: true,
-                    message: "Tipe Resiko/Issue is required",
+                    message: "Tipe Issue is required",
                   },
                 ]}
               >
-                <Select placeholder="Select issue/risk type">
+                <Select placeholder="Select issue type">
                   <Select.Option value="Technical Risk">Technical Risk</Select.Option>
                   <Select.Option value="Budget Risk">Budget Risk</Select.Option>
                   <Select.Option value="Schedule Risk">Schedule Risk</Select.Option>
@@ -61,25 +61,17 @@ export const FormIssueRisk = ({ formProps, error, loading, isEdit }) => {
                 </Select>
               </Form.Item>
             </Col>
-            {isEdit && (
-              <Col span={12}>
-                <Form.Item
-                  label="Status"
-                  name="status"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Status is required",
-                    },
-                  ]}
-                >
-                  <Select placeholder="Select status">
-                    <Select.Option value="Active">Active</Select.Option>
-                    <Select.Option value="Inactive">Inactive</Select.Option>
-                  </Select>
-                </Form.Item>
-              </Col>
-            )}
+            <Col span={12}>
+              <Form.Item
+                label="Status"
+                name="status"
+                valuePropName="checked"
+                getValueFromEvent={(checked) => checked ? "Active" : "Inactive"}
+                getValueProps={(value) => ({ checked: value === "Active" })}
+              >
+                <Switch checkedChildren="Active" unCheckedChildren="Inactive" />
+              </Form.Item>
+            </Col>
           </Row>
         </Section>
       </Section>
