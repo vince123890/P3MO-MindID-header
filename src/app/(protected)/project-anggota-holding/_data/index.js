@@ -1,3 +1,13 @@
+// Consistent company color mapping
+export const COMPANY_COLORS = {
+  "1": "#E53E3E", // PT Aneka Tambang Tbk - Red
+  "2": "#3182CE", // PT Bukit Asam Tbk - Blue  
+  "3": "#D69E2E", // PT Freeport Indonesia - Gold/Yellow
+  "4": "#38A169", // PT Indonesia Asahan Aluminium (Inalum) - Green
+  "5": "#805AD5", // PT Timah Tbk - Purple
+  "6": "#DD6B20", // PT Vale Indonesia - Orange
+};
+
 // Data dummy untuk Project Anggota Holding dengan koordinat Indonesia
 export const projectsData = {
   status_code: 200,
@@ -12,7 +22,9 @@ export const projectsData = {
         pic: "Ahmad Setiawan",
         status: "In Progress",
         progress: 65,
-        color: "#ff4d4f", // Merah
+        target: "Q4 2024",
+        company_id: "1", // PT Aneka Tambang Tbk
+        company_name: "PT Aneka Tambang Tbk",
       },
       {
         id: 2,
@@ -23,7 +35,9 @@ export const projectsData = {
         pic: "Dewi Kartika",
         status: "In Progress",
         progress: 80,
-        color: "#ff7875", // Merah Muda
+        target: "Q1 2025",
+        company_id: "1", // PT Aneka Tambang Tbk
+        company_name: "PT Aneka Tambang Tbk",
       },
       {
         id: 3,
@@ -34,7 +48,9 @@ export const projectsData = {
         pic: "Siti Nurhaliza",
         status: "In Progress",
         progress: 45,
-        color: "#1890ff", // Biru
+        target: "Q3 2024",
+        company_id: "2", // PT Bukit Asam Tbk
+        company_name: "PT Bukit Asam Tbk",
       },
       {
         id: 4,
@@ -45,7 +61,9 @@ export const projectsData = {
         pic: "Eko Prasetyo",
         status: "Planning",
         progress: 30,
-        color: "#40a9ff", // Biru Muda
+        target: "Q2 2025",
+        company_id: "3", // PT Freeport Indonesia
+        company_name: "PT Freeport Indonesia",
       },
       {
         id: 5,
@@ -56,7 +74,9 @@ export const projectsData = {
         pic: "Budi Hartono",
         status: "Planning",
         progress: 25,
-        color: "#fadb14", // Kuning
+        target: "Q4 2025",
+        company_id: "4", // PT Indonesia Asahan Aluminium (Inalum)
+        company_name: "PT Indonesia Asahan Aluminium (Inalum)",
       },
       {
         id: 6,
@@ -67,7 +87,9 @@ export const projectsData = {
         pic: "Maria Santoso",
         status: "Planning",
         progress: 15,
-        color: "#52c41a", // Hijau
+        target: "Q1 2026",
+        company_id: "5", // PT Timah Tbk
+        company_name: "PT Timah Tbk",
       },
       {
         id: 7,
@@ -78,7 +100,9 @@ export const projectsData = {
         pic: "Rahman Hidayat",
         status: "In Progress",
         progress: 55,
-        color: "#fa541c", // Orange
+        target: "Q3 2024",
+        company_id: "6", // PT Vale Indonesia
+        company_name: "PT Vale Indonesia",
       },
       {
         id: 8,
@@ -89,7 +113,9 @@ export const projectsData = {
         pic: "I Nyoman Wiratha",
         status: "In Progress",
         progress: 70,
-        color: "#722ed1", // Ungu
+        target: "Q2 2024",
+        company_id: "2", // PT Bukit Asam Tbk
+        company_name: "PT Bukit Asam Tbk",
       },
     ],
     version: "1.0.0",

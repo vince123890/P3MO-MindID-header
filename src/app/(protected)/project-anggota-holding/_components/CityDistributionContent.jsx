@@ -110,7 +110,7 @@ const CityDistributionContent = ({ showOnlySummary = false, showOnlyCities = fal
   // Format currency in billions
   const formatBillions = (value) => {
     const billions = value / 1000000000;
-    return `${billions.toFixed(1)}T`;
+    return `${billions.toFixed(1)}`;
   };
 
   return (
@@ -124,38 +124,46 @@ const CityDistributionContent = ({ showOnlySummary = false, showOnlyCities = fal
           headStyle={{ borderBottom: "none" }}
           bodyStyle={{ paddingTop: 0 }}
         >
-          <Row gutter={[16, 16]}>
-            <Col xs={12} sm={6}>
+          <Row gutter={[24, 16]}>
+            <Col xs={24} sm={8}>
               <Statistic
                 title="Total Project"
                 value={totalStats.totalProjects}
                 prefix={<ProjectOutlined />}
-                valueStyle={{ color: "#1890ff" }}
+                valueStyle={{ color: "#1890ff", fontSize: "24px" }}
               />
             </Col>
-            <Col xs={12} sm={6}>
-              <Statistic
-                title="Budget Akumulatif"
-                value={formatBillions(totalStats.totalBudget)}
-                prefix={<DollarOutlined />}
-                valueStyle={{ color: "#fa8c16" }}
-              />
+            <Col xs={24} sm={8}>
+              <div>
+                <Text strong style={{ fontSize: "14px", color: "#666" }}>
+                  Budget Akumulatif vs Target Budget
+                </Text>
+                <div style={{ fontSize: "20px", fontWeight: "600", marginTop: "8px" }}>
+                  <span style={{ color: "#fa8c16" }}>
+                    {formatBillions(totalStats.totalBudget)}
+                  </span>
+                  <span style={{ color: "#999", margin: "0 8px" }}>|</span>
+                  <span style={{ color: "#52c41a" }}>
+                    {formatBillions(totalStats.totalBudget * 1.2)}
+                  </span>
+                </div>
+              </div>
             </Col>
-            <Col xs={12} sm={6}>
-              <Statistic
-                title="Target Budget"
-                value={formatBillions(totalStats.totalBudget * 1.2)}
-                prefix={<DollarOutlined />}
-                valueStyle={{ color: "#52c41a" }}
-              />
-            </Col>
-            <Col xs={12} sm={6}>
-              <Statistic
-                title="Progress Akumulatif"
-                value={totalStats.overallProgress}
-                suffix="%"
-                valueStyle={{ color: "#722ed1" }}
-              />
+            <Col xs={24} sm={8}>
+              <div>
+                <Text strong style={{ fontSize: "14px", color: "#666" }}>
+                  Progress Akumulatif vs Target Progress
+                </Text>
+                <div style={{ fontSize: "20px", fontWeight: "600", marginTop: "8px" }}>
+                  <span style={{ color: "#722ed1" }}>
+                    {totalStats.overallProgress}%
+                  </span>
+                  <span style={{ color: "#999", margin: "0 8px" }}>|</span>
+                  <span style={{ color: "#52c41a" }}>
+                    85%
+                  </span>
+                </div>
+              </div>
             </Col>
           </Row>
         </Card>

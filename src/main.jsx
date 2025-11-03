@@ -11,7 +11,7 @@ import { ReactQueryProvider } from "./libs/react-query/react-query-provider";
 import "antd/dist/reset.css";
 import "admiral/style.css";
 import "./styles/theme.css";
-import "./styles/sidebar.css";
+import "./styles/navbar.css";
 import "leaflet/dist/leaflet.css";
 import "./utils/surpress-warning";
 

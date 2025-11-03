@@ -128,99 +128,147 @@ const CompanyDistributionContent = ({ linkPrefix = "/projects" }) => {
                       borderRadius: "8px",
                       boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
                       cursor: "pointer",
+                      overflow: "hidden",
                     }}
+                    bodyStyle={{ padding: 0 }}
                     onClick={() => handleCardClick(project.id)}
                   >
-                    <Space direction="vertical" size="small" style={{ width: "100%" }}>
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-                        <div style={{ flex: 1 }}>
-                          <Text type="secondary" style={{ fontSize: "12px" }}>Project Code</Text>
-                          <br />
-                          <Text 
+                    {/* Project Image */}
+                    <div style={{ 
+                      position: "relative", 
+                      height: "120px", 
+                      backgroundImage: "url(/img/991694779p.webp)",
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                      backgroundRepeat: "no-repeat"
+                    }}>
+                      {/* Inalum Logo for Affiliate Projects */}
+                      {isAffiliate && (
+                        <div style={{ 
+                          position: "absolute", 
+                          top: "8px", 
+                          right: "8px",
+                          backgroundColor: "rgba(255, 255, 255, 0.9)",
+                          borderRadius: "4px",
+                          padding: "4px",
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "4px"
+                        }}>
+                          <img 
+                            src="/img/logo-inalum.png" 
+                            alt="Inalum Logo" 
                             style={{ 
-                              fontWeight: "bold",
-                              fontSize: "14px",
-                              color: "#000"
-                            }}
-                          >
-                            {project.project_code}
-                          </Text>
+                              height: "16px", 
+                              width: "auto"
+                            }} 
+                          />
+                          <Text style={{ fontSize: "10px", fontWeight: "bold" }}>Affiliate</Text>
                         </div>
-                        {isAffiliate && (
-                          <Tag color="blue" style={{ fontSize: "10px", marginTop: "16px" }}>
-                            Affiliate
-                          </Tag>
-                        )}
-                      </div>
+                      )}
+                      
+                      {/* Overlay for better text readability */}
+                      <div style={{ 
+                        position: "absolute", 
+                        bottom: 0, 
+                        left: 0, 
+                        right: 0, 
+                        background: "linear-gradient(transparent, rgba(0,0,0,0.6))",
+                        height: "40px"
+                      }} />
+                    </div>
 
-                      <div>
-                        <Text type="secondary" style={{ fontSize: "12px" }}>Project Name</Text>
-                        <br />
-                        <div style={{ display: "flex", alignItems: "flex-start", gap: "4px" }}>
-                          <Text 
-                            style={{ 
-                              fontSize: "13px",
-                              display: "-webkit-box",
-                              WebkitBoxOrient: "vertical",
-                              WebkitLineClamp: 3,
-                              overflow: "hidden",
-                              textOverflow: "ellipsis",
-                              lineHeight: "1.4",
-                              flex: 1
-                            }}
-                            title={project.business_initiative_name}
-                          >
-                            {project.business_initiative_name}
-                          </Text>
-                          <Tooltip title="Copy Project Name">
-                            <CopyOutlined 
+                    {/* Card Content */}
+                    <div style={{ padding: "12px" }}>
+                      <Space direction="vertical" size="small" style={{ width: "100%" }}>
+                        {/* Project Name */}
+                        <div>
+                          <Text type="secondary" style={{ fontSize: "11px", fontWeight: "500" }}>Project Name</Text>
+                          <div style={{ display: "flex", alignItems: "flex-start", gap: "4px", marginTop: "2px" }}>
+                            <Text 
                               style={{ 
-                                color: "#999", 
-                                cursor: "pointer", 
                                 fontSize: "12px",
-                                marginTop: "2px",
-                                flexShrink: 0
+                                fontWeight: "600",
+                                display: "-webkit-box",
+                                WebkitBoxOrient: "vertical",
+                                WebkitLineClamp: 2,
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                                lineHeight: "1.3",
+                                flex: 1,
+                                color: "#000"
                               }}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                copyToClipboard(project.business_initiative_name, "Project Name");
-                              }}
-                            />
-                          </Tooltip>
+                              title={project.business_initiative_name}
+                            >
+                              {project.business_initiative_name}
+                            </Text>
+                            <Tooltip title="Copy Project Name">
+                              <CopyOutlined 
+                                style={{ 
+                                  color: "#999", 
+                                  cursor: "pointer", 
+                                  fontSize: "11px",
+                                  marginTop: "1px",
+                                  flexShrink: 0
+                                }}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  copyToClipboard(project.business_initiative_name, "Project Name");
+                                }}
+                              />
+                            </Tooltip>
+                          </div>
                         </div>
-                      </div>
 
-                      <div>
-                        <Text type="secondary" style={{ fontSize: "12px" }}>Company</Text>
-                        <br />
-                        <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-                          <Text strong style={{ fontSize: "13px", flex: 1 }}>
-                            {project.company}
-                          </Text>
-                          <Tooltip title="Copy Company">
-                            <CopyOutlined 
+                        {/* COD Target */}
+                        <div>
+                          <Text type="secondary" style={{ fontSize: "11px", fontWeight: "500" }}>COD Target</Text>
+                          <div style={{ marginTop: "2px" }}>
+                            <Text strong style={{ fontSize: "12px", color: "#000" }}>
+                              {project.days_remaining_till_cod !== null && project.days_remaining_till_cod !== undefined 
+                                ? `${project.days_remaining_till_cod} days remaining` 
+                                : "-"}
+                            </Text>
+                          </div>
+                        </div>
+
+                        {/* CAPEX */}
+                        <div>
+                          <Text type="secondary" style={{ fontSize: "11px", fontWeight: "500" }}>CAPEX</Text>
+                          <div style={{ marginTop: "2px" }}>
+                            <Text strong style={{ fontSize: "12px", color: "#000" }}>
+                              {project.capex_estimate 
+                                ? `IDR ${(project.capex_estimate / 1000000000).toFixed(1)}B`
+                                : "-"}
+                            </Text>
+                          </div>
+                        </div>
+
+                        {/* Commodity */}
+                        <div>
+                          <Text type="secondary" style={{ fontSize: "11px", fontWeight: "500" }}>Commodity</Text>
+                          <div style={{ marginTop: "2px" }}>
+                            <Tag 
+                              color="blue" 
                               style={{ 
-                                color: "#999", 
-                                cursor: "pointer", 
-                                fontSize: "12px",
-                                flexShrink: 0
+                                fontSize: "11px", 
+                                margin: 0,
+                                borderRadius: "4px"
                               }}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                copyToClipboard(project.company, "Company");
-                              }}
-                            />
-                          </Tooltip>
+                            >
+                              {project.commodity || "General"}
+                            </Tag>
+                          </div>
                         </div>
-                      </div>
 
-                      <div style={{ textAlign: "center", marginTop: "8px", paddingTop: "8px", borderTop: "1px solid #f0f0f0" }}>
-                        <InfoCircleOutlined style={{ color: "#999" }} />
-                        <Text style={{ fontSize: "11px", color: "#999", marginLeft: "4px" }}>
-                          Click card for details
-                        </Text>
-                      </div>
-                    </Space>
+                        <div style={{ textAlign: "center", marginTop: "8px", paddingTop: "8px", borderTop: "1px solid #f0f0f0" }}>
+                          <InfoCircleOutlined style={{ color: "#999" }} />
+                          <Text style={{ fontSize: "10px", color: "#999", marginLeft: "4px" }}>
+                            Click card for details
+                          </Text>
+                        </div>
+                      </Space>
+                    </div>
                   </Card>
                 </Tooltip>
               </Col>

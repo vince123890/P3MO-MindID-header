@@ -1,34 +1,30 @@
 import { useState } from "react";
-import { MainLayout, theme } from "admiral";
-import { Button, Flex, Typography, Dropdown, Avatar, Badge, Modal, Form, Select } from "antd";
-import { Outlet, useResolvedPath } from "react-router";
+import { Layout, Menu, Button, Flex, Typography, Dropdown, Avatar, Badge, Modal, Form, Select } from "antd";
+import { Outlet, useResolvedPath, Link } from "react-router";
 import {
   UserOutlined,
   DownOutlined,
   BellOutlined,
   ReloadOutlined,
   LogoutOutlined,
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
+  MenuOutlined,
 } from "@ant-design/icons";
 
 import { useSession } from "../_components/providers/session";
 import { SIDEBAR_ITEMS } from "./_utils/menu";
 import { RoleList as roleList } from "./_utils/role-list";
 
-function Layout() {
+const { Header, Content } = Layout;
+
+function ProtectedLayout() {
   const { switchRole, signout, session } = useSession();
   const role = session?.user?.role;
   const [rolePopup, setRolePopup] = useState(false);
-  const [collapsed, setCollapsed] = useState(false);
+  const [mobileMenuVisible, setMobileMenuVisible] = useState(false);
   const path = useResolvedPath();
 
   // Safe pathname extraction to prevent object-to-primitive conversion
   const pathname = typeof path?.pathname === 'string' ? path.pathname : '/';
-
-  const {
-    token: { colorWhite },
-  } = theme.useToken();
 
   const handleClosePopup = () => {
     setRolePopup(false);
@@ -57,6 +53,7 @@ function Layout() {
     },
   ];
 
+  // Filter menu items based on role permissions
   const filteredItems = SIDEBAR_ITEMS.map((item) => {
     if (item.children) {
       const filteredChildren = item.children.filter((child) => {
@@ -67,7 +64,7 @@ function Layout() {
       if (filteredChildren.length > 0) {
         return { ...item, children: filteredChildren };
       }
-      return null; // No visible children, remove parent
+      return null;
     }
 
     // Handle top-level items without children
@@ -76,74 +73,116 @@ function Layout() {
     }
 
     return item;
-  }).filter(Boolean); // Remove nulls
+  }).filter(Boolean);
 
   return (
-    <MainLayout
-      header={{
-        brandLogo: (
-          <Flex align="center" justify="space-between" style={{ width: "100%" }}>
-            <Typography.Title
-              level={3}
-              style={{ color: colorWhite, margin: 0 }}
-            >
-              Prototype
-            </Typography.Title>
-            <Button
-              type="text"
-              icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-              onClick={() => setCollapsed(!collapsed)}
-              style={{
-                color: colorWhite,
-                fontSize: "18px",
-              }}
-              title={collapsed ? "Show Sidebar" : "Hide Sidebar"}
-            />
-          </Flex>
-        ),
-      }}
-      sidebar={{
-        extra: (
-          <Flex style={{ margin: "8px 0", paddingInline: "16px" }}>
-            <Dropdown menu={{ items: AccountItem }} trigger={["hover"]}>
-              <Flex gap="8px" align="center" style={{ width: "100%" }}>
-                <Avatar icon={<UserOutlined />} />
-                {!collapsed && (
-                  <Flex vertical style={{ flex: 1 }}>
-                    <Flex gap="8px">
-                      <Typography.Text strong style={{ color: colorWhite, fontSize: 14 }}>
-                        {session?.user?.name}
-                      </Typography.Text>
-                      <DownOutlined style={{ color: colorWhite }} />
-                    </Flex>
-                    <Typography.Text style={{ fontSize: 12, color: colorWhite }} type="secondary">
-                      {session?.user?.role}
-                    </Typography.Text>
-                  </Flex>
-                )}
+    <Layout style={{ minHeight: "100vh" }}>
+      <Header
+        style={{
+          position: "sticky",
+          top: 0,
+          zIndex: 1000,
+          width: "100%",
+          background: "var(--primary-blue, #19315a)",
+          padding: "0 24px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+        }}
+      >
+        <Flex align="center" gap="24px" style={{ flex: 1 }}>
+          <Typography.Title
+            level={3}
+            style={{ color: "#fff", margin: 0, minWidth: "150px" }}
+          >
+            Prototype
+          </Typography.Title>
+
+          {/* Desktop Menu */}
+          <Menu
+            mode="horizontal"
+            selectedKeys={[pathname]}
+            items={filteredItems}
+            style={{
+              flex: 1,
+              background: "transparent",
+              borderBottom: "none",
+              minWidth: 0,
+            }}
+            className="navbar-menu"
+          />
+
+          {/* Mobile Menu Button */}
+          <Button
+            type="text"
+            icon={<MenuOutlined />}
+            onClick={() => setMobileMenuVisible(!mobileMenuVisible)}
+            className="mobile-menu-button"
+            style={{
+              color: "#fff",
+              fontSize: "18px",
+            }}
+          />
+        </Flex>
+
+        {/* Right Side Actions */}
+        <Flex align="center" gap="16px">
+          <Badge dot={true} offset={[-10, 6]}>
+            <Button type="text" shape="circle">
+              <BellOutlined style={{ fontSize: "20px", color: "#fff" }} />
+            </Button>
+          </Badge>
+
+          <Dropdown menu={{ items: AccountItem }} trigger={["hover"]}>
+            <Flex gap="8px" align="center" style={{ cursor: "pointer" }}>
+              <Avatar icon={<UserOutlined />} />
+              <Flex vertical className="user-info">
+                <Flex gap="8px" align="center">
+                  <Typography.Text strong style={{ color: "#fff", fontSize: 14 }}>
+                    {session?.user?.name}
+                  </Typography.Text>
+                  <DownOutlined style={{ color: "#fff", fontSize: 10 }} />
+                </Flex>
+                <Typography.Text style={{ fontSize: 12, color: "#fff", opacity: 0.8 }}>
+                  {session?.user?.role}
+                </Typography.Text>
               </Flex>
-            </Dropdown>
-            {!collapsed && (
-              <Badge dot={true} offset={[-10, 6]}>
-                <Button type="text" shape="circle">
-                  <BellOutlined style={{ fontSize: "24px", color: colorWhite }} />
-                </Button>
-              </Badge>
-            )}
-          </Flex>
-        ),
-        width: 250,
-        collapsedWidth: 80,
-        collapsed: collapsed,
-        collapsible: true,
-        menu: filteredItems,
-        theme: "light",
-        defaultSelectedKeys: [pathname],
-      }}
-    >
-      <Outlet />
+            </Flex>
+          </Dropdown>
+        </Flex>
+      </Header>
+
+      {/* Mobile Menu Drawer */}
+      {mobileMenuVisible && (
+        <div
+          className="mobile-menu-overlay"
+          onClick={() => setMobileMenuVisible(false)}
+        >
+          <div
+            className="mobile-menu-content"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <Menu
+              mode="inline"
+              selectedKeys={[pathname]}
+              items={filteredItems}
+              style={{
+                background: "var(--primary-blue, #19315a)",
+                border: "none",
+              }}
+              onClick={() => setMobileMenuVisible(false)}
+            />
+          </div>
+        </div>
+      )}
+
+      <Content style={{ padding: "24px", background: "#f0f2f5" }}>
+        <Outlet />
+      </Content>
+
       <Modal
-        title="Swith Role"
+        title="Switch Role"
         open={rolePopup}
         maskClosable={false}
         footer={null}
@@ -163,7 +202,8 @@ function Layout() {
           </Flex>
         </Form>
       </Modal>
-    </MainLayout>
+    </Layout>
   );
 }
-export default Layout;
+
+export default ProtectedLayout;

@@ -1,0 +1,261 @@
+/* Navbar Styling - Blue and Red Theme */
+
+/* Header Background */
+.ant-layout-header {
+  background: var(--primary-blue, #19315a) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Horizontal Menu */
+.navbar-menu.ant-menu-horizontal {
+  background: transparent !important;
+  border-bottom: none !important;
+  line-height: 64px;
+}
+
+/* Menu Items */
+.navbar-menu .ant-menu-item,
+.navbar-menu .ant-menu-submenu-title {
+  color: #ffffff !important;
+  border-bottom: 3px solid transparent !important;
+  margin: 0 4px !important;
+  padding: 0 16px !important;
+  transition: all 0.3s ease;
+}
+
+/* SUPER AGGRESSIVE WHITE COLOR OVERRIDE - All possible selectors */
+.ant-menu-horizontal.navbar-menu .ant-menu-item,
+.ant-menu-horizontal.navbar-menu .ant-menu-item *,
+.ant-menu-horizontal.navbar-menu .ant-menu-item span,
+.ant-menu-horizontal.navbar-menu .ant-menu-item a,
+.ant-menu-horizontal.navbar-menu .ant-menu-item a span,
+.ant-menu-horizontal.navbar-menu .ant-menu-submenu-title,
+.ant-menu-horizontal.navbar-menu .ant-menu-submenu-title *,
+.ant-menu-horizontal.navbar-menu .ant-menu-submenu-title span,
+.navbar-menu.ant-menu .ant-menu-item,
+.navbar-menu.ant-menu .ant-menu-item *,
+.navbar-menu.ant-menu .ant-menu-submenu-title,
+.navbar-menu.ant-menu .ant-menu-submenu-title *,
+.navbar-menu .ant-menu-item,
+.navbar-menu .ant-menu-item *,
+.navbar-menu .ant-menu-item span,
+.navbar-menu .ant-menu-item a,
+.navbar-menu .ant-menu-submenu-title,
+.navbar-menu .ant-menu-submenu-title *,
+.navbar-menu .ant-menu-submenu-title span {
+  color: #ffffff !important;
+}
+
+/* Menu Item Hover */
+.navbar-menu .ant-menu-item:hover,
+.navbar-menu .ant-menu-submenu:hover > .ant-menu-submenu-title {
+  background-color: var(--blue-hover, #21426e) !important;
+  color: var(--white, #ffffff) !important;
+  border-bottom-color: var(--primary-red, #c41e3a) !important;
+}
+
+/* Selected Menu Item - Red Highlight */
+.navbar-menu .ant-menu-item-selected {
+  background-color: var(--primary-red, #c41e3a) !important;
+  color: var(--white, #ffffff) !important;
+  border-bottom-color: var(--primary-red, #c41e3a) !important;
+}
+
+.navbar-menu .ant-menu-item-selected:hover {
+  background-color: var(--red-hover, #b01a32) !important;
+}
+
+/* All Navbar Links - White Color - SUPER AGGRESSIVE */
+.navbar-menu a,
+.navbar-menu a:link,
+.navbar-menu a:visited,
+.navbar-menu a:hover,
+.navbar-menu a:active,
+.navbar-menu a:focus,
+.navbar-menu a *,
+.navbar-menu a span,
+.navbar-menu .ant-menu-title-content,
+.navbar-menu .ant-menu-title-content *,
+.navbar-menu .ant-menu-title-content a,
+.navbar-menu .ant-menu-title-content a *,
+.navbar-menu .ant-menu-title-content span,
+.ant-menu-horizontal.navbar-menu > .ant-menu-item,
+.ant-menu-horizontal.navbar-menu > .ant-menu-item *,
+.ant-menu-horizontal.navbar-menu > .ant-menu-item span,
+.ant-menu-horizontal.navbar-menu > .ant-menu-item a,
+.ant-menu-horizontal.navbar-menu > .ant-menu-item a *,
+.ant-menu-horizontal.navbar-menu > .ant-menu-submenu > .ant-menu-submenu-title,
+.ant-menu-horizontal.navbar-menu > .ant-menu-submenu > .ant-menu-submenu-title *,
+.ant-menu-horizontal.navbar-menu > .ant-menu-submenu > .ant-menu-submenu-title span,
+.ant-menu-horizontal > .ant-menu-item,
+.ant-menu-horizontal > .ant-menu-item *,
+.ant-menu-horizontal > .ant-menu-submenu > .ant-menu-submenu-title,
+.ant-menu-horizontal > .ant-menu-submenu > .ant-menu-submenu-title * {
+  color: #ffffff !important;
+  text-decoration: none !important;
+}
+
+/* Force override any Ant Design default colors */
+.navbar-menu.ant-menu-horizontal > .ant-menu-item::after,
+.navbar-menu.ant-menu-horizontal > .ant-menu-submenu::after {
+  border-bottom-color: transparent !important;
+}
+
+/* Additional overrides for any stubborn elements */
+.ant-layout-header .navbar-menu * {
+  color: #ffffff !important;
+}
+
+.ant-layout-header .ant-menu-horizontal * {
+  color: #ffffff !important;
+}
+
+/* Menu Icons */
+.navbar-menu .ant-menu-item .anticon,
+.navbar-menu .ant-menu-submenu-title .anticon {
+  color: var(--white, #ffffff) !important;
+  margin-right: 8px;
+}
+
+/* Submenu Dropdown */
+.navbar-menu .ant-menu-submenu-popup {
+  background: var(--primary-blue, #19315a) !important;
+}
+
+.navbar-menu .ant-menu-submenu-popup .ant-menu {
+  background: var(--primary-blue, #19315a) !important;
+}
+
+.navbar-menu .ant-menu-submenu-popup .ant-menu-item {
+  color: var(--white, #ffffff) !important;
+  border-bottom: none !important;
+}
+
+.navbar-menu .ant-menu-submenu-popup .ant-menu-item:hover {
+  background-color: var(--blue-hover, #21426e) !important;
+}
+
+.navbar-menu .ant-menu-submenu-popup .ant-menu-item-selected {
+  background-color: var(--primary-red, #c41e3a) !important;
+}
+
+/* Submenu Arrow */
+.navbar-menu .ant-menu-submenu-arrow {
+  color: var(--white, #ffffff) !important;
+}
+
+/* Mobile Menu Styles */
+.mobile-menu-button {
+  display: none;
+}
+
+.mobile-menu-overlay {
+  display: none;
+  position: fixed;
+  top: 64px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+.mobile-menu-content {
+  background: var(--primary-blue, #19315a);
+  width: 280px;
+  height: 100%;
+  overflow-y: auto;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Mobile Menu Items */
+.mobile-menu-content .ant-menu {
+  background: var(--primary-blue, #19315a) !important;
+  color: var(--white, #ffffff) !important;
+  border-right: none !important;
+}
+
+.mobile-menu-content .ant-menu-item,
+.mobile-menu-content .ant-menu-submenu-title {
+  color: var(--white, #ffffff) !important;
+}
+
+.mobile-menu-content .ant-menu-item:hover,
+.mobile-menu-content .ant-menu-submenu:hover > .ant-menu-submenu-title {
+  background-color: var(--blue-hover, #21426e) !important;
+}
+
+.mobile-menu-content .ant-menu-item-selected {
+  background-color: var(--primary-red, #c41e3a) !important;
+}
+
+.mobile-menu-content .ant-menu a {
+  color: var(--white, #ffffff) !important;
+}
+
+/* User Info Section */
+.user-info {
+  display: flex;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+  /* Hide desktop menu on tablet and mobile */
+  .navbar-menu.ant-menu-horizontal {
+    display: none !important;
+  }
+
+  /* Show mobile menu button */
+  .mobile-menu-button {
+    display: inline-flex !important;
+  }
+
+  /* Show mobile menu overlay when active */
+  .mobile-menu-overlay {
+    display: block;
+  }
+
+  /* Hide user info text on small screens */
+  .user-info {
+    display: none;
+  }
+
+  /* Adjust header padding */
+  .ant-layout-header {
+    padding: 0 16px !important;
+  }
+}
+
+@media (max-width: 576px) {
+  /* Further adjustments for mobile */
+  .ant-layout-header h3 {
+    font-size: 18px !important;
+    min-width: 100px !important;
+  }
+
+  .ant-layout-content {
+    padding: 16px !important;
+  }
+}
+
+/* Remove default Ant Design menu after styles */
+.navbar-menu.ant-menu-horizontal::after {
+  display: none !important;
+}
+
+/* Smooth transitions */
+.navbar-menu .ant-menu-item,
+.navbar-menu .ant-menu-submenu-title,
+.mobile-menu-content .ant-menu-item,
+.mobile-menu-content .ant-menu-submenu-title {
+  transition: all 0.3s ease;
+}
+
+/* Override any inline styles */
+.navbar-menu .ant-menu-item[style*="background-color"] {
+  background-color: transparent !important;
+}
+
+.navbar-menu .ant-menu-item-selected[style*="background-color"] {
+  background-color: var(--primary-red, #c41e3a) !important;
+}
